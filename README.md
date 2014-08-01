@@ -1,6 +1,7 @@
 ## Welcome to the Amazon Payments plugin for the Magento eCommerce platform. 
 ### Installation
-* To install, use the download links above to download a tar.gz or .zip archive 
+* To install, click the Download Zip button and save to your local machine
+* Transfer the zip file to your Magento webserver
 * Unpack the archive in the root directory of your Magento instance
 * Flush your Magento caches
 ** In the admin page for your Magento instance, navigate to System->Cache Management
