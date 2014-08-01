@@ -10,7 +10,7 @@
 
 class Amazon_Payments_Model_Api
 {
-    const ORDER_PLATFORM_ID = 'AIOVPYYF70KB5';
+    const ORDER_PLATFORM_ID = 'A2K7HE1S3M5XJ';
 
     protected $api;
     protected $log_file = 'amazon.log';
