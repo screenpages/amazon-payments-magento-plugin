@@ -1,0 +1,3 @@
+amazon-payments-magento-plugin
+==============================
+
