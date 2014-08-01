@@ -1,0 +1,43 @@
+/* Default Amazon Payments CSS */
+
+#checkout-amazon-payments h2 {
+  margin-top:1em;
+}
+
+.amazon-widget-wrapper {
+  float:left;
+}
+
+#amazon-widget-address-wrapper {
+  width:60%;
+  margin-right:2%;
+}
+
+#amazon-widget-wallet-wrapper {
+  width:38%;
+}
+
+#amazon-widget-address,
+#amazon-widget-wallet {
+  max-width:100%;
+  height: 230px;
+}
+
+#amazon-widget-wallet {
+  height:280px;
+  margin-bottom:1em;
+}
+
+@media all and (max-width: 640px) {
+  #amazon-widget-address-wrapper,
+  #amazon-widget-wallet-wrapper {
+    float:none;
+    width:auto;
+    margin:auto;
+  }
+
+  #amazon-widget-wallet-wrapper {
+    margin-top:1em;
+  }
+
+}

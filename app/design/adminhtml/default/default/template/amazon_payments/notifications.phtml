@@ -1,0 +1,23 @@
+<?php
+/**
+ * Amazon Payments
+ *
+ * @category    Amazon
+ * @package     Amazon_Payments
+ * @copyright   Copyright (c) 2014 Amazon.com
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+/* @var $this Amazon_Payments_Block_Adminhtml_Notifications */
+?>
+
+<?php if ($this->isMissingPaymentConfig()) : ?>
+
+<div class="notification-global">
+    <strong>
+        To complete your Amazon Payments configuration, please set up <a href="https://sellercentral.amazon.com/" taget="_blank">your account</a> and add the API credentials <a href="<?php echo $this->getManageUrl(); ?>">here</a>.
+    </strong>
+    <span class="f-right"></span>
+</div>
+
+<?php endif; ?>

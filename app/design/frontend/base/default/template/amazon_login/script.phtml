@@ -1,0 +1,64 @@
+<?php
+/**
+ * Login with Amazon
+ *
+ * @category    Amazon
+ * @package     Amazon_Login
+ * @copyright   Copyright (c) 2014 Amazon.com
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+
+<?php
+/**
+ * @see https://images-na.ssl-images-amazon.com/images/G/01/lwa/dev/docs/website-sdk-reference._TTH_.pdf
+ */
+?>
+
+<div id="amazon-root"></div>
+<script type="text/javascript">
+
+window.onAmazonLoginReady = function() {
+    <?php if (Mage::getStoreConfig('payment/amazon_payments/sandbox')) : ?>
+    amazon.Login.setSandboxMode(true);
+    <?php endif; ?>
+    amazon.Login.setClientId('<?php echo Mage::getModel('amazon_login/api')->getClientId(); ?>');
+};
+(function(d) {
+    var a = d.createElement('script'); a.type = 'text/javascript';
+    a.async = true; a.id = 'amazon-login-sdk';
+    a.src = 'https://api-cdn.amazon.com/sdk/login1.js';
+    d.getElementById('amazon-root').appendChild(a);
+})(document);
+
+
+
+function amazonLoginAuthorize() {
+    options = { scope : 'profile postal_code', response_type: 'token' };
+    amazon.Login.authorize(options, function(response) {
+        if (response.error) {
+            console.log(response.error);
+        }
+        else {
+          document.location.href = "<?php echo $this->getUrl('amazon_login/customer/authorize')?>?token=" + response.access_token + "&referer=<?php echo Mage::helper('core')->urlEncode($this->helper('core/url')->getCurrentUrl())?>";
+        }
+    });
+}
+
+$$('.amazon-login-button').each(function(el) {
+    el.observe('click', amazonLoginAuthorize);
+})
+
+</script>
+
+<?php if ($this->getNameInLayout() == 'amazon_login.script.logout') : ?>
+
+<script type="text/javascript">
+
+window.onAmazonLoginReady = function() {
+    amazon.Login.logout();
+};
+
+</script>
+
+<?php endif; ?>

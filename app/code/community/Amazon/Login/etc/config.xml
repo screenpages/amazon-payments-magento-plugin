@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category    Amazon
+ * @package     Amazon_Login
+ * @copyright   Copyright (c) 2014 Amazon.com
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<config>
+    <modules>
+        <Amazon_Login>
+            <version>0.0.1.0</version>
+        </Amazon_Login>
+    </modules>
+    <global>
+        <models>
+            <amazon_login>
+                <class>Amazon_Login_Model</class>
+            </amazon_login>
+        </models>
+        <helpers>
+            <amazon_login>
+                <class>Amazon_Login_Helper</class>
+            </amazon_login>
+        </helpers>
+
+
+
+    </global>
+
+
+    <frontend>
+        <routers>
+            <amazon_login>
+                <use>standard</use>
+                <args>
+                    <module>Amazon_Login</module>
+                    <frontName>amazon_login</frontName>
+                </args>
+            </amazon_login>
+        </routers>
+        <layout>
+            <updates>
+                <amazon_login>
+                    <file>amazon_login.xml</file>
+                </amazon_login>
+            </updates>
+        </layout>
+    </frontend>
+
+</config>

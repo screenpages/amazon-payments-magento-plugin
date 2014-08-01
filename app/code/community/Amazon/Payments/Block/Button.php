@@ -1,0 +1,42 @@
+<?php
+/**
+ * Amazon Payments
+ *
+ * @category    Amazon
+ * @package     Amazon_Payments
+ * @copyright   Copyright (c) 2014 Amazon.com
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+class Amazon_Payments_Block_Button extends Mage_Core_Block_Template
+{
+    public function getCheckoutUrl()
+    {
+        return $this->getUrl('checkout/amazon_payments', array('_secure'=>true));
+    }
+
+    public function getOnepageCheckoutUrl()
+    {
+        return $this->getUrl('amazon_payments/onepage', array('_secure'=>true));
+    }
+
+    public function getAmazonPayButtonId() {
+        return $this->getNameInLayout();
+    }
+
+    public function getSellerId()
+    {
+        return $this->helper('amazon_payments')->getSellerId();
+    }
+
+    public function isDisabled()
+    {
+        return !Mage::getSingleton('checkout/session')->getQuote()->validateMinimumAmount();
+    }
+
+    public function isAmazonPayButtonEnabled()
+    {
+        return !(Mage::getSingleton('amazon_payments/config')->isCheckoutOnepage());
+    }
+
+}
