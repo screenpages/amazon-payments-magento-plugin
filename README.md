@@ -31,3 +31,15 @@
           * Switch to "Login with Amazon" in the top-nav
           * Click "Register a New Application" if you haven't done so already
           * Find the client and secret key under "Web Settings"
+* Configure Amazon Payments
+    * Allow your site to use your Login with Amazon account:
+       * Switch to "Login with Amazon" in the top-nav
+       * Add any domains your site is hosted on (i.e., https://www.yourdomain.com, https://yourdomain.com) under "Allowed Javascript Origins".
+    * Add your store logo to the Amazon Login screen
+       * Upload a 150x150 image under "Application Information" -> "Logo Image"
+    * Set your store information
+       * Switch to "Amazon Payments Advanced" in the top nav
+       * Navigate to "Settings" (top-nav) -> "Account Info" (menu)
+       * Complete the "Seller Information" information which is used in Buyer-facing communication
+       * Complete the tax interview under "Legal Entity"
+       * Add your bank account for disbursements under "Deposit Information"
