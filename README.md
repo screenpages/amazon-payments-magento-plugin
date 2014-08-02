@@ -1,4 +1,4 @@
-## Welcome to the Amazon Payments plugin for the Magento eCommerce platform. 
+## Welcome to the Amazon Payments plugin for the Magento
 
 
 ### Pre-Requisites
@@ -18,15 +18,16 @@
 
 
 ### Configuration
-* The plugin is configured under "System" (top-nav) -> "Configuration" (menu) -> "Payment Methods" (left nav) -> "Amazon Payments" (main page).
-* If you haven't already registered, use the link in the module to create an Amazon Payments account.
-* Apply your Amazon account keys, shown during registration or find them in Seller Central:
-    * Merchant/Seller ID
-       * Switch to "Amazon Payments Advanced" in the top nav
-       * Navigate to "Settings" (top-nav) -> "Integration Settings" (menu)
-    * API Access and Secret Key
-       * Navigate to "Integration" (top-nav) -> "MWS Access Keys" (menu)
-    * Client and Secret Key (under "Login with Amazon")
-       * Switch to "Login with Amazon" in the top-nav
-       * Click "Register a New Application" if you haven't done so already
-       * Find the client and secret key under "Web Settings"
+* Configure Magento
+    * The plugin is configured under "System" (top-nav) -> "Configuration" (menu) -> "Payment Methods" (left nav) -> "Amazon Payments" (main page).
+    * If you haven't already registered, use the link in the module to create an Amazon Payments account.
+    * Apply your Amazon account keys, shown during registration or find them in Seller Central:
+       * Merchant/Seller ID
+          * Switch to "Amazon Payments Advanced" in the top nav
+          * Navigate to "Settings" (top-nav) -> "Integration Settings" (menu)
+       * API Access and Secret Key
+          * Navigate to "Integration" (top-nav) -> "MWS Access Keys" (menu)
+       * Client and Secret Key (under "Login with Amazon")
+          * Switch to "Login with Amazon" in the top-nav
+          * Click "Register a New Application" if you haven't done so already
+          * Find the client and secret key under "Web Settings"
