@@ -32,13 +32,19 @@
 
         <section id="main_content">
           <h2>
-<a name="welcome-to-the-amazon-payments-plugin-for-the-magento-ecommerce-platform" class="anchor" href="#welcome-to-the-amazon-payments-plugin-for-the-magento-ecommerce-platform"><span class="octicon octicon-link"></span></a>Welcome to the Amazon Payments plugin for the Magento eCommerce platform.</h2>
+<a name="welcome-to-the-amazon-payments-plugin-for-the-magento" class="anchor" href="#welcome-to-the-amazon-payments-plugin-for-the-magento"><span class="octicon octicon-link"></span></a>Welcome to the Amazon Payments plugin for the Magento</h2>
 
 <h3>
+<a name="pre-requisites" class="anchor" href="#pre-requisites"><span class="octicon octicon-link"></span></a>Pre-Requisites</h3>
+
+<ul>
+<li>Magento CE 1.5-1.9 or EE 1.12+.</li>
+<li>SSL is installed on your site and active on Checkout and Login pages</li>
+</ul><h3>
 <a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h3>
 
 <ul>
-<li>To install, click the Download Zip button and save to your local machine</li>
+<li>Click the Download Zip button and save to your local machine</li>
 <li>Transfer the zip file to your Magento webserver</li>
 <li>Unpack the archive in the root directory of your Magento instance</li>
 <li>Flush your Magento caches
@@ -50,7 +56,66 @@
 </li>
 </ul>
 </li>
-<li>Log out of the admin page and then log back in to configure Amazon Payments</li>
+<li>Log out of the admin page and then log back in to ensure activation of the module</li>
+</ul><h3>
+<a name="configure-magento" class="anchor" href="#configure-magento"><span class="octicon octicon-link"></span></a>Configure Magento</h3>
+
+<ul>
+<li>The plugin is configured under "System" (top-nav) -&gt; "Configuration" (menu) -&gt; "Payment Methods" (left nav) -&gt; "Amazon Payments" (main page).</li>
+<li>If you haven't already registered, use the link in the module to create an Amazon Payments account.</li>
+<li>Apply your Amazon account keys, shown during registration or find them in Seller Central:
+
+<ul>
+<li>Merchant/Seller ID
+
+<ul>
+<li>Switch to "Amazon Payments Advanced" in the top nav</li>
+<li>Navigate to "Settings" (top-nav) -&gt; "Integration Settings" (menu)</li>
+</ul>
+</li>
+<li>API Access and Secret Key
+
+<ul>
+<li>Navigate to "Integration" (top-nav) -&gt; "MWS Access Keys" (menu)</li>
+</ul>
+</li>
+<li>Client and Secret Key (under "Login with Amazon")
+
+<ul>
+<li>Switch to "Login with Amazon" in the top-nav</li>
+<li>Click "Register a New Application" if you haven't done so already</li>
+<li>Find the client and secret key under "Web Settings"</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul><h3>
+<a name="configure-amazon-payments" class="anchor" href="#configure-amazon-payments"><span class="octicon octicon-link"></span></a>Configure Amazon Payments</h3>
+
+<ul>
+<li>Allow your site to use your Login with Amazon account:
+
+<ul>
+<li>Switch to "Login with Amazon" in the top-nav</li>
+<li>Add any domains your site is hosted on under "Allowed Javascript Origins" (i.e., <a href="https://www.yourdomain.com">https://www.yourdomain.com</a>, <a href="https://yourdomain.com">https://yourdomain.com</a>)</li>
+</ul>
+</li>
+<li>Add your store logo to the Amazon Login screen
+
+<ul>
+<li>Upload a 150x150 image under "Application Information" -&gt; "Logo Image"</li>
+</ul>
+</li>
+<li>Complete your store setup
+
+<ul>
+<li>Switch to "Amazon Payments Advanced" in the top nav</li>
+<li>Navigate to "Settings" (top-nav) -&gt; "Account Info" (menu)</li>
+<li>Complete the "Seller Information" information which is used in Buyer-facing communication</li>
+<li>Complete the tax interview under "Legal Entity"</li>
+<li>Add your bank account for disbursements under "Deposit Information"</li>
+</ul>
+</li>
 </ul>
         </section>
 
