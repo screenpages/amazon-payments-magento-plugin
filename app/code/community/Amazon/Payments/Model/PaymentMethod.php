@@ -86,13 +86,20 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
     {
         $order = $payment->getOrder();
 
+        $sellerAuthorizationNote = null;
+
+        if ($payment->getAdditionalInformation('sandbox') && $this->_getApi()->getConfig()->isSandbox()) {
+            $sellerAuthorizationNote = $payment->getAdditionalInformation('sandbox');
+        }
+
         $result = $this->_getApi()->authorize(
             $payment->getTransactionId(),
             $this->_getMagentoReferenceId($payment) . '-authorize',
             $amount,
             $order->getBaseCurrencyCode(),
             $captureNow,
-            ($captureNow) ? $this->_getSoftDescriptor() : null
+            ($captureNow) ? $this->_getSoftDescriptor() : null,
+            $sellerAuthorizationNote
         );
 
         $status = $result->getAuthorizationStatus();
@@ -139,9 +146,9 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
 
                 break;
 
-            case self::AUTH_STATUS_DECLINED:
             case self::AUTH_STATUS_CLOSED:
-                Mage::throwException('Amazon Payments authorization error: ' . $status->getReasonCode() . ' - ' . $status->getReasonDescription());
+            case self::AUTH_STATUS_DECLINED:
+                Mage::throwException('Amazon Payments authorization error: ' . $status->getState() . ' - ' . $status->getReasonCode() . '  ' . $status->getReasonDescription());
                 break;
             default:
                 Mage::throwException('Amazon Payments authorization error.');
@@ -312,24 +319,25 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
         return $this->_void($payment);
     }
 
+    /**
+     * Void/Cancel
+     */
     protected function _void(Varien_Object $payment)
     {
         $orderTransaction = $payment->lookupTransaction(false, Mage_Sales_Model_Order_Payment_Transaction::TYPE_ORDER);
 
         if (!$orderTransaction) {
-            $orderTransaction = $payment->getAdditionalInformation('order_reference');
+            $orderTransactionId = $payment->getAdditionalInformation('order_reference');
         }
         else {
             $orderTransactionId = $orderTransaction->getTxnId();
         }
 
         if ($orderTransaction) {
-            $this->_getApi()->cancelOrderReference($orderTransaction);
-            //$orderTransaction->close(true);
+            $this->_getApi()->cancelOrderReference($orderTransactionId);
         }
         return $this;
     }
-
 
     /**
      * Can capture?
