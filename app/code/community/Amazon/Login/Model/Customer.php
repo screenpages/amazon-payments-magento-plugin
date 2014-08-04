@@ -17,19 +17,38 @@ class Amazon_Login_Model_Customer extends Mage_Customer_Model_Customer
      *   Amazon Access Token
      * @return object $customer
      */
-    public function loginWithToken($token)
+    public function loginWithToken($token, $redirectOnVerify = '')
     {
         $amazonProfile = $this->getAmazonProfile($token);
 
         if ($amazonProfile && isset($amazonProfile['email'])) {
+
+            // Load customer by email
             $this->setWebsiteId(Mage::app()->getWebsite()->getId())->loadByEmail($amazonProfile['email']);
 
-            // Log user in?
-            if ($this->getId()) {
-                Mage::getSingleton('customer/session')->setCustomerAsLoggedIn($this);
+            // Load Amazon Login association
+            $row = Mage::getModel('amazon_login/login')->load($amazonProfile['user_id'], 'amazon_uid');
+
+            // If Magento customer account exists and there is no association, then the Magento account
+            // must be verified, as Amazon does not verify email addresses.
+            if (!$row->getLoginId() && $this->getId()) {
+                Mage::getSingleton('customer/session')->setAmazonProfile($amazonProfile);
+
+                Mage::app()->getResponse()
+                    ->setRedirect(Mage::helper('amazon_login')->getVerifyUrl() . '?redirect=' . $redirectOnVerify, 301)
+                    ->sendResponse();
+
+                exit;
+
             }
+            // Log user in
             else {
-                $this->createCustomer($amazonProfile);
+                // Create account
+                if (!$this->getId()) {
+                  $this->createCustomer($amazonProfile);
+                }
+                Mage::getSingleton('customer/session')->setCustomerAsLoggedIn($this);
+                //Mage::getSingleton('customer/session')->loginById($this->getId());
             }
         }
 
@@ -65,14 +84,7 @@ class Amazon_Login_Model_Customer extends Mage_Customer_Model_Customer
      */
     public function createCustomer($amazonProfile)
     {
-        // Verify customer does not exist
-        $this->setWebsiteId(Mage::app()->getWebsite()->getId())->loadByEmail($amazonProfile['email']);
-        if ($this->getId()) {
-            return $this;
-        }
-
-        $firstName = substr($amazonProfile['name'], 0, strrpos($amazonProfile['name'], ' '));
-        $lastName  = substr($amazonProfile['name'], strlen($firstName) + 1);
+        list($firstName, $lastName) = $this->getAmazonName($amazonProfile['name']);
 
         try {
             $this
@@ -86,16 +98,26 @@ class Amazon_Login_Model_Customer extends Mage_Customer_Model_Customer
                 ->save()
                 ->sendNewAccountEmail('registered', '', Mage::app()->getStore()->getId());
 
-            Mage::getSingleton('customer/session')->loginById($this->getId());
+            $this->createAssociation($amazonProfile, $this->getId());
+
         }
         catch (Exception $ex) {
-            Zend_Debug::dump($ex->getMessage());
+            Mage::logException($ex);
         }
 
         return $this;
     }
 
+    /**
+     * Create association between Amazon Profile and Customer
+     */
+    public function createAssociation($amazonProfile, $customer_id)
+    {
+        Mage::getModel('amazon_login/login')
+            ->setCustomerId($customer_id)
+            ->setAmazonUid($amazonProfile['user_id'])
+            ->save();
+    }
+
 }
 
-
-?>

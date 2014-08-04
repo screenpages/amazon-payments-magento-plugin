@@ -10,7 +10,7 @@
 <config>
     <modules>
         <Amazon_Payments>
-            <version>0.0.1.0</version>
+            <version>0.1.0</version>
         </Amazon_Payments>
     </modules>
     <global>

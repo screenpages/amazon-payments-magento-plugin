@@ -10,23 +10,56 @@
 <config>
     <modules>
         <Amazon_Login>
-            <version>0.0.1.0</version>
+            <version>0.1.0</version>
         </Amazon_Login>
     </modules>
     <global>
+        <blocks>
+            <amazon_login>
+                <class>Amazon_Login_Block</class>
+            </amazon_login>
+        </blocks>
         <models>
             <amazon_login>
                 <class>Amazon_Login_Model</class>
+                <resourceModel>login_mysql4</resourceModel>
             </amazon_login>
+            <login_mysql4>
+                <class>Amazon_Login_Model_Resource</class>
+                <entities>
+                    <login>
+                        <table>amazon_login</table>
+                    </login>
+                </entities>
+            </login_mysql4>
         </models>
+
+        <resources>
+            <login_setup>
+                <setup>
+                    <module>Amazon_Login</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </login_setup>
+            <login_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </login_write>
+            <login_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </login_read>
+        </resources>
+
         <helpers>
             <amazon_login>
                 <class>Amazon_Login_Helper</class>
             </amazon_login>
         </helpers>
-
-
-
     </global>
 
 

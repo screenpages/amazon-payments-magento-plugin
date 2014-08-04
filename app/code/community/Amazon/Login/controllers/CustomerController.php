@@ -37,6 +37,40 @@ class Amazon_Login_CustomerController extends Mage_Core_Controller_Front_Action
         }
     }
 
+    /**
+     * Verify Customer account
+     */
+    public function verifyAction()
+    {
+        if ($login = $this->getRequest()->getParam('login')) {
+            $profile = Mage::helper('amazon_login')->getAmazonProfileSession();
+
+            try {
+                if (Mage::getSingleton('customer/session')->login($profile['email'], $login['password'])) {
+                    Mage::getSingleton('amazon_login/customer')->createAssociation($profile, Mage::getSingleton('customer/session')->getCustomer()->getId());
+
+                    $redirect = $this->getRequest()->getParam('redirect');
+                    if (!$redirect) {
+                        $this->_redirectUrl(Mage::helper('customer')->getDashboardUrl());
+                    }
+                    else {
+                        $this->_redirect($redirect);
+                    }
+
+                }
+
+            } catch (Exception $e) {
+                Mage::getSingleton('customer/session')->addError($e->getMessage());
+            }
+
+        }
+
+
+        $this->loadLayout();
+        $this->_initLayoutMessages('customer/session');
+        $this->renderLayout();
+    }
+
 }
 
 ?>
