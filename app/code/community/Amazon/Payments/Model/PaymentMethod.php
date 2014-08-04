@@ -79,43 +79,9 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
     }
 
 
-
     /**
-     * Instantiate state and set it to state object
-     *
-     * @param string $paymentAction
-     * @param Varien_Object
-
-    public function initialize($paymentAction, $stateObject)
-    {
-        Mage::log($paymentAction);
-
-        switch ($paymentAction) {
-            case self::ACTION_AUTHORIZE:
-            case self::ACTION_AUTHORIZE_CAPTURE:
-
-                /*
-                $payment = $this->getInfoInstance();
-                $order = $payment->getOrder();
-                $order->setCanSendNewEmailFlag(false);
-                $payment->authorize(true, $order->getBaseTotalDue()); // base amount will be set inside
-                $payment->setAmountAuthorized($order->getTotalDue());
-
-                $order->setState(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT, 'pending_payment', '', false);
-
-                $stateObject->setState(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT);
-                $stateObject->setStatus('pending_payment');
-                $stateObject->setIsNotified(false);
-
-                break;
-            default:
-                break;
-        }
-
-        exit;
-    }
-    */
-
+     * Authorize, with option to Capture
+     */
     protected function _authorize(Varien_Object $payment, $amount, $captureNow = false)
     {
         $order = $payment->getOrder();
@@ -134,10 +100,6 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
         switch ($status->getState()) {
             case self::AUTH_STATUS_PENDING:
             case self::AUTH_STATUS_OPEN:
-
-                //$order->setState(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT, 'pending_payment', '', false);
-
-                Mage::log("authorize: " . $result->getAmazonAuthorizationId());
 
                 $payment->setTransactionId($result->getAmazonAuthorizationId());
                 $payment->setParentTransactionId($payment->getAdditionalInformation('order_reference'));
@@ -163,24 +125,7 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
 
                     }
 
-                    /*
-                    $order->setState(Mage_Sales_Model_Order::STATE_PROCESSING, true);
-                    $transactionSave->addObject($order);
-                    $transactionSave->addCommitCallback(array($order, 'save'));
-                    //*/
-
                     $transactionSave->save();
-
-                    // Process Order
-                    /*
-                    $order->setState(Mage_Sales_Model_Order::STATE_PROCESSING, Mage_Sales_Model_Order::STATE_PROCESSING, '', Mage_Sales_Model_Order_Status_History::CUSTOMER_NOTIFICATION_NOT_APPLICABLE)
-                          ->save();
-                    */
-
-
-
-
-
 
                     $transactionType = Mage_Sales_Model_Order_Payment_Transaction::TYPE_CAPTURE;
                     $message = Mage::helper('payment')->__('Authorize and capture request for %s sent to Amazon Payments.', $order->getStore()->convertPrice($amount, true, false));
@@ -203,8 +148,6 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
                 break;
         }
 
-
-
     }
 
     /**
@@ -220,15 +163,8 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
 
         $orderReferenceId = $payment->getAdditionalInformation('order_reference');
 
-        Mage::log("order: " . $orderReferenceId);
-
         $payment->setTransactionId($orderReferenceId);
         $order = $payment->getOrder();
-
-        //Mage::log($payment->debug());
-        //Mage::log($order->debug());
-        //exit;
-
 
         $apiResult = $this->_getApi()->setOrderReferenceDetails(
             $orderReferenceId,
@@ -239,8 +175,6 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
         );
 
         $apiResult = $this->_getApi()->confirmOrderReference($orderReferenceId);
-        //*/
-
 
         $payment->setIsTransactionClosed(false);
         $payment->setSkipOrderProcessing(true);
@@ -288,8 +222,6 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
      */
     public function capture(Varien_Object $payment, $amount)
     {
-        Mage::log("capture");
-
         $transactionAuth = $payment->lookupTransaction(false, Mage_Sales_Model_Order_Payment_Transaction::TYPE_AUTH);
         $authReferenceId = $transactionAuth->getTxnId();
 
@@ -297,14 +229,11 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
 
         $result = $this->_getApi()->capture(
             $authReferenceId,
-            //$payment->getTransactionId(),
             $this->_getMagentoReferenceId($payment) . '-capture',
             $amount,
             $order->getBaseCurrencyCode(),
             $this->_getSoftDescriptor()
         );
-
-        Mage::log($result);
 
         if ($result) {
             $status = $result->getCaptureStatus();
@@ -330,8 +259,8 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
 
         }
         else {
-            $error = error_get_last();
-            Mage::log($error);
+            //$error = error_get_last();
+            //Mage::log($error);
             Mage::throwException('Unable to capture payment at this time. Please try again later.');
         }
 
@@ -348,9 +277,6 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
         }
 
         $order = $payment->getOrder();
-
-        //Mage::log($payment->debug());
-        //Mage::log($payment->getRefundTransactionId());
 
         $result = $this->_getApi()->refund(
             $payment->getRefundTransactionId(),
@@ -373,15 +299,16 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
     /**
      * Cancel
      */
-    public function cancel(Varien_Object $payment) {
-        Mage::log('cancel');
+    public function cancel(Varien_Object $payment)
+    {
         return $this->_void($payment);
     }
 
     /**
      * Void
      */
-    public function void(Varien_Object $payment) {
+    public function void(Varien_Object $payment)
+    {
         return $this->_void($payment);
     }
 
@@ -409,7 +336,8 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
      *
      * @return bool
      */
-    public function canCapture() {
+    public function canCapture()
+    {
         $payment = $this->getInfoInstance();
         if ($payment) {
             $transactionAuth = $payment->lookupTransaction(false, Mage_Sales_Model_Order_Payment_Transaction::TYPE_AUTH);
@@ -428,7 +356,8 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
      *
      * @return bool
      */
-    public function canInvoice() {
+    public function canInvoice()
+    {
         $payment = $this->getInfoInstance();
         if ($payment) {
             $transactionAuth = $payment->lookupTransaction(false, Mage_Sales_Model_Order_Payment_Transaction::TYPE_AUTH);
