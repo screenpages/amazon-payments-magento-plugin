@@ -29,4 +29,12 @@ class Amazon_Payments_Block_Checkout extends Mage_Core_Block_Template
         return (float)Mage::getSingleton('checkout/session')->getQuote()->getBaseGrandTotal();
     }
 
+    /**
+     * Is debug mode?
+     */
+    public function isDebugMode()
+    {
+        return Mage::getSingleton('amazon_payments/config')->isDebugMode();
+    }
+
 }

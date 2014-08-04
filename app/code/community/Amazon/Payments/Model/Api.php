@@ -122,12 +122,12 @@ class Amazon_Payments_Model_Api
      * @param string $orderReferenceId
      * @param string $authorizationAmount
      * @param string $authorizationCurrency
-     * @param string $sellerAuthorizationNote
-     * @param string $softDescriptor Description to be shown on the buyer’s payment instrument statement.
+     * @param string $softDescriptor    Description to be shown on the buyer’s payment instrument statement.
+     * @param string $sellerAuthorizationNote   A description for the transaction that is displayed in emails to the buyer (also used for Sandbox Simulations).
      * @return OffAmazonPaymentsService_Model_AuthorizeResponse
      * @link http://docs.developer.amazonservices.com/en_US/off_amazon_payments/OffAmazonPayments_Authorize.html
      */
-    public function authorize($orderReferenceId, $authorizationReferenceId, $authorizationAmount, $authorizationCurrency, $captureNow = false, $softDescriptor = null)
+    public function authorize($orderReferenceId, $authorizationReferenceId, $authorizationAmount, $authorizationCurrency, $captureNow = false, $softDescriptor = null, $sellerAuthorizationNote = null)
     {
         $request = array(
             'AmazonOrderReferenceId' => $orderReferenceId,
@@ -136,11 +136,16 @@ class Amazon_Payments_Model_Api
                 'Amount'       => $authorizationAmount,
                 'CurrencyCode' => $authorizationCurrency
             ),
-            'CaptureNow' => $captureNow
+            'CaptureNow' => $captureNow,
+            'TransactionTimeout' => 0, // Synchronous Mode
         );
 
         if ($softDescriptor) {
             $request['SoftDescriptor'] = $softDescriptor;
+        }
+
+        if ($sellerAuthorizationNote) {
+            $request['SellerAuthorizationNote'] = trim($sellerAuthorizationNote);
         }
 
         $response = $this->request('authorize', $request);
@@ -175,6 +180,7 @@ class Amazon_Payments_Model_Api
                 'Amount' => $captureAmount,
                 'CurrencyCode' => $captureCurrency
             ),
+            'TransactionTimeout' => 0, // Synchronous Mode
         );
 
         if ($softDescriptor) {

@@ -22,6 +22,7 @@ class Amazon_Payments_Model_Config
     const CONFIG_XML_PATH_ACCESS_SECRET = 'payment/amazon_payments/access_secret';
     const CONFIG_XML_PATH_REGION        = 'payment/amazon_payments/region';
     const CONFIG_XML_PATH_SANDBOX       = 'payment/amazon_payments/sandbox';
+    const CONFIG_XML_PATH_DEBUG         = 'payment/amazon_payments/debug';
     const CONFIG_XML_PATH_CHECKOUT_PAGE = 'payment/amazon_payments/checkout_page';
 
     const CONFIG_XML_PATH_LOGIN_ENABLED = 'amazon_login/settings/enabled';
@@ -71,6 +72,17 @@ class Amazon_Payments_Model_Config
     public function isGuestCheckout($store = null)
     {
         return ! (bool) $this->_getStoreConfig(self::CONFIG_XML_PATH_LOGIN_ENABLED, $store);
+    }
+
+    /**
+     * Is debug mode enabled?
+     *
+     * @param   store $store
+     * @return  string
+     */
+    public function isDebugMode($store = null)
+    {
+        return (bool) $this->_getStoreConfig(self::CONFIG_XML_PATH_DEBUG, $store);
     }
 
     /**

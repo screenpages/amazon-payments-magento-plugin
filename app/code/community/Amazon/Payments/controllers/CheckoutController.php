@@ -251,44 +251,22 @@ class Amazon_Payments_CheckoutController extends Amazon_Payments_Controller_Chec
                 }
             }
 
-            /*
-            $data = $this->getRequest()->getPost('payment', array());
-            if ($data) {
-                $data['checks'] = Mage_Payment_Model_Method_Abstract::CHECK_USE_CHECKOUT
-                    | Mage_Payment_Model_Method_Abstract::CHECK_USE_FOR_COUNTRY
-                    | Mage_Payment_Model_Method_Abstract::CHECK_USE_FOR_CURRENCY
-                    | Mage_Payment_Model_Method_Abstract::CHECK_ORDER_TOTAL_MIN_MAX
-                    | Mage_Payment_Model_Method_Abstract::CHECK_ZERO_TOTAL;
-                $this->_getCheckout()->getQuote()->getPayment()->importData($data);
+            $additional_information = array(
+                'order_reference' => $this->getAmazonOrderReferenceId()
+            );
+
+            if ($this->getRequest()->getPost('sandbox')) {
+                $additional_information['sandbox'] = $this->getRequest()->getPost('sandbox');
             }
-            */
 
             $this->_getCheckout()->savePayment(array(
                 'method' => 'amazon_payments',
-                'additional_information' => array(
-                    'order_reference' => $this->getAmazonOrderReferenceId(),
-                )
+                'additional_information' => $additional_information,
             ));
 
             //$this->_getCheckout()->getQuote()->getPayment()->setTransactionId($this->getAmazonOrderReferenceId());
             $this->_getCheckout()->saveOrder();
             $this->_getCheckout()->getQuote()->save();
-
-
-
-            /*
-            // Sets order reference details
-            $apiResult = $this->_getApi()->setOrderReferenceDetails(
-                $this->_amazonOrderReferenceId,
-                $this->_getCheckout()->getQuote()->getBaseGrandTotal(),
-                $this->_getCheckout()->getQuote()->getBaseCurrencyCode(),
-                $this->_getCheckout()->getCheckout()->getLastOrderId(),
-                Mage::app()->getStore()->getName()
-            );
-
-            $apiResult = $this->_getApi()->confirmOrderReference($this->_amazonOrderReferenceId);
-            */
-
 
             $redirectUrl = Mage::getUrl('checkout/amazon_payments/success');
             $result['success'] = true;

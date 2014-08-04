@@ -26,7 +26,6 @@
                 <div id="amazon-widget-address"></div>
             </div>
 
-
             <?php if ($this->getChild('shipping_method')->isShow()) : ?>
                 <div id="shipping-method-wrapper">
                     <?php echo $this->getChildHtml('shipping_method') ?>
@@ -48,6 +47,20 @@
         <div id="col-3-amz" class="col-amz">
             <h2><?php echo $this->__('Order Summary'); ?></h2>
             <?php echo $this->getChildHtml('review') ?>
+
+            <?php if ($this->isDebugMode()) : ?>
+            <br />
+            <h3>Authorization Sandbox Simulation:</h3>
+            <textarea id="sandbox"></textarea>
+            Example:
+            <small>
+             	{"SandboxSimulation": {"State":"Declined", "ReasonCode":"AmazonRejected"}}
+              <br />
+              (<a href="http://docs.developer.amazonservices.com/en_US/apa_guide/APAGuide_Testing.html" target="_blank">More Info</a>)<br />
+            </small>
+
+
+            <?php endif; ?>
         </div>
 
     </div>
@@ -128,6 +141,11 @@ AmazonPaymentsMageCheckout.prototype = {
           params += '&'+Form.serialize(this.agreementsForm);
       }
       params.save = true;
+
+      var sandbox = $('sandbox');
+      if (sandbox) {
+          params.sandbox = sandbox.getValue();
+      }
 
       this.toggleOrderSubmit(true);
 
