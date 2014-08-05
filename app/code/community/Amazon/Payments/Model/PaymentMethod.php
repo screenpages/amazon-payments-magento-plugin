@@ -107,6 +107,7 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
         switch ($status->getState()) {
             case self::AUTH_STATUS_PENDING:
             case self::AUTH_STATUS_OPEN:
+            case self::AUTH_STATUS_CLOSED:
 
                 $payment->setTransactionId($result->getAmazonAuthorizationId());
                 $payment->setParentTransactionId($payment->getAdditionalInformation('order_reference'));
@@ -146,7 +147,6 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
 
                 break;
 
-            case self::AUTH_STATUS_CLOSED:
             case self::AUTH_STATUS_DECLINED:
                 Mage::throwException('Amazon Payments authorization error: ' . $status->getState() . ' - ' . $status->getReasonCode() . '  ' . $status->getReasonDescription());
                 break;
