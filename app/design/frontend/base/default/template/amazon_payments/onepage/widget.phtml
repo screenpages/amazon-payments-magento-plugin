@@ -63,11 +63,10 @@ AmazonWidgetStep.prototype = {
     },
 
     setAmazonOrderReferenceId: function(id) {
-        $(this.form)["amazon_order_reference_id"].setValue(id);
+        $(this.form)["amazon_order_reference_id"].value = id;
     },
 
     validate: function() {
-
         if (!$(this.form)["amazon_order_reference_id"].value) {
            alert("Amazon Order Reference ID required. Please try again.");
            return false;
