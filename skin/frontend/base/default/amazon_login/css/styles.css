@@ -1,0 +1,8 @@
+/* Amazon Login CSS */
+
+
+@media all and (max-width: 480px) {
+    #amazon-buttons-wrapper .col-2 {
+        display:none;
+    }
+}

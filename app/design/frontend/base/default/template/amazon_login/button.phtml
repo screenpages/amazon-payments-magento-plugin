@@ -32,7 +32,7 @@ END;
 
 ?>
 
-<div class="col2-set">
+<div id="amazon-buttons-wrapper" class="col2-set">
     <div class="col-1">
         <?php echo $login_button; ?>
     </div>
@@ -44,6 +44,6 @@ END;
 <script>
     // Focus popup window on click (e.g. if already open and hidden behind main window)
     var timeoutShowPopup; // Prevent blank tab from opening if already signed in
-    $$(".amazon-login-button").invoke("observe", "click", function() { timeoutShowPopup = setTimeout(function() { window.open('', 'amazonloginpopup', '').focus(); }, 500); })
+    $$(".amazon-login-button").invoke("observe", "mouseup", function() { timeoutShowPopup = setTimeout(function() { window.open('', 'amazonloginpopup', '').focus(); }, 500); })
     Event.observe(window, "beforeunload", function() { clearTimeout(timeoutShowPopup); });
 </script>

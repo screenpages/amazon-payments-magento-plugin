@@ -11,6 +11,11 @@
 -->
 <layout version="0.1.0">
     <customer_account_login translate="label">
+
+        <reference name="head">
+            <action method="addItem"><type>skin_css</type><name>amazon_login/css/styles.css</name><params/></action>
+        </reference>
+
         <block type="core/template" name="amazon_login.script" template="amazon_login/script.phtml" />
         <block type="core/template" name="amazon_login.button" template="amazon_login/button.phtml" after="customer_form_login" />
 
