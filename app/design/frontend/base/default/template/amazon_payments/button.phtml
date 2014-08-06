@@ -32,11 +32,6 @@
 
     OffAmazonPayments.Button("<?php echo $this->getAmazonPayButtonId(); ?>", "<?php echo $this->getSellerId(); ?>", AmazonButtonOptions);
 
-    // Focus popup window on click (e.g. if already open and hidden behind main window)
-    var timeoutShowPopup; // Prevent blank tab from opening if already signed in
-    $("<?php echo $this->getAmazonPayButtonId(); ?>").observe("click", function() { timeoutShowPopup = setTimeout(function() { window.open('', 'amazonloginpopup', '').focus(); }, 500); })
-    Event.observe(window, "beforeunload", function() { clearTimeout(timeoutShowPopup); });
-
   </script>
 
 <?php endif; ?>

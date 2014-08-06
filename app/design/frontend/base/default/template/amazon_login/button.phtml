@@ -40,10 +40,3 @@ END;
         <?php echo $login_button; ?>
     </div>
 </div>
-
-<script>
-    // Focus popup window on click (e.g. if already open and hidden behind main window)
-    var timeoutShowPopup; // Prevent blank tab from opening if already signed in
-    $$(".amazon-login-button").invoke("observe", "mouseup", function() { timeoutShowPopup = setTimeout(function() { window.open('', 'amazonloginpopup', '').focus(); }, 500); })
-    Event.observe(window, "beforeunload", function() { clearTimeout(timeoutShowPopup); });
-</script>
