@@ -15,9 +15,16 @@ class Amazon_Payments_Model_Observer_Onepage
      */
     public function beforeLoadLayout(Varien_Event_Observer $observer)
     {
+        $_helper = Mage::helper('amazon_payments/data');
         $fullActionName = $observer->getEvent()->getAction()->getFullActionName();
 
-        if ($fullActionName == 'checkout_onepage_index' && Mage::helper('amazon_payments/data')->isCheckoutAmazonSession()) {
+
+        if ($fullActionName == 'checkout_onepage_index' && $_helper->getConfig()->isEnabled() && $_helper->isCheckoutAmazonSession()) {
+            // If One Page is disable and user has active Amazon Session, redirect to standalone checkout
+            if (!$_helper->getConfig()->isCheckoutOnepage()) {
+                Mage::app()->getFrontController()->getResponse()->setRedirect($_helper->getStandaloneUrl());
+            }
+
             $observer->getEvent()->getLayout()->getUpdate()->addHandle('checkout_onepage_index_amazon_payments');
         }
 

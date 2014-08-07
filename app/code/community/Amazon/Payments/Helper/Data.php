@@ -50,6 +50,16 @@ class Amazon_Payments_Helper_Data extends Mage_Core_Helper_Abstract
     }
 
     /**
+     * Retrieve stand alone URL
+     *
+     * @return string
+     */
+    public function getStandaloneUrl()
+    {
+        return Mage::getUrl('checkout/amazon_payments', array('_secure'=>true));
+    }
+
+    /**
      * Does user have Amazon order reference for checkout?
      *
      * @return string

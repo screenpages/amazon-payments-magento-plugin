@@ -12,7 +12,7 @@ class Amazon_Payments_Block_Link extends Mage_Core_Block_Template
 {
     public function getCheckoutUrl()
     {
-        return $this->getUrl('checkout/amazon_payments', array('_secure'=>true));
+        return Mage::helper('amazon_payments/data')->getStandaloneUrl();
     }
 
     public function isDisabled()
