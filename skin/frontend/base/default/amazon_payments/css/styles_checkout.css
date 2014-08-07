@@ -66,12 +66,20 @@
   /*border-image: linear-gradient(to bottom, rgba(207, 186, 132, 0), rgba(156, 125, 46, 0)) 1 100%;*/
 
   text-transform:none;
-  color:#4f3310;
   display:block;
   width:100%;
   padding:5px 15px;
 
+}
 
+button.btn-checkout span {
+  color:#4f3310;
+  background:none;
+  height:auto;
+  padding:0;
+}
+button.btn-checkout span span {
+  padding:0;
 }
 
 
