@@ -97,6 +97,8 @@
                 <model>amazon_payments/paymentMethod</model>
                 <payment_action>authorize_capture</payment_action>
                 <show_pay_cart>1</show_pay_cart>
+                <order_status>pending</order_status>
+                <active>1</active>
             </amazon_payments>
         </payment>
     </default>
