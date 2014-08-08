@@ -16,7 +16,7 @@ class Amazon_Payments_Block_Button extends Mage_Core_Block_Template
         $_config = Mage::getSingleton('amazon_payments/config');
 
         if ($_config->isCheckoutOnepage()) {
-            return $this->helper('checkout/url')->getCheckoutUrl();
+            return $this->getOnepageCheckoutUrl();
         }
         else if ($_config->isCheckoutModal()) {
             return $_helper->getModalUrl();
@@ -48,7 +48,7 @@ class Amazon_Payments_Block_Button extends Mage_Core_Block_Template
 
     public function isAmazonPayButtonEnabled()
     {
-        return !(Mage::getSingleton('amazon_payments/config')->isCheckoutOnepage());
+        return (!Mage::getSingleton('amazon_payments/config')->isCheckoutOnepage() || Mage::getSingleton('amazon_payments/config')->showPayOnCart());
     }
 
 }

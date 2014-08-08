@@ -24,6 +24,7 @@ class Amazon_Payments_Model_Config
     const CONFIG_XML_PATH_SANDBOX       = 'payment/amazon_payments/sandbox';
     const CONFIG_XML_PATH_DEBUG         = 'payment/amazon_payments/debug';
     const CONFIG_XML_PATH_CHECKOUT_PAGE = 'payment/amazon_payments/checkout_page';
+    const CONFIG_XML_PATH_SHOW_PAY_CART = 'payment/amazon_payments/show_pay_cart';
 
     const CONFIG_XML_PATH_LOGIN_ENABLED = 'amazon_login/settings/enabled';
 
@@ -186,5 +187,16 @@ class Amazon_Payments_Model_Config
     public function isCheckoutModal($store = null)
     {
         return ($this->_getStoreConfig(self::CONFIG_XML_PATH_CHECKOUT_PAGE, $store) == 'modal');
+    }
+
+    /**
+     * Show Pay button on Cart?
+     *
+     * @param   store $store
+     * @return  string
+     */
+    public function showPayOnCart($store = null)
+    {
+        return ($this->_getStoreConfig(self::CONFIG_XML_PATH_SHOW_PAY_CART, $store));
     }
 }
