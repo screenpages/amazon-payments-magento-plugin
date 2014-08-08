@@ -82,4 +82,12 @@
         </layout>
     </frontend>
 
+    <default>
+        <amazon_login>
+            <settings>
+                <enabled>1</enabled>
+            </settings>
+        </amazon_login>
+    </default>
+
 </config>

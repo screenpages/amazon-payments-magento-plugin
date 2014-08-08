@@ -61,7 +61,7 @@ class Amazon_Payments_Model_Config
      */
     public function isEnabled($store = null)
     {
-        return (bool) $this->_getStoreConfig(self::CONFIG_XML_PATH_ENABLED, $store);
+        return ($this->_getStoreConfig(self::CONFIG_XML_PATH_ENABLED, $store) && $this->getClientId($store) && $this->getClientSecret($store));
     }
 
     /**
