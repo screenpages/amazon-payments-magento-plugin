@@ -62,7 +62,7 @@ abstract class Amazon_Payments_Controller_Checkout extends Mage_Checkout_Control
         }
 
         // Redirect to clean URL
-        if ($this->getRequest()->getParam('access_token')) {
+        if ($this->getRequest()->getParam('access_token') && !$this->getRequest()->getParam('ajax')) {
             $this->_redirect($this->_checkoutUrl, array('_secure' => true));
             return;
         }

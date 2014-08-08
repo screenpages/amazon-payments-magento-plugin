@@ -39,6 +39,15 @@ class Amazon_Payments_CheckoutController extends Amazon_Payments_Controller_Chec
 
         //$this->_initLayoutMessages('customer/session');
 
+        // Ajax Modal
+        if($this->getRequest()->getParam('ajax')){
+            $this->getLayout()->getBlock('root')->setTemplate('page/popup.phtml');
+            $this->getLayout()->getBlock('after_body_start')->append('popup.header');
+            $this->getLayout()->getBlock('before_body_end')->append('popup.footer');
+        }
+
+
+
         $this->getLayout()->getBlock('head')->setTitle($this->__('Checkout'));
         $this->renderLayout();
     }

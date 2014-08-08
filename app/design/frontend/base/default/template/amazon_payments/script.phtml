@@ -23,3 +23,39 @@
 <?php $sandbox = ($_helper->isAmazonSandbox()) ? 'sandbox/' : ''; ?>
 
 <script type='text/javascript' src='https://static-na.payments-amazon.com/OffAmazonPayments/us/<?php echo $sandbox; ?>js/Widgets.js?sellerId=<?php echo $_helper->getSellerId(); ?>'></script>
+
+
+<?php if ($_helper->showModal()) : ?>
+
+<script type="text/javascript">
+
+function showAmazonModal(url) {
+
+    oPopup = new Window({
+        id:'amazon_modal',
+        className: 'alphacube',
+        url: url,
+        width: 1010,
+        height: 700,
+        minimizable: false,
+        maximizable: false,
+        showEffectOptions: {
+            duration: 0.4
+        },
+        hideEffectOptions:{
+            duration: 0.4
+        },
+        destroyOnClose: true
+    });
+    oPopup.setZIndex(100);
+    oPopup.showCenter(true);
+}
+
+
+document.observe("dom:loaded", function() {
+    showAmazonModal('<?php print $_helper->getStandaloneUrl(); ?>?ajax=1&<?php print $_SERVER['QUERY_STRING']; ?>');
+});
+
+</script>
+
+<?php endif; ?>

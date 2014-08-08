@@ -12,7 +12,19 @@ class Amazon_Payments_Block_Button extends Mage_Core_Block_Template
 {
     public function getCheckoutUrl()
     {
-        return Mage::helper('amazon_payments/data')->getStandaloneUrl();
+        $_helper = Mage::helper('amazon_payments/data');
+        $_config = Mage::getSingleton('amazon_payments/config');
+
+        if ($_config->isCheckoutOnepage()) {
+            return $this->helper('checkout/url')->getCheckoutUrl();
+        }
+        else if ($_config->isCheckoutModal()) {
+            return $_helper->getModalUrl();
+        }
+        else {
+            return $_helper->getStandaloneUrl();
+        }
+
     }
 
     public function getOnepageCheckoutUrl()

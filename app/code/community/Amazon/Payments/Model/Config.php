@@ -176,4 +176,15 @@ class Amazon_Payments_Model_Config
     {
         return ($this->_getStoreConfig(self::CONFIG_XML_PATH_CHECKOUT_PAGE, $store) == 'onepage');
     }
+
+    /**
+     * Is Checkout modal?
+     *
+     * @param   store $store
+     * @return  string
+     */
+    public function isCheckoutModal($store = null)
+    {
+        return ($this->_getStoreConfig(self::CONFIG_XML_PATH_CHECKOUT_PAGE, $store) == 'modal');
+    }
 }

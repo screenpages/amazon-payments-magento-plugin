@@ -9,63 +9,65 @@
  */
 ?>
 
+<div id="amazon-checkout">
 
-<div class="page-title">
-    <h1><?php echo $this->__('Checkout') ?></h1>
-</div>
-
-<?php echo $this->__('Amazon Payments uses information from your amazon account to place your order.'); ?>
-
-<div id="checkout-amazon-payments">
-    <div id="checkout-amazon-columns">
-
-        <div id="col-1-amz" class="col-amz">
-
-            <div id="amazon-widget-address-wrapper" class="amazon-widget-wrapper">
-                <h2><?php echo $this->__('Shipping Address'); ?></h2>
-                <div id="amazon-widget-address"></div>
-            </div>
-
-            <?php if ($this->getChild('shipping_method')->isShow()) : ?>
-                <div id="shipping-method-wrapper">
-                    <?php echo $this->getChildHtml('shipping_method') ?>
-                </div>
-            <?php endif; ?>
-
-        </div>
-
-        <div id="col-2-amz" class="col-amz">
-
-            <div id="amazon-widget-wrapper" class="amazon-widget-wrapper">
-                <h2><?php echo $this->__('Payment'); ?></h2>
-                <div id="amazon-widget-wallet"></div>
-            </div>
-
-        </div>
-
-
-        <div id="col-3-amz" class="col-amz">
-            <h2><?php echo $this->__('Order Summary'); ?></h2>
-            <?php echo $this->getChildHtml('review') ?>
-
-            <?php if ($this->isDebugMode()) : ?>
-            <br />
-            <h3>Authorization Sandbox Simulation:</h3>
-            <textarea id="sandbox"></textarea>
-            Example:
-            <small>
-             	{"SandboxSimulation": {"State":"Declined", "ReasonCode":"AmazonRejected"}}
-              <br />
-              (<a href="http://docs.developer.amazonservices.com/en_US/apa_guide/APAGuide_Testing.html" target="_blank">More Info</a>)<br />
-            </small>
-
-
-            <?php endif; ?>
-        </div>
-
+    <div class="page-title">
+        <h1><?php echo $this->__('Checkout') ?></h1>
     </div>
-</div>
 
+    <?php echo $this->__('Amazon Payments uses information from your amazon account to place your order.'); ?>
+
+    <div id="checkout-amazon-payments">
+        <div id="checkout-amazon-columns">
+
+            <div id="col-1-amz" class="col-amz">
+
+                <div id="amazon-widget-address-wrapper" class="amazon-widget-wrapper">
+                    <h2><?php echo $this->__('Shipping Address'); ?></h2>
+                    <div id="amazon-widget-address"></div>
+                </div>
+
+                <?php if ($this->getChild('shipping_method')->isShow()) : ?>
+                    <div id="shipping-method-wrapper">
+                        <?php echo $this->getChildHtml('shipping_method') ?>
+                    </div>
+                <?php endif; ?>
+
+            </div>
+
+            <div id="col-2-amz" class="col-amz">
+
+                <div id="amazon-widget-wrapper" class="amazon-widget-wrapper">
+                    <h2><?php echo $this->__('Payment'); ?></h2>
+                    <div id="amazon-widget-wallet"></div>
+                </div>
+
+            </div>
+
+
+            <div id="col-3-amz" class="col-amz">
+                <h2><?php echo $this->__('Order Summary'); ?></h2>
+                <?php echo $this->getChildHtml('review') ?>
+
+                <?php if ($this->isDebugMode()) : ?>
+                <br />
+                <h3>Authorization Sandbox Simulation:</h3>
+                <textarea id="sandbox"></textarea>
+                Example:
+                <small>
+                 	{"SandboxSimulation": {"State":"Declined", "ReasonCode":"AmazonRejected"}}
+                  <br />
+                  (<a href="http://docs.developer.amazonservices.com/en_US/apa_guide/APAGuide_Testing.html" target="_blank">More Info</a>)<br />
+                </small>
+
+
+                <?php endif; ?>
+            </div>
+
+        </div>
+    </div>
+
+</div>
 
 <script>
 
@@ -166,12 +168,12 @@ AmazonPaymentsMageCheckout.prototype = {
 
         if (response.redirect) {
             this.isSuccess = true;
-            location.href = response.redirect;
+            window.top.location.href = response.redirect;
             return;
         }
         if (response.success) {
             this.isSuccess = true;
-            window.location=this.successUrl;
+            window.top.location.href = this.successUrl;
         }
         else{
             var msg = response.error_messages;
@@ -250,7 +252,7 @@ new OffAmazonPayments.Widgets.AddressBook({
   },
   onError: function(error) {
     if (error.getErrorCode() == "BuyerSessionExpired") {
-         document.location.href = '<?php echo $this->getUrl('checkout/amazon_payments/clear'); ?>';
+         window.top.location.href = '<?php echo $this->getUrl('checkout/amazon_payments/clear'); ?>';
     }
     console.log(error.getErrorMessage());
   }

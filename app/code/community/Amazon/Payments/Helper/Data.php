@@ -60,6 +60,15 @@ class Amazon_Payments_Helper_Data extends Mage_Core_Helper_Abstract
     }
 
     /**
+     * Retrieve popup modal URL
+     *
+     * @return string
+     */
+    public function getModalUrl()
+    {
+        return Mage::getUrl('checkout/cart?amazon_modal=1', array('_secure'=>true));
+    }
+    /**
      * Does user have Amazon order reference for checkout?
      *
      * @return string
@@ -68,7 +77,6 @@ class Amazon_Payments_Helper_Data extends Mage_Core_Helper_Abstract
     {
         return (Mage::getSingleton('checkout/session')->getAmazonAccessToken());
     }
-
 
     /**
      * Is sandbox mode?
@@ -86,7 +94,6 @@ class Amazon_Payments_Helper_Data extends Mage_Core_Helper_Abstract
     public function clearSession()
     {
         Mage::getSingleton('checkout/session')->unsAmazonAccessToken();
-
     }
 
     /**
@@ -103,6 +110,13 @@ class Amazon_Payments_Helper_Data extends Mage_Core_Helper_Abstract
         }
     }
 
+    /**
+     * Show modal?
+     */
+    public function showModal()
+    {
+        return (Mage::app()->getRequest()->getParam('amazon_modal') && $this->getConfig()->isCheckoutModal());
+    }
 
 
 }

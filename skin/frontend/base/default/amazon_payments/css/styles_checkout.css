@@ -89,6 +89,60 @@ button.btn-checkout span span {
 }
 
 
+
+/* Popup Modal */
+body.page-popup {
+  padding:0px;
+}
+
+body.page-popup #amazon-checkout {
+  padding:20px;
+  height:550px; /* -150px from modal height */
+  overflow-y:scroll;
+}
+
+#popup-header {
+  background: #ffffff; /* Old browsers */
+  background: -moz-linear-gradient(top,  #ffffff 0%, #ebebeb 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#ebebeb)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  #ffffff 0%,#ebebeb 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  #ffffff 0%,#ebebeb 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  #ffffff 0%,#ebebeb 100%); /* IE10+ */
+  background: linear-gradient(to bottom,  #ffffff 0%,#ebebeb 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ebebeb',GradientType=0 ); /* IE6-9 */
+}
+
+#popup-header #amazon-payments-logo {
+  padding-top:20px;
+  padding-bottom:20px;
+  padding-left:20px;
+  width:300px;
+}
+
+#popup-footer {
+  height:60px;
+  border-top:1px solid #ddd;
+  background:#fafafa;
+  overflow:hidden;
+}
+
+#popup-footer-links,
+#popup-footer-right {
+  margin-top:0.25em;
+}
+
+#popup-footer-links li {
+  float:left;
+  padding-left:20px;
+}
+#popup-footer-right {
+  float:right;
+  color:#888;
+  padding-right:20px;
+}
+
+
+/* Responsive */
 @media all and (max-width: 640px) {
   #checkout-amazon-columns,
   #checkout-amazon-columns {
@@ -120,3 +174,5 @@ button.btn-checkout span span {
   }
 }
 */
+
+
