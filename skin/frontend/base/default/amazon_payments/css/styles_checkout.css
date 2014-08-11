@@ -96,9 +96,8 @@ body.page-popup {
 }
 
 body.page-popup #amazon-checkout {
+  margin-top:1em;
   padding:20px;
-  height:550px; /* -150px from modal height */
-  overflow-y:scroll;
 }
 
 #popup-header {

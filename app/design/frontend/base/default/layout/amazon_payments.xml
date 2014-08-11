@@ -154,10 +154,6 @@
             <action method="addItem"><type>skin_css</type><name>amazon_payments/css/styles_checkout.css</name><params/></action>
         </reference>
 
-        <!-- If ajax modal, added dynamically by Amazon_Payments_CheckoutController -->
-        <block type="core/template" name="popup.header" template="amazon_payments/popup_header.phtml" />
-        <block type="core/template" name="popup.footer" template="amazon_payments/popup_footer.phtml" />
-
         <reference name="root">
             <action method="setTemplate"><template>page/1column.phtml</template></action>
         </reference>
