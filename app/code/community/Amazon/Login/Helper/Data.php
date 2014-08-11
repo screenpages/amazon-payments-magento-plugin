@@ -10,8 +10,6 @@
 
 class Amazon_Login_Helper_Data extends Mage_Core_Helper_Abstract
 {
-
-
     /**
      * Retrieve customer verify url
      *
@@ -29,5 +27,15 @@ class Amazon_Login_Helper_Data extends Mage_Core_Helper_Abstract
     {
         return Mage::getSingleton('customer/session')->getAmazonProfile();
     }
+
+    /**
+     * Retreive additional login access scope
+     */
+    public function getAdditionalScope()
+    {
+        $scope = trim(Mage::getStoreConfig('amazon_login/settings/additional_scope'));
+        return ($scope) ? ' ' . $scope : '';
+    }
+
 
 }

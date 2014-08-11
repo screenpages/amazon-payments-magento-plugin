@@ -76,6 +76,28 @@
                 <show_in_store>1</show_in_store>
             </client_secret>
 
+
+
+            <heading_advanced translate="label">
+                <label>Advanced</label>
+                <frontend_model>adminhtml/system_config_form_field_heading</frontend_model>
+                <sort_order>110</sort_order>
+                <show_in_default>1</show_in_default>
+                <show_in_website>1</show_in_website>
+            </heading_advanced>
+
+            <additional_scope translate="label">
+              <label>Additional Access Scope</label>
+              <comment>
+                <![CDATA[Optional access scope strings during login.]]>
+              </comment>
+              <frontend_type>text</frontend_type>
+              <sort_order>120</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </additional_scope>
+
           </fields>
         </settings>
       </groups>

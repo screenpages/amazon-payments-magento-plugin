@@ -16,7 +16,7 @@
             <action method="addItem"><type>skin_css</type><name>amazon_login/css/styles.css</name><params/></action>
         </reference>
 
-        <block type="core/template" name="amazon_login.script" template="amazon_login/script.phtml" />
+        <block type="amazon_login/script" name="amazon_login.script" template="amazon_login/script.phtml" />
         <block type="core/template" name="amazon_login.button" template="amazon_login/button.phtml" after="customer_form_login" />
 
         <!-- ifconfig only works with action -->
@@ -36,7 +36,7 @@
 
     <customer_account_logoutsuccess>
         <reference name="content">
-            <block type="core/template" name="amazon_login.script.logout" template="amazon_login/script.phtml" />
+            <block type="amazon_login/script" name="amazon_login.script.logout" template="amazon_login/script.phtml" />
         </reference>
     </customer_account_logoutsuccess>
 
