@@ -51,7 +51,8 @@ AmazonModal.prototype.show = function(url) {
             duration: 0.4
         },
         destroyOnClose: true,
-        onShow: function() { Event.observe($('overlay_modal'), 'click', function() { Windows.closeAll(); }) }
+        onShow: function() { Event.observe($('overlay_modal'), 'click', function() { Windows.closeAll(); }) },
+        onClose: function() { $('overlay_modal').remove(); }
     });
     this.oPopup.setZIndex(100);
     this.oPopup.showCenter(true);
