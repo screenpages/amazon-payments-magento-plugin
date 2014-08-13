@@ -140,9 +140,11 @@ body.page-popup #amazon-checkout {
   padding-right:20px;
 }
 
+textarea#sandbox { width:100%;}
+
 
 /* Responsive */
-@media all and (max-width: 640px) {
+@media all and (max-width: 880px) {
   #checkout-amazon-columns,
   #checkout-amazon-columns {
     display:block;

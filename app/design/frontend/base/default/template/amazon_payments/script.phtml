@@ -17,7 +17,6 @@
   window.onAmazonLoginReady = function() {
     amazon.Login.setClientId('<?php echo $_helper->getClientId(); ?>');
   };
-
 </script>
 
 <?php $sandbox = ($_helper->isAmazonSandbox()) ? 'sandbox/' : ''; ?>
@@ -29,13 +28,19 @@
 
 <script type="text/javascript">
 
-function showAmazonModal(url) {
+AmazonModal = Class.create();
 
-    oPopup = new Window({
+AmazonModal.prototype.initialize = function(width) {
+    this.width = width;
+}
+
+AmazonModal.prototype.show = function(url) {
+
+    this.oPopup = new Window({
         id:'amazon_modal',
         className: 'alphacube',
         url: url,
-        width: 1010,
+        width: this.width,
         height: 700,
         minimizable: false,
         maximizable: false,
@@ -45,16 +50,34 @@ function showAmazonModal(url) {
         hideEffectOptions:{
             duration: 0.4
         },
-        destroyOnClose: true
+        destroyOnClose: true,
+        onShow: function() { Event.observe($('overlay_modal'), 'click', function() { Windows.closeAll(); }) }
     });
-    oPopup.setZIndex(100);
-    oPopup.showCenter(true);
+    this.oPopup.setZIndex(100);
+    this.oPopup.showCenter(true);
+
+    // Reponsive modal
+    Event.observe(window, "resize", this.resize.bind(this));
+    this.resize();
+}
+
+AmazonModal.prototype.resize = function() {
+    var oSize = this.oPopup.getSize();
+    var width = document.viewport.getWidth();
+
+    if (this.width > width) {
+      this.oPopup.setSize(width, oSize.height);
+    }
 }
 
 
+
+
 document.observe("dom:loaded", function() {
-    showAmazonModal('<?php print $_helper->getStandaloneUrl(); ?>?ajax=1&<?php print $_SERVER['QUERY_STRING']; ?>');
+    var amazonModal = new AmazonModal(1020);
+    amazonModal.show('<?php print $_helper->getStandaloneUrl(); ?>?ajax=1&<?php print $_SERVER['QUERY_STRING']; ?>');
 });
+
 
 </script>
 
