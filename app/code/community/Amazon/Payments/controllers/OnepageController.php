@@ -31,29 +31,36 @@ class Amazon_Payments_OnepageController extends Amazon_Payments_Controller_Check
             return;
         }
 
-        $this->_saveShipping();
+        try {
+            $this->_saveShipping();
+            $this->_getOnepage()->getCheckout()->setStepData('widget', 'complete', true);
 
-        $this->_getOnepage()->getCheckout()->setStepData('widget', 'complete', true);
+            $this->_getOnepage()->savePayment(array(
+                'method' => 'amazon_payments',
+                'additional_information' => array(
+                    'order_reference' => $this->getAmazonOrderReferenceId(),
+                )
+            ));
 
-        $this->_getOnepage()->savePayment(array(
-            'method' => 'amazon_payments',
-            'additional_information' => array(
-                'order_reference' => $this->getAmazonOrderReferenceId(),
-            )
-        ));
+            if ($this->_getOnepage()->getQuote()->isVirtual()) {
+                $result['goto_section'] = 'review';
+                $result['update_section'] = array(
+                    'name' => 'review',
+                    'html' => $this->_getReviewHtml()
+                );
+            } else {
+                $result['goto_section'] = 'shipping_method';
+                $result['update_section'] = array(
+                    'name' => 'shipping-method',
+                    'html' => $this->_getShippingMethodsHtml()
+                );
+            }
 
-        if ($this->_getOnepage()->getQuote()->isVirtual()) {
-            $result['goto_section'] = 'review';
-            $result['update_section'] = array(
-                'name' => 'review',
-                'html' => $this->_getReviewHtml()
-            );
-        } else {
-            $result['goto_section'] = 'shipping_method';
-            $result['update_section'] = array(
-                'name' => 'shipping-method',
-                'html' => $this->_getShippingMethodsHtml()
-            );
+        }
+        // Catch any API errors like invalid keys
+        catch (Exception $e) {
+            $result['error'] = true;
+            $result['message'] = $e->getMessage();
         }
 
         $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));

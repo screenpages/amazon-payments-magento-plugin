@@ -89,6 +89,7 @@ class Amazon_Payments_Model_Api
         }
         catch (Exception $exception) {
             Mage::logException($exception);
+            Mage::throwException($exception);
         }
 
         // Debugging/Logging
