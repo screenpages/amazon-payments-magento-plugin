@@ -102,12 +102,13 @@
             <action method="addItem"><type>skin_css</type><name>amazon_payments/css/styles_onepage.css</name><params/></action>
         </reference>
 
-
         <reference name="checkout.progress">
             <block type="checkout/onepage_progress" name="shipping.progress" template="amazon_payments/onepage/progress/widget.phtml"></block>
         </reference>
 
         <block type="amazon_payments/onepage" name="checkout.onepage" template="checkout/onepage.phtml">
+
+            <block type="checkout/onepage_login" name="checkout.onepage.login" as="login" template="amazon_payments/onepage/login_cancel.phtml" />
 
             <block type="amazon_payments/onepage_widget" name="amazon_payments.onepage.widget" as="widget" template="amazon_payments/onepage/widget.phtml" />
 

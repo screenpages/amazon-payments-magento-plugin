@@ -21,10 +21,6 @@ class Amazon_Payments_Block_Onepage extends Mage_Checkout_Block_Onepage_Abstract
         $steps = array();
         $stepCodes = $this->_getStepCodes();
 
-        if ($this->isCustomerLoggedIn()) {
-            $stepCodes = array_diff($stepCodes, array('login'));
-        }
-
         foreach ($stepCodes as $step) {
             $steps[$step] = $this->getCheckout()->getStepData($step);
         }
@@ -39,7 +35,7 @@ class Amazon_Payments_Block_Onepage extends Mage_Checkout_Block_Onepage_Abstract
      */
     public function getActiveStep()
     {
-        return $this->isCustomerLoggedIn() ? 'widget' : 'login';
+        return 'widget';
     }
 
     /**

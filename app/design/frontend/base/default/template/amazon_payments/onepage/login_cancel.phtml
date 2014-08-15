@@ -1,0 +1,32 @@
+<?php
+/**
+ * Amazon Payments
+ *
+ * @category    Amazon
+ * @package     Amazon_Payments
+ * @copyright   Copyright (c) 2014 Amazon.com
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+
+<br />
+<?php echo $this->__('Amazon Payments uses information from your Amazon account to place your order.'); ?>
+<br />
+<?php echo $this->__('Click <a href="#" id="amazon-cancel">here</a> to cancel and return to your cart.'); ?>
+
+<div class="col2-set">
+    <div class="col-1">
+        <div class="buttons-set">
+            <p class="required">&nbsp;</p>
+            <button type="button" class="button" onclick="checkout.gotoSection('widget', false);"><span><span><?php echo ($this->getQuote()->isAllowedGuestCheckout() ? $this->__('Continue') : $this->__('Register')) ?></span></span></button>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    // Cancel and log user out of Amazon
+    $('amazon-cancel').observe("click", function() {
+        amazon.Login.logout();
+        window.top.location.href = "<?php echo $this->getUrl('amazon_payments/checkout/clear'); ?>";
+    });
+</script>

@@ -77,5 +77,3 @@ class Amazon_Login_CustomerController extends Mage_Core_Controller_Front_Action
     }
 
 }
-
-?>

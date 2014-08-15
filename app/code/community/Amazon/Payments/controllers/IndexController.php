@@ -12,19 +12,10 @@ class Amazon_Payments_IndexController extends Mage_Core_Controller_Front_Action
 {
 
     /**
-     * Checkout page
+     * Index
      */
     public function indexAction()
     {
-
-        $api = Mage::getModel('amazon_payments/api');
-
-        $result = $api->getOrderReferenceDetails($_GET['id']);
-
-        print_r($result);
-
-
-        ///die('here');
 
     }
 
