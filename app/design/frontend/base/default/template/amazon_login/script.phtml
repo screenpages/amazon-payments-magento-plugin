@@ -34,15 +34,26 @@ window.onAmazonLoginReady = function() {
 
 
 function amazonLoginAuthorize() {
-    options = { scope : 'profile postal_code payments:shipping_address<?php print $this->getAdditionalScope(); ?>', response_type: 'token' };
-    amazon.Login.authorize(options, function(response) {
+    options = { scope : 'profile postal_code payments:shipping_address<?php print $this->getAdditionalScope(); ?>', response_type: 'token', popup: <?php print $this->getIsPopup(); ?> };
+
+    <?php if ($this->isPopup()) : ?>
+
+      var responseRedirect = function(response) {
         if (response.error) {
             console.log(response.error);
         }
         else {
-          document.location.href = "<?php echo $this->getUrl('amazon_login/customer/authorize')?>?token=" + response.access_token + "&referer=<?php echo Mage::helper('core')->urlEncode($this->helper('core/url')->getCurrentUrl())?>";
+          document.location.href = "<?php echo $this->getUrl('amazon_login/customer/authorize', array('_forced_secure' => true))?>?token=" + response.access_token + "&referer=<?php echo Mage::helper('core')->urlEncode($this->helper('core/url')->getCurrentUrl())?>";
         }
-    });
+      }
+
+    <?php else: ?>
+
+        var responseRedirect = "<?php echo $this->getUrl('amazon_login/customer/authorize', array('_forced_secure' => true))?>";
+
+    <?php endif; ?>
+
+    amazon.Login.authorize(options, responseRedirect);
 }
 
 $$('.amazon-login-button').each(function(el) {

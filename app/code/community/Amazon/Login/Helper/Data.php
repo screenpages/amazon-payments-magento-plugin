@@ -37,5 +37,12 @@ class Amazon_Login_Helper_Data extends Mage_Core_Helper_Abstract
         return ($scope) ? ' ' . $scope : '';
     }
 
+    /**
+     * Is login a popup or full-page redirect?
+     */
+    public function isPopup()
+    {
+        return (Mage::getStoreConfig('amazon_login/settings/popup'));
+    }
 
 }

@@ -86,6 +86,7 @@
         <amazon_login>
             <settings>
                 <enabled>1</enabled>
+                <popup>1</popup>
             </settings>
         </amazon_login>
     </default>

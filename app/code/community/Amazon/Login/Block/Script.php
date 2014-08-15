@@ -11,6 +11,26 @@
 class Amazon_Login_Block_Script extends Mage_Core_Block_Template
 {
     /**
+     * Is popup window?
+     *
+     * @return string
+     */
+    public function getIsPopup()
+    {
+        return ($this->isPopup()) ? 'true' : 'false';
+    }
+
+    /**
+     * Is popup window?
+     *
+     * @return bool
+     */
+    public function isPopup()
+    {
+        return ($this->helper('amazon_login')->isPopup());
+    }
+
+    /**
      * Is sandbox mode?
      */
     public function isSandboxEnabled()
