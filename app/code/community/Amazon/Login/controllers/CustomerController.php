@@ -49,6 +49,11 @@ class Amazon_Login_CustomerController extends Mage_Core_Controller_Front_Action
                 if (Mage::getSingleton('customer/session')->login($profile['email'], $login['password'])) {
                     Mage::getSingleton('amazon_login/customer')->createAssociation($profile, Mage::getSingleton('customer/session')->getCustomer()->getId());
 
+                    if ($token = Mage::getSingleton('checkout/session')->getAmazonAccessTokenVerify()) {
+                        Mage::getSingleton('checkout/session')->setAmazonAccessToken($token);
+                        Mage::getSingleton('checkout/session')->unsAmazonAccessTokenVerify();
+                    }
+
                     $redirect = $this->getRequest()->getParam('redirect');
                     if (!$redirect) {
                         $this->_redirectUrl(Mage::helper('customer')->getDashboardUrl());

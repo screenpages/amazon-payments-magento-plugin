@@ -42,8 +42,6 @@ abstract class Amazon_Payments_Controller_Checkout extends Mage_Checkout_Control
         $token = $this->getRequest()->getParam('access_token');
 
         if ($token) {
-            Mage::getSingleton('checkout/session')->setAmazonAccessToken($token);
-
             $_amazonLogin = Mage::getModel('amazon_login/customer');
 
             if (!Mage::getSingleton('customer/session')->isLoggedIn()) {
@@ -59,6 +57,8 @@ abstract class Amazon_Payments_Controller_Checkout extends Mage_Checkout_Control
                     }
                 }
             }
+
+            Mage::getSingleton('checkout/session')->setAmazonAccessToken($token);
         }
 
         // Redirect to clean URL

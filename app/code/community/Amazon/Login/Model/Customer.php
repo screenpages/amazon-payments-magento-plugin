@@ -29,13 +29,11 @@ class Amazon_Login_Model_Customer extends Mage_Customer_Model_Customer
             // Load Amazon Login association
             $row = Mage::getModel('amazon_login/login')->load($amazonProfile['user_id'], 'amazon_uid');
 
-            // Use Pay with Amazon for checkout (if Amazon_Payments enabled)
-            Mage::getSingleton('checkout/session')->setAmazonAccessToken($token);
-
             // If Magento customer account exists and there is no association, then the Magento account
             // must be verified, as Amazon does not verify email addresses.
             if (!$row->getLoginId() && $this->getId()) {
                 Mage::getSingleton('customer/session')->setAmazonProfile($amazonProfile);
+                Mage::getSingleton('checkout/session')->setAmazonAccessTokenVerify($token);
 
                 Mage::app()->getResponse()
                     ->setRedirect(Mage::helper('amazon_login')->getVerifyUrl() . '?redirect=' . $redirectOnVerify, 301)
@@ -52,7 +50,12 @@ class Amazon_Login_Model_Customer extends Mage_Customer_Model_Customer
                 }
                 Mage::getSingleton('customer/session')->setCustomerAsLoggedIn($this);
                 //Mage::getSingleton('customer/session')->loginById($this->getId());
+
+                // Use Pay with Amazon for checkout (if Amazon_Payments enabled)
+                Mage::getSingleton('checkout/session')->setAmazonAccessToken($token);
             }
+
+
         }
 
         return $this;
@@ -120,6 +123,7 @@ class Amazon_Login_Model_Customer extends Mage_Customer_Model_Customer
             ->setCustomerId($customer_id)
             ->setAmazonUid($amazonProfile['user_id'])
             ->save();
+
     }
 
 }
