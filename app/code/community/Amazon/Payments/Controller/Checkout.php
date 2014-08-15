@@ -199,7 +199,7 @@ abstract class Amazon_Payments_Controller_Checkout extends Mage_Checkout_Control
                 'region_id'   => $regionId,
                 'postcode'    => $address->getPostalCode(),
                 'country_id'  => $address->getCountryCode(),
-                'telephone'   => $address->getPhone(),
+                'telephone'   => ($address->getPhone()) ? $address->getPhone() : '.', // Mage requires phone number
                 'use_for_shipping' => true,
             );
 
