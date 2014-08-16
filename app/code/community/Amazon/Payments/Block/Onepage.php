@@ -10,6 +10,16 @@
 
 class Amazon_Payments_Block_Onepage extends Mage_Checkout_Block_Onepage_Abstract
 {
+
+    /**
+     * Initialize login step, as user may have logged in from cart page.
+     */
+    protected function _construct()
+    {
+        $this->getCheckout()->setStepData('login', array('label'=>Mage::helper('checkout')->__('Checkout Method'), 'allow'=>true));
+        parent::_construct();
+    }
+
     /**
      * Get 'one step checkout' step data
      *
