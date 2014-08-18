@@ -29,7 +29,7 @@ class Amazon_Payments_Block_Button extends Mage_Core_Block_Template
 
     public function getOnepageCheckoutUrl()
     {
-        return $this->getUrl('amazon_payments/onepage', array('_secure'=>true));
+        return $this->getUrl('amazon_payments/onepage', array('_forced_secure'=>true));
     }
 
     public function getAmazonPayButtonId() {
