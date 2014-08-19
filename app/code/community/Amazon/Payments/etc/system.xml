@@ -52,7 +52,7 @@
               <sort_order>5</sort_order>
               <show_in_default>1</show_in_default>
               <show_in_website>1</show_in_website>
-              <show_in_store>1</show_in_store>
+              <show_in_store>0</show_in_store>
             </enabled>
 
 
@@ -62,6 +62,7 @@
                 <sort_order>10</sort_order>
                 <show_in_default>1</show_in_default>
                 <show_in_website>1</show_in_website>
+                <show_in_store>0</show_in_store>
             </heading_creds>
 
             <client_id translate="label">
@@ -71,7 +72,7 @@
                 <sort_order>11</sort_order>
                 <show_in_default>1</show_in_default>
                 <show_in_website>1</show_in_website>
-                <show_in_store>1</show_in_store>
+                <show_in_store>0</show_in_store>
             </client_id>
 
             <client_secret translate="label">
@@ -81,7 +82,7 @@
                 <sort_order>12</sort_order>
                 <show_in_default>1</show_in_default>
                 <show_in_website>1</show_in_website>
-                <show_in_store>1</show_in_store>
+                <show_in_store>0</show_in_store>
             </client_secret>
 
             <seller_id translate="label">
@@ -90,7 +91,7 @@
                 <sort_order>15</sort_order>
                 <show_in_default>1</show_in_default>
                 <show_in_website>1</show_in_website>
-                <show_in_store>1</show_in_store>
+                <show_in_store>0</show_in_store>
             </seller_id>
 
             <access_key translate="label">
@@ -99,7 +100,7 @@
                 <sort_order>20</sort_order>
                 <show_in_default>1</show_in_default>
                 <show_in_website>1</show_in_website>
-                <show_in_store>1</show_in_store>
+                <show_in_store>0</show_in_store>
             </access_key>
             <access_secret translate="label">
                 <label>API Secret Access Key</label>
@@ -107,7 +108,7 @@
                 <sort_order>30</sort_order>
                 <show_in_default>1</show_in_default>
                 <show_in_website>1</show_in_website>
-                <show_in_store>1</show_in_store>
+                <show_in_store>0</show_in_store>
             </access_secret>
 
             <!--
@@ -128,6 +129,7 @@
                 <sort_order>35</sort_order>
                 <show_in_default>1</show_in_default>
                 <show_in_website>1</show_in_website>
+                <show_in_store>0</show_in_store>
             </heading_config>
 
 
@@ -138,7 +140,7 @@
                 <sort_order>40</sort_order>
                 <show_in_default>1</show_in_default>
                 <show_in_website>1</show_in_website>
-                <show_in_store>1</show_in_store>
+                <show_in_store>0</show_in_store>
             </checkout_page>
 
             <show_pay_cart translate="label">
@@ -149,7 +151,7 @@
                 <sort_order>45</sort_order>
                 <show_in_default>1</show_in_default>
                 <show_in_website>1</show_in_website>
-                <show_in_store>1</show_in_store>
+                <show_in_store>0</show_in_store>
             </show_pay_cart>
 
             <payment_action translate="label">
@@ -159,7 +161,7 @@
                 <sort_order>50</sort_order>
                 <show_in_default>1</show_in_default>
                 <show_in_website>1</show_in_website>
-                <show_in_store>1</show_in_store>
+                <show_in_store>0</show_in_store>
             </payment_action>
 
 
@@ -169,6 +171,7 @@
                 <sort_order>80</sort_order>
                 <show_in_default>1</show_in_default>
                 <show_in_website>1</show_in_website>
+                <show_in_store>0</show_in_store>
             </heading_dev>
 
             <sandbox translate="label">
@@ -178,7 +181,7 @@
               <sort_order>90</sort_order>
               <show_in_default>1</show_in_default>
               <show_in_website>1</show_in_website>
-              <show_in_store>1</show_in_store>
+              <show_in_store>0</show_in_store>
             </sandbox>
 
             <debug translate="label">
@@ -191,7 +194,7 @@
               <sort_order>100</sort_order>
               <show_in_default>1</show_in_default>
               <show_in_website>1</show_in_website>
-              <show_in_store>1</show_in_store>
+              <show_in_store>0</show_in_store>
             </debug>
 
 
