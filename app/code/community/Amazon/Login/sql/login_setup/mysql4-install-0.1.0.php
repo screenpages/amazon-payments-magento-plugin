@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS `{$this->getTable('amazon_login')}` (
   PRIMARY KEY (`login_id`),
   KEY `amazon_uid` (`amazon_uid`),
   UNIQUE KEY `customer_id` (`customer_id`),
-  CONSTRAINT `amazon_login_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customer_entity` (`entity_id`) ON DELETE CASCADE
+  CONSTRAINT `amazon_login_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `{$this->getTable('customer_entity')}` (`entity_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 ");
