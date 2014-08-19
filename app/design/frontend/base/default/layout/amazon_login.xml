@@ -46,7 +46,6 @@
         <remove name="right"/>
         <remove name="left"/>
 
-
         <reference name="content">
 
             <block type="core/messages" name="global_messages" as="global_messages"/>
@@ -58,5 +57,10 @@
         </reference>
    </amazon_login_customer_verify>
 
+   <amazon_login_customer_authorize translate="label">
+        <reference name="content">
+            <block type="amazon_login/script" name="amazon_login.script.authorize" template="amazon_login/script_authorize.phtml" />
+        </reference>
+   </amazon_login_customer_authorize>
 
 </layout>

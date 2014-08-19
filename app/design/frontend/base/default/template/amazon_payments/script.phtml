@@ -11,17 +11,30 @@
 
 <?php
     $_helper = Mage::helper('amazon_payments/data');
+
+    $sandbox = ($_helper->isAmazonSandbox()) ? 'sandbox/' : '';
+    $jsAmazon = 'https://static-na.payments-amazon.com/OffAmazonPayments/us/' . $sandbox . 'js/Widgets.js?sellerId=' . $_helper->getSellerId();
+
+    $isPopup = Mage::helper('amazon_login/data')->isPopup();
 ?>
 
 <script type='text/javascript'>
-  window.onAmazonLoginReady = function() {
-    amazon.Login.setClientId('<?php echo $_helper->getClientId(); ?>');
-  };
+    window.onAmazonLoginReady = function() {
+        amazon.Login.setClientId('<?php echo $_helper->getClientId(); ?>');
+
+        <?php if (!$isPopup) : ?>
+        amazon.Login.setUseCookie(true);
+        <?php endif; ?>
+
+    };
+
+    <?php if (!$isPopup) : ?>
+    src = '<?php echo $jsAmazon; ?>';
+    <?php endif; ?>
+
 </script>
 
-<?php $sandbox = ($_helper->isAmazonSandbox()) ? 'sandbox/' : ''; ?>
-
-<script type='text/javascript' src='https://static-na.payments-amazon.com/OffAmazonPayments/us/<?php echo $sandbox; ?>js/Widgets.js?sellerId=<?php echo $_helper->getSellerId(); ?>'></script>
+<script type='text/javascript' src='<?php echo $jsAmazon; ?>'></script>
 
 
 <?php if ($_helper->showModal()) : ?>

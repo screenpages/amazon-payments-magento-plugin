@@ -49,6 +49,15 @@ class Amazon_Payments_CheckoutController extends Amazon_Payments_Controller_Chec
     }
 
     /**
+     * Authorize action for full-page redirects
+     */
+    public function authorizeAction()
+    {
+        $this->loadLayout();
+        $this->renderLayout();
+    }
+
+    /**
      * Clear session and redirect to cart
      */
     public function clearAction()

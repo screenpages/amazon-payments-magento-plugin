@@ -18,7 +18,13 @@ class Amazon_Login_CustomerController extends Mage_Core_Controller_Front_Action
      */
     public function authorizeAction()
     {
-        if ($token = $this->getRequest()->getParam('token')) {
+        $token = $this->getRequest()->getParam('token');
+
+        if (!$token) {
+            $token = $this->getRequest()->getParam('access_token');
+        }
+
+        if ($token) {
             $customer = Mage::getModel('amazon_login/customer')->loginWithToken($token);
 
             if ($customer->getId()) {
@@ -34,6 +40,18 @@ class Amazon_Login_CustomerController extends Mage_Core_Controller_Front_Action
                 }
             }
 
+        }
+        // Error
+        else if ($error = $this->getRequest()->getParam('error_description')) {
+            Mage::getSingleton('customer/session')->addError('Unable to log in with Amazon: ' . htmlspecialchars($error));
+            $this->_redirectUrl(Mage::getUrl(''));
+        }
+        // Non-popup/full-page redirect login requires JavaScript
+        else {
+
+            $this->loadLayout();
+            $this->_initLayoutMessages('customer/session');
+            $this->renderLayout();
         }
     }
 

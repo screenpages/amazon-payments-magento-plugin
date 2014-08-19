@@ -19,12 +19,13 @@
         type: "PwA",
         authorization: function() {
             loginOptions = {
-                scope: "profile payments:widget payments:shipping_address"
+                scope: "profile payments:widget payments:shipping_address",
+                response_type: 'token',
+                popup: <?php print $this->isPopup(); ?>
             };
 
-            authRequest = amazon.Login.authorize (loginOptions, "<?php echo $this->getCheckoutUrl(); ?>");
+            authRequest = amazon.Login.authorize (loginOptions, "<?php echo (!$this->isPopup()) ? $this->getLoginAuthUrl() : $this->getCheckoutUrl(); ?>");
         },
-        onClick: function() { alert(1); },
         onError: function(error) {
             console.log(error);
         }

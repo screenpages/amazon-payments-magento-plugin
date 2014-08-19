@@ -59,13 +59,21 @@ abstract class Amazon_Payments_Controller_Checkout extends Mage_Checkout_Control
             }
 
             Mage::getSingleton('checkout/session')->setAmazonAccessToken($token);
+
+            // Full-page redirect (user did not sign in using popup)
+            if ($this->getRequest()->getParam('nopopup')) {
+                $this->_redirectUrl(Mage::helper('amazon_payments')->getCheckoutUrl(false) . '#access_token=' . $token);
+
+            }
+            // Redirect to clean URL
+            else if (!$this->getRequest()->getParam('ajax')) {
+                $this->_redirect($this->_checkoutUrl, array('_secure' => true));
+                return;
+            }
+
+
         }
 
-        // Redirect to clean URL
-        if ($this->getRequest()->getParam('access_token') && !$this->getRequest()->getParam('ajax')) {
-            $this->_redirect($this->_checkoutUrl, array('_secure' => true));
-            return;
-        }
     }
 
     /**
@@ -179,10 +187,10 @@ abstract class Amazon_Payments_Controller_Checkout extends Mage_Checkout_Control
         if ($this->getAmazonOrderReferenceId()) {
 
             $orderReferenceDetails = $this->_getApi()->getOrderReferenceDetails($this->getAmazonOrderReferenceId(), Mage::getSingleton('checkout/session')->getAmazonAccessToken());
+
             $address = $orderReferenceDetails->getDestination()->getPhysicalDestination();
 
             // Split name into first/last
-            //$name      = (Mage::getSingleton('customer/session')->isLoggedIn()) ? $address->getName() : Mage::getSingleton('checkout/session')->getCustomerName();
             $name      = $address->getName();
             $firstName = substr($name, 0, strrpos($name, ' '));
             $lastName  = substr($name, strlen($firstName) + 1);

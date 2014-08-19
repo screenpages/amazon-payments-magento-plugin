@@ -22,7 +22,12 @@ window.onAmazonLoginReady = function() {
     <?php if ($this->isSandboxEnabled()) : ?>
     amazon.Login.setSandboxMode(true);
     <?php endif; ?>
+
     amazon.Login.setClientId('<?php echo $this->getClientId(); ?>');
+
+    <?php if (!$this->isPopup()) : ?>
+    amazon.Login.setUseCookie(true);
+    <?php endif; ?>
 };
 (function(d) {
     var a = d.createElement('script'); a.type = 'text/javascript';
@@ -34,7 +39,11 @@ window.onAmazonLoginReady = function() {
 
 
 function amazonLoginAuthorize() {
-    options = { scope : 'profile postal_code payments:shipping_address<?php print $this->getAdditionalScope(); ?>', response_type: 'token', popup: <?php print $this->getIsPopup(); ?> };
+    options = {
+          scope : 'profile postal_code payments:shipping_address<?php print $this->getAdditionalScope(); ?>',
+          response_type: 'token',
+          popup: <?php print $this->isPopup(); ?>
+    };
 
     <?php if ($this->isPopup()) : ?>
 
@@ -43,13 +52,13 @@ function amazonLoginAuthorize() {
             console.log(response.error);
         }
         else {
-          document.location.href = "<?php echo $this->getUrl('amazon_login/customer/authorize', array('_forced_secure' => true))?>?token=" + response.access_token + "&referer=<?php echo Mage::helper('core')->urlEncode($this->helper('core/url')->getCurrentUrl())?>";
+          document.location.href = "<?php echo $this->getLoginAuthUrl(); ?>?token=" + response.access_token + "&referer=<?php echo Mage::helper('core')->urlEncode($this->helper('core/url')->getCurrentUrl())?>";
         }
       }
 
     <?php else: ?>
 
-        var responseRedirect = "<?php echo $this->getUrl('amazon_login/customer/authorize', array('_forced_secure' => true))?>";
+        var responseRedirect = "<?php echo $this->getLoginAuthUrl(); ?>";
 
     <?php endif; ?>
 
@@ -68,6 +77,7 @@ $$('.amazon-login-button').each(function(el) {
 
 window.onAmazonLoginReady = function() {
     amazon.Login.logout();
+    document.cookie = "amazon_Login_accessToken=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
 };
 
 </script>

@@ -38,6 +38,16 @@ class Amazon_Login_Helper_Data extends Mage_Core_Helper_Abstract
     }
 
     /**
+     * Return login authorize URL
+     *
+     * @return string
+     */
+    public function getLoginAuthUrl()
+    {
+        return $this->_getUrl('amazon_login/customer/authorize', array('_forced_secure' => true));
+    }
+
+    /**
      * Is login a popup or full-page redirect?
      */
     public function isPopup()

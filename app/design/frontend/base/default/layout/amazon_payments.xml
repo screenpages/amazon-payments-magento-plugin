@@ -239,5 +239,14 @@
         </reference>
     </checkout_amazon_payments_success>
 
+    <!--
+    Full-page (no popup) authorize and redirect
+    -->
+   <amazon_payments_checkout_authorize translate="label">
+        <reference name="content">
+            <block type="amazon_login/script" name="amazon_login.script.authorize" template="amazon_login/script_authorize.phtml" />
+        </reference>
+   </amazon_payments_checkout_authorize>
+
 
 </layout>

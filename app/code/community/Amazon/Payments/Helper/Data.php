@@ -50,6 +50,39 @@ class Amazon_Payments_Helper_Data extends Mage_Core_Helper_Abstract
     }
 
     /**
+     * Return URL to use for checkout
+     *
+     * @param $hasToken   Amazon token is passed in query paramaters to log user in
+     */
+    public function getCheckoutUrl($hasToken = true)
+    {
+        $_config = $this->getConfig();
+
+        if ($_config->isCheckoutOnepage()) {
+            if ($hasToken) {
+                return $this->getOnepageCheckoutUrl();
+            }
+            else {
+                return Mage::getUrl('checkout/onepage', array('_secure'=>true));
+            }
+        }
+        else if ($_config->isCheckoutModal()) {
+            return $this->getModalUrl();
+        }
+        else {
+            return $this->getStandaloneUrl();
+        }
+    }
+
+    /**
+     * Return onepage checkout URL
+     */
+    public function getOnepageCheckoutUrl()
+    {
+        return Mage::getUrl('amazon_payments/onepage', array('_forced_secure'=>true));
+    }
+
+    /**
      * Retrieve stand alone URL
      *
      * @return string
@@ -68,6 +101,7 @@ class Amazon_Payments_Helper_Data extends Mage_Core_Helper_Abstract
     {
         return Mage::getUrl('checkout/cart?amazon_modal=1', array('_secure'=>true));
     }
+
     /**
      * Does user have Amazon order reference for checkout?
      *

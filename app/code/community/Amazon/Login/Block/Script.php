@@ -10,15 +10,6 @@
 
 class Amazon_Login_Block_Script extends Mage_Core_Block_Template
 {
-    /**
-     * Is popup window?
-     *
-     * @return string
-     */
-    public function getIsPopup()
-    {
-        return ($this->isPopup()) ? 'true' : 'false';
-    }
 
     /**
      * Is popup window?
@@ -52,6 +43,14 @@ class Amazon_Login_Block_Script extends Mage_Core_Block_Template
     public function getAdditionalScope()
     {
          return $this->helper('amazon_login')->getAdditionalScope();
+    }
+
+    /**
+     * Get login auth URL
+     */
+    public function getLoginAuthUrl()
+    {
+         return $this->helper('amazon_login')->getLoginAuthUrl();
     }
 
 }

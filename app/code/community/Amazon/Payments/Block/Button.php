@@ -10,45 +10,73 @@
 
 class Amazon_Payments_Block_Button extends Mage_Core_Block_Template
 {
+    /**
+     * Return URL to use for checkout
+     */
     public function getCheckoutUrl()
     {
-        $_helper = Mage::helper('amazon_payments/data');
-        $_config = Mage::getSingleton('amazon_payments/config');
-
-        if ($_config->isCheckoutOnepage()) {
-            return $this->getOnepageCheckoutUrl();
-        }
-        else if ($_config->isCheckoutModal()) {
-            return $_helper->getModalUrl();
-        }
-        else {
-            return $_helper->getStandaloneUrl();
-        }
-
+        return $this->helper('amazon_payments')->getCheckoutUrl();
     }
 
+    /**
+     * Return onepage checkout URL
+     */
     public function getOnepageCheckoutUrl()
     {
-        return $this->getUrl('amazon_payments/onepage', array('_forced_secure'=>true));
+        return $this->helper('amazon_payments')->getOnepageCheckoutUrl();
     }
 
+    /**
+     * Return CSS identifier to use for Amazon button
+     */
     public function getAmazonPayButtonId() {
         return $this->getNameInLayout();
     }
 
+    /**
+     * Return seller ID
+     */
     public function getSellerId()
     {
         return $this->helper('amazon_payments')->getSellerId();
     }
 
+    /**
+     * Get login auth URL
+     */
+    public function getLoginAuthUrl()
+    {
+         return $this->getUrl('amazon_payments/checkout/authorize', array('_forced_secure'=>true));
+    }
+
+    /**
+     * Is Disabled?
+     *
+     * @return bool
+     */
     public function isDisabled()
     {
         return !Mage::getSingleton('checkout/session')->getQuote()->validateMinimumAmount();
     }
 
+    /**
+     * Is button enabled?
+     *
+     * @return bool
+     */
     public function isAmazonPayButtonEnabled()
     {
         return (!Mage::getSingleton('amazon_payments/config')->isCheckoutOnepage() || Mage::getSingleton('amazon_payments/config')->showPayOnCart());
+    }
+
+    /**
+     * Is popup window?
+     *
+     * @return bool
+     */
+    public function isPopup()
+    {
+        return ($this->helper('amazon_login')->isPopup());
     }
 
 }
