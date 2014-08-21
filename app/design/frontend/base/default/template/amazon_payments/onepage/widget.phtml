@@ -127,7 +127,7 @@ AmazonWidgetStep.prototype = {
 
         if (response.goto_section) {
             checkout.gotoSection(response.goto_section, true);
-            checkout.reloadProgressBlock();
+            checkout.reloadProgressBlock("shipping");
             return;
         }
 
