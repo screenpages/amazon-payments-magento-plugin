@@ -57,7 +57,7 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
      */
     protected function _getSoftDescriptor()
     {
-        return substr(Mage::app()->getStore()->getName(), 0, 16); // 16 chars max
+        return substr($this->_getApi()->getConfig()->getStoreName(), 0, 16); // 16 chars max
     }
 
     /**
@@ -178,7 +178,7 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
             $order->getBaseGrandTotal(),
             $order->getBaseCurrencyCode(),
             $order->getIncrementId(),
-            Mage::app()->getStore()->getName()
+            $this->_getApi()->getConfig()->getStoreName()
         );
 
         $apiResult = $this->_getApi()->confirmOrderReference($orderReferenceId);
@@ -266,8 +266,6 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
 
         }
         else {
-            //$error = error_get_last();
-            //Mage::log($error);
             Mage::throwException('Unable to capture payment at this time. Please try again later.');
         }
 

@@ -25,6 +25,7 @@ class Amazon_Payments_Model_Config
     const CONFIG_XML_PATH_DEBUG         = 'payment/amazon_payments/debug';
     const CONFIG_XML_PATH_CHECKOUT_PAGE = 'payment/amazon_payments/checkout_page';
     const CONFIG_XML_PATH_SHOW_PAY_CART = 'payment/amazon_payments/show_pay_cart';
+    const CONFIG_XML_PATH_STORE_NAME    = 'payment/amazon_payments/store_name';
 
     const CONFIG_XML_PATH_LOGIN_ENABLED = 'amazon_login/settings/enabled';
 
@@ -165,6 +166,23 @@ class Amazon_Payments_Model_Config
     public function getCheckoutPage($store = null)
     {
         return $this->_getStoreConfig(self::CONFIG_XML_PATH_CHECKOUT_PAGE, $store);
+    }
+
+    /**
+     * Get customzied store name, if used
+     *
+     * @param   store $store
+     * @return  string
+     */
+    public function getStoreName($store = null)
+    {
+        $storeName = $this->_getStoreConfig(self::CONFIG_XML_PATH_STORE_NAME, $store);
+        if ($storeName) {
+            return $storeName;
+        }
+        else {
+            return Mage::app()->getStore()->getName();
+        }
     }
 
     /**

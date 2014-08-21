@@ -164,6 +164,15 @@
                 <show_in_store>0</show_in_store>
             </payment_action>
 
+            <store_name translate="label">
+                <label>Email Store Name</label>
+                <frontend_type>text</frontend_type>
+                <comment><![CDATA[Store name to display in Amazon emails. If left blank, current Magento store name will be used.]]></comment>
+                <sort_order>60</sort_order>
+                <show_in_default>0</show_in_default>
+                <show_in_website>1</show_in_website>
+                <show_in_store>1</show_in_store>
+            </store_name>
 
             <heading_dev translate="label">
                 <label>Development</label>
