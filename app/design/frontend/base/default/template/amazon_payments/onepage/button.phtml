@@ -9,16 +9,12 @@
  */
 ?>
 
-
-<!--<h3><?php echo $this->__('Pay with Amazon'); ?></h3>-->
-
-
 <div id="<?php echo $this->getAmazonPayButtonId(); ?>"></div>
 <script type="text/javascript">
   var authRequest;
 
   var AmazonButtonOptions = {
-      type: "LwA",
+      type: "<?php echo ($this->isAmazonLoginEnabled()) ? 'LwA' : 'PwA'; ?>",
       authorization: function() {
           loginOptions = {
               scope: "profile payments:widget payments:shipping_address"

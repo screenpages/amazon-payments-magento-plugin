@@ -58,6 +58,16 @@ class Amazon_Payments_Block_Button extends Mage_Core_Block_Template
     {
         return !Mage::getSingleton('checkout/session')->getQuote()->validateMinimumAmount();
     }
+    /**
+     * Is Amazon Login enabled?
+     *
+     * @return bool
+     */
+    public function isAmazonLoginEnabled()
+    {
+        return $this->helper('amazon_login')->isEnabled();
+    }
+
 
     /**
      * Is button enabled?

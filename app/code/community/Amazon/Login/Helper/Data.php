@@ -55,4 +55,13 @@ class Amazon_Login_Helper_Data extends Mage_Core_Helper_Abstract
         return (Mage::getStoreConfig('amazon_login/settings/popup'));
     }
 
+    /**
+     * Is Amazon_Login enabled in config?
+     */
+    public function isEnabled()
+    {
+        return (Mage::getStoreConfig('amazon_login/settings/enabled'));
+    }
+
+
 }
