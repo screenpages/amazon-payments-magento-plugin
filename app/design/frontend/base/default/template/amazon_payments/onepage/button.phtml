@@ -17,7 +17,7 @@
       type: "<?php echo ($this->isAmazonLoginEnabled()) ? 'LwA' : 'PwA'; ?>",
       authorization: function() {
           loginOptions = {
-              scope: "profile payments:widget payments:shipping_address"
+              scope: "profile payments:widget payments:shipping_address<?php print $this->getAdditionalScope(); ?>"
           };
 
           authRequest = amazon.Login.authorize (loginOptions, "<?php echo $this->getOnepageCheckoutUrl(); ?>");

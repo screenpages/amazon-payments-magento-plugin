@@ -50,6 +50,14 @@ class Amazon_Payments_Block_Button extends Mage_Core_Block_Template
     }
 
     /**
+     * Get additional login scope
+     */
+    public function getAdditionalScope()
+    {
+         return $this->helper('amazon_login')->getAdditionalScope();
+    }
+
+    /**
      * Is Disabled?
      *
      * @return bool

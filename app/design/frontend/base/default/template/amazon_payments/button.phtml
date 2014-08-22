@@ -19,7 +19,7 @@
         type: "PwA",
         authorization: function() {
             loginOptions = {
-                scope: "profile payments:widget payments:shipping_address",
+                scope: "profile payments:widget payments:shipping_address<?php print $this->getAdditionalScope(); ?>",
                 response_type: 'token',
                 popup: <?php print $this->isPopup(); ?>
             };

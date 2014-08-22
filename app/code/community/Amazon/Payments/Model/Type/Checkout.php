@@ -65,8 +65,6 @@ class Amazon_Payments_Model_Type_Checkout extends Mage_Checkout_Model_Type_Onepa
             return array('error' => -1, 'message' => Mage::helper('checkout')->__('Invalid data.'));
         }
 
-        $this->saveBilling($data, false);
-
         $address = $this->getQuote()->getShippingAddress();
 
         /* @var $addressForm Mage_Customer_Model_Form */
@@ -78,14 +76,6 @@ class Amazon_Payments_Model_Type_Checkout extends Mage_Checkout_Model_Type_Onepa
         $addressForm->setEntity($address);
         // emulate request object
         $addressData    = $addressForm->extractData($addressForm->prepareRequest($data));
-
-
-        /*
-        $addressErrors  = $addressForm->validateData($addressData);
-        if ($addressErrors !== true) {
-            return array('error' => 1, 'message' => $addressErrors);
-        }
-        */
 
         $addressForm->compactData($addressData);
         // unset shipping address attributes which were not shown in form
@@ -100,7 +90,12 @@ class Amazon_Payments_Model_Type_Checkout extends Mage_Checkout_Model_Type_Onepa
         $address->setSaveInAddressBook(empty($data['save_in_address_book']) ? 0 : 1);
 
 
-        $address->setSameAsBilling(true);
+        if (isset($data['use_for_shipping']) && $data['use_for_shipping']) {
+            $address->setSameAsBilling(true);
+        }
+        else {
+            $address->setSameAsBilling(false);
+        }
 
         $address->implodeStreetAddress();
         $address->setCollectShippingRates(true);

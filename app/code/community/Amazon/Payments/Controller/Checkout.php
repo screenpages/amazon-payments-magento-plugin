@@ -207,12 +207,44 @@ abstract class Amazon_Payments_Controller_Checkout extends Mage_Checkout_Control
                 'region_id'   => $regionId,
                 'postcode'    => $address->getPostalCode(),
                 'country_id'  => $address->getCountryCode(),
-                'telephone'   => ($address->getPhone()) ? $address->getPhone() : '.', // Mage requires phone number
+                'telephone'   => ($address->getPhone()) ? $address->getPhone() : '-', // Mage requires phone number
                 'use_for_shipping' => true,
             );
 
             if ($email = Mage::getSingleton('checkout/session')->getCustomerEmail()) {
                 $data['email'] = $email;
+            }
+
+
+            // Set billing address (if allowed by scope)
+            if ($orderReferenceDetails->getBillingAddress()) {
+                $billing = $orderReferenceDetails->getBillingAddress()->getPhysicalAddress();
+                $data['use_for_shipping'] = false;
+
+                $name      = $billing->getName();
+                $firstName = substr($name, 0, strrpos($name, ' '));
+                $lastName  = substr($name, strlen($firstName) + 1);
+
+                $regionModel = Mage::getModel('directory/region')->loadByCode($address->getStateOrRegion(), $address->getCountryCode());
+                $regionId    = $regionModel->getId();
+
+                $dataBilling = array(
+                    'firstname'   => $firstName,
+                    'lastname'    => $lastName,
+                    'street'      => array($billing->getAddressLine1(), $billing->getAddressLine2()),
+                    'city'        => $billing->getCity(),
+                    'region_id'   => $regionId,
+                    'postcode'    => $billing->getPostalCode(),
+                    'country_id'  => $billing->getCountryCode(),
+                    'telephone'   => ($billing->getPhone()) ? $billing->getPhone() : '-',
+                    'use_for_shipping' => false,
+                );
+
+                $this->_getCheckout()->saveBilling($dataBilling, null);
+
+            }
+            else {
+                $this->_getCheckout()->saveBilling($data, null);
             }
 
             return $this->_getCheckout()->saveShipping($data);
