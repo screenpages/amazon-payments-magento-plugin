@@ -173,13 +173,17 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
         $payment->setTransactionId($orderReferenceId);
         $order = $payment->getOrder();
 
-        $apiResult = $this->_getApi()->setOrderReferenceDetails(
-            $orderReferenceId,
-            $order->getBaseGrandTotal(),
-            $order->getBaseCurrencyCode(),
-            $order->getIncrementId(),
-            $this->_getApi()->getConfig()->getStoreName()
-        );
+        $orderReferenceDetails = $this->_getApi()->getOrderReferenceDetails($orderReferenceId);
+
+        if ($orderReferenceDetails->getOrderReferenceStatus()->getState() == 'Draft') {
+            $apiResult = $this->_getApi()->setOrderReferenceDetails(
+                $orderReferenceId,
+                $order->getBaseGrandTotal(),
+                $order->getBaseCurrencyCode(),
+                $order->getIncrementId(),
+                $this->_getApi()->getConfig()->getStoreName()
+            );
+        }
 
         $apiResult = $this->_getApi()->confirmOrderReference($orderReferenceId);
 

@@ -57,7 +57,7 @@
                 <textarea id="sandbox"></textarea>
                 Example:
                 <small>
-                 	{"SandboxSimulation": {"State":"Declined", "ReasonCode":"AmazonRejected"}}
+                 	{"SandboxSimulation": {"State":"Declined", "ReasonCode":"InvalidPaymentMethod"}}
                   <br />
                   (<a href="http://docs.developer.amazonservices.com/en_US/apa_guide/APAGuide_Testing.html" target="_blank">More Info</a>)<br />
                 </small>
@@ -192,6 +192,7 @@ AmazonPaymentsMageCheckout.prototype = {
             if (msg) {
                 alert(msg);
             }
+            setTimeout(loadAmazonWallet, 2000); // Refresh Wallet
         }
 
         this.toggleOrderSubmit(false);
@@ -253,11 +254,10 @@ new OffAmazonPayments.Widgets.AddressBook({
       amazonPaymentsMageCheckout.amazonOrderReferenceId = orderReference.getAmazonOrderReferenceId();
   },
   onAddressSelect: function(orderReference) {
-    amazonPaymentsMageCheckout.setShippingMethod();
+      amazonPaymentsMageCheckout.setShippingMethod();
   },
   design: {
      designMode: 'responsive'
-     //size : {width:'400px', height:'260px'}
   },
   onError: function(error) {
     if (error.getErrorCode() == "BuyerSessionExpired") {
@@ -271,19 +271,21 @@ new OffAmazonPayments.Widgets.AddressBook({
 
 <!-- Wallet Widget JS -->
 <script>
+function loadAmazonWallet() {
+    new OffAmazonPayments.Widgets.Wallet({
+      sellerId: '<?php echo $this->getSellerId(); ?>',
+        design: {
+          designMode: 'responsive',
+      },
 
-new OffAmazonPayments.Widgets.Wallet({
-  sellerId: '<?php echo $this->getSellerId(); ?>',
-    design: {
-      designMode: 'responsive',
-      //size : {width:'400px', height:'260px'}
-  },
+      onPaymentSelect: function(orderReference) {
 
-  onPaymentSelect: function(orderReference) {
-    //console.log(orderReference);
-  },
-  onError: function(error) {
-    console.log(error.getErrorMessage());
-  }
-}).bind("amazon-widget-wallet");
+      },
+      onError: function(error) {
+        console.log(error.getErrorMessage());
+      }
+    }).bind("amazon-widget-wallet");
+}
+
+loadAmazonWallet();
 </script>
