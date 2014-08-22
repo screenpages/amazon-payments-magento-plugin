@@ -5,7 +5,7 @@
  * @category    Amazon
  * @package     Amazon_Payments
  * @copyright   Copyright (c) 2014 Amazon.com
- * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @license     http://opensource.org/licenses/Apache-2.0  Apache License, Version 2.0
  */
 
 abstract class Amazon_Payments_Controller_Checkout extends Mage_Checkout_Controller_Action
@@ -35,7 +35,6 @@ abstract class Amazon_Payments_Controller_Checkout extends Mage_Checkout_Control
         else {
             Mage::getSingleton('checkout/session')->setAmazonOrderReferenceId($this->_amazonOrderReferenceId);
         }
-
 
         // User is logging in...
 

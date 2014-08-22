@@ -5,7 +5,7 @@
  * @category    Amazon
  * @package     Amazon_Payments
  * @copyright   Copyright (c) 2014 Amazon.com
- * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @license     http://opensource.org/licenses/Apache-2.0  Apache License, Version 2.0
  */
 
 class Amazon_Payments_Model_Type_Checkout extends Mage_Checkout_Model_Type_Onepage
@@ -30,15 +30,6 @@ class Amazon_Payments_Model_Type_Checkout extends Mage_Checkout_Model_Type_Onepa
         if (!$quote->isVirtual() && $quote->getShippingAddress()) {
             $quote->getShippingAddress()->setCollectShippingRates(true);
         }
-
-
-        /*
-        $data['checks'] = Mage_Payment_Model_Method_Abstract::CHECK_USE_CHECKOUT
-            | Mage_Payment_Model_Method_Abstract::CHECK_USE_FOR_COUNTRY
-            | Mage_Payment_Model_Method_Abstract::CHECK_USE_FOR_CURRENCY
-            | Mage_Payment_Model_Method_Abstract::CHECK_ORDER_TOTAL_MIN_MAX
-            | Mage_Payment_Model_Method_Abstract::CHECK_ZERO_TOTAL;
-        */
 
         $payment = $quote->getPayment();
         $payment->importData($data);

@@ -5,7 +5,7 @@
  * @category    Amazon
  * @package     Amazon_Payments
  * @copyright   Copyright (c) 2014 Amazon.com
- * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @license     http://opensource.org/licenses/Apache-2.0  Apache License, Version 2.0
  */
 
 class Amazon_Payments_OnepageController extends Amazon_Payments_Controller_Checkout
@@ -96,13 +96,6 @@ class Amazon_Payments_OnepageController extends Amazon_Payments_Controller_Check
             }
 
             $this->_getOnepage()->getQuote()->collectTotals()->save();
-            //$this->_getOnepage()->getQuote()->save();
-
-            /*
-            $this->_getOnepage()->saveOrder();
-            $this->_getOnepage()->getQuote()->save();
-            */
-
 
             $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
         }
@@ -138,8 +131,6 @@ class Amazon_Payments_OnepageController extends Amazon_Payments_Controller_Check
         $layout->generateBlocks();
         $output = $layout->getOutput();
         return $output;
-
-        //return $this->getLayout()->getBlock('root')->toHtml();
     }
 
 

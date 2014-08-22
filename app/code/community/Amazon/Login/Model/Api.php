@@ -5,7 +5,7 @@
  * @category    Amazon
  * @package     Amazon_Login
  * @copyright   Copyright (c) 2014 Amazon.com
- * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @license     http://opensource.org/licenses/Apache-2.0  Apache License, Version 2.0
  */
 
 class Amazon_Login_Model_Api
@@ -49,15 +49,6 @@ class Amazon_Login_Model_Api
         $client->setConfig($this->http_client_config);
         $client->setMethod($postParams ? 'POST' : 'GET');
 
-        /*
-        if (empty($params['client_id']) && empty($params['access_token'])) {
-            $params['client_id'] = $this->getClientId();
-            $params['client_secret'] = $this->getClientSecret();
-        }
-        print_r($params);
-        exit;
-        */
-
         foreach ($postParams as $key => $value) {
             $client->setParameterPost($key, $value);
         }
@@ -86,6 +77,3 @@ class Amazon_Login_Model_Api
         }
     }
 }
-
-
-?>

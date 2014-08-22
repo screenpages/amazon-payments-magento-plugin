@@ -5,7 +5,7 @@
  * @category    Amazon
  * @package     Amazon_Login
  * @copyright   Copyright (c) 2014 Amazon.com
- * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @license     http://opensource.org/licenses/Apache-2.0  Apache License, Version 2.0
  */
 
 class Amazon_Login_Model_Customer extends Mage_Customer_Model_Customer
@@ -46,10 +46,9 @@ class Amazon_Login_Model_Customer extends Mage_Customer_Model_Customer
             else {
                 // Create account
                 if (!$this->getId()) {
-                  $this->createCustomer($amazonProfile);
+                    $this->createCustomer($amazonProfile);
                 }
                 Mage::getSingleton('customer/session')->setCustomerAsLoggedIn($this);
-                //Mage::getSingleton('customer/session')->loginById($this->getId());
 
                 // Use Pay with Amazon for checkout (if Amazon_Payments enabled)
                 Mage::getSingleton('checkout/session')->setAmazonAccessToken($token);

@@ -5,7 +5,7 @@
  * @category    Amazon
  * @package     Amazon_Payments
  * @copyright   Copyright (c) 2014 Amazon.com
- * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @license     http://opensource.org/licenses/Apache-2.0  Apache License, Version 2.0
  */
 ?>
 
@@ -180,7 +180,6 @@ new OffAmazonPayments.Widgets.AddressBook({
   },
   design: {
      designMode: 'responsive'
-     //size : {width:'400px', height:'260px'}
   },
   onError: function(error) {
     if (error.getErrorCode() == "BuyerSessionExpired") {
@@ -196,27 +195,29 @@ new OffAmazonPayments.Widgets.AddressBook({
 <!-- Wallet Widget JS -->
 <script>
 
-new OffAmazonPayments.Widgets.Wallet({
-  <?php if (!$this->isShowShip()) : ?>
-  onOrderReferenceCreate: function(orderReference) {
-      amazonWidgetStep.showShipping = false;
-      amazonWidgetStep.setAmazonOrderReferenceId(orderReference.getAmazonOrderReferenceId());
-  },
-  <?php endif; ?>
+function loadAmazonWallet() {
+    new OffAmazonPayments.Widgets.Wallet({
+      <?php if (!$this->isShowShip()) : ?>
+      onOrderReferenceCreate: function(orderReference) {
+          amazonWidgetStep.showShipping = false;
+          amazonWidgetStep.setAmazonOrderReferenceId(orderReference.getAmazonOrderReferenceId());
+      },
+      <?php endif; ?>
 
-  sellerId: '<?php echo $this->getSellerId(); ?>',
-    design: {
-      designMode: 'responsive',
-      //size : {width:'400px', height:'260px'}
-  },
+      sellerId: '<?php echo $this->getSellerId(); ?>',
+        design: {
+          designMode: 'responsive',
+      },
 
-  onPaymentSelect: function(orderReference) {
-    amazonWidgetStep.hasPayment = true;
-  },
-  onError: function(error) {
-    console.log(error.getErrorMessage());
-  }
-}).bind("amazon-widget-wallet");
+      onPaymentSelect: function(orderReference) {
+        amazonWidgetStep.hasPayment = true;
+      },
+      onError: function(error) {
+        console.log(error.getErrorMessage());
+      }
+    }).bind("amazon-widget-wallet");
+}
+loadAmazonWallet();
 </script>
 
 

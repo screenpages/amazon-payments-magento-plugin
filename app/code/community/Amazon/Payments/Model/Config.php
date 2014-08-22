@@ -5,7 +5,7 @@
  * @category    Amazon
  * @package     Amazon_Payments
  * @copyright   Copyright (c) 2014 Amazon.com
- * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @license     http://opensource.org/licenses/Apache-2.0  Apache License, Version 2.0
  */
 
 class Amazon_Payments_Model_Config
@@ -28,8 +28,6 @@ class Amazon_Payments_Model_Config
     const CONFIG_XML_PATH_STORE_NAME    = 'payment/amazon_payments/store_name';
 
     const CONFIG_XML_PATH_LOGIN_ENABLED = 'amazon_login/settings/enabled';
-
-
 
     /**
      * Retrieve config value for store by path

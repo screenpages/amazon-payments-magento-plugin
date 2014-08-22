@@ -5,7 +5,7 @@
  * @category    Amazon
  * @package     Amazon_Payments
  * @copyright   Copyright (c) 2014 Amazon.com
- * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @license     http://opensource.org/licenses/Apache-2.0  Apache License, Version 2.0
  */
 
 class Amazon_Payments_CheckoutController extends Amazon_Payments_Controller_Checkout
@@ -36,8 +36,6 @@ class Amazon_Payments_CheckoutController extends Amazon_Payments_Controller_Chec
         Mage::getSingleton('customer/session')->setBeforeAuthUrl(Mage::getUrl('*/*/*', array('_secure' => true)));
         $this->_getCheckout()->initCheckout();
         $this->loadLayout();
-
-        //$this->_initLayoutMessages('customer/session');
 
         // Ajax Modal
         if($this->getRequest()->getParam('ajax')){
@@ -147,51 +145,6 @@ class Amazon_Payments_CheckoutController extends Amazon_Payments_Controller_Chec
     }
 
     /**
-     * Save checkout billing address
-
-    public function saveBillingAction()
-    {
-        if ($this->_expireAjax()) {
-            return;
-        }
-        if ($this->getRequest()->isPost()) {
-            $data = $this->getRequest()->getPost('billing', array());
-            $customerAddressId = $this->getRequest()->getPost('billing_address_id', false);
-
-            if (isset($data['email'])) {
-                $data['email'] = trim($data['email']);
-            }
-            $result = $this->getOnepage()->saveBilling($data, $customerAddressId);
-
-            if (!isset($result['error'])) {
-                if ($this->getOnepage()->getQuote()->isVirtual()) {
-                    $result['goto_section'] = 'payment';
-                    $result['update_section'] = array(
-                        'name' => 'payment-method',
-                        'html' => $this->_getPaymentMethodsHtml()
-                    );
-                } elseif (isset($data['use_for_shipping']) && $data['use_for_shipping'] == 1) {
-                    $result['goto_section'] = 'shipping_method';
-                    $result['update_section'] = array(
-                        'name' => 'shipping-method',
-                        'html' => $this->_getShippingMethodsHtml()
-                    );
-
-                    $result['allow_sections'] = array('shipping');
-                    $result['duplicateBillingInfo'] = 'true';
-                } else {
-                    $result['goto_section'] = 'shipping';
-                }
-            }
-
-            $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
-        }
-    }
-    */
-
-
-
-    /**
      * Shipping address save action
      */
     public function saveShippingAction()
@@ -278,7 +231,6 @@ class Amazon_Payments_CheckoutController extends Amazon_Payments_Controller_Chec
                 'additional_information' => $additional_information,
             ));
 
-            //$this->_getCheckout()->getQuote()->getPayment()->setTransactionId($this->getAmazonOrderReferenceId());
             $this->_getCheckout()->saveOrder();
             $this->_getCheckout()->getQuote()->save();
 
@@ -369,9 +321,6 @@ class Amazon_Payments_CheckoutController extends Amazon_Payments_Controller_Chec
     {
         return $this->getLayout()->getBlock('root')->toHtml();
     }
-
-
-
 
 }
 

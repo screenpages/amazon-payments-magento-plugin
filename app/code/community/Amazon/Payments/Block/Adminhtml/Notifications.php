@@ -5,7 +5,7 @@
  * @category    Amazon
  * @package     Amazon_Payments
  * @copyright   Copyright (c) 2014 Amazon.com
- * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @license     http://opensource.org/licenses/Apache-2.0  Apache License, Version 2.0
  */
 
 class Amazon_Payments_Block_Adminhtml_Notifications extends Mage_Adminhtml_Block_Template
@@ -57,18 +57,5 @@ class Amazon_Payments_Block_Adminhtml_Notifications extends Mage_Adminhtml_Block
         return $this->getUrl('adminhtml/system_config/edit/section/payment');
     }
 
-    /**
-     * ACL validation before html generation
-     *
-     * @return string
-
-    protected function _toHtml()
-    {
-        if ($this->_factory->getSingleton('admin/session')->isAllowed('system/config/tax')) {
-            return parent::_toHtml();
-        }
-        return '';
-    }
-     */
 }
 
