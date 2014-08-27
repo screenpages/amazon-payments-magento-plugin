@@ -73,7 +73,6 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
             $this->setStore($order->getStoreId())->order($payment, $order->getBaseTotalDue());
         }
 
-        $stateObject->setState(($paymentAction == self::ACTION_AUTHORIZE_CAPTURE) ? Mage_Sales_Model_Order::STATE_PROCESSING : Mage_Sales_Model_Order::STATE_NEW);
         $stateObject->setStatus(true);
         $stateObject->setIsNotified(Mage_Sales_Model_Order_Status_History::CUSTOMER_NOTIFICATION_NOT_APPLICABLE);
     }
