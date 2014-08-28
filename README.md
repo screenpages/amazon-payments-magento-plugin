@@ -46,3 +46,10 @@
     * Complete the "Seller Information" information which is used in Buyer-facing communication
     * Complete the tax interview under "Legal Entity"
     * Add your bank account for disbursements under "Deposit Information"
+
+## Release Notes
+0.9.1-beta
+* Added configuration option to modify intial order status.
+
+0.9.0-beta
+* Initial version.
