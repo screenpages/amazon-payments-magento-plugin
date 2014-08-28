@@ -11,22 +11,27 @@
 
 <br />
 <?php echo $this->__('Amazon Payments uses information from your Amazon account to place your order.'); ?>
-<br />
-<?php echo $this->__('Click <a href="#" id="amazon-cancel">here</a> to cancel and return to your cart.'); ?>
 
 <div class="col2-set">
     <div class="col-1">
         <div class="buttons-set">
-            <p class="required">&nbsp;</p>
-            <button type="button" class="button" onclick="checkout.gotoSection('widget', false);"><span><span><?php echo ($this->getQuote()->isAllowedGuestCheckout() ? $this->__('Continue') : $this->__('Register')) ?></span></span></button>
+            <button type="button" class="button" onclick="checkout.gotoSection('widget', false);"><span><span><?php echo $this->__('Continue'); ?></span></span></button>
         </div>
     </div>
+
+    <div class="col-2">
+        <div class="buttons-set">
+            <button type="button" class="button" onclick="amazonCheckoutCancel();"><span><span><?php echo $this->__('Change Payment Method'); ?></span></span></button>
+        </div>
+    </div>
+
+
 </div>
 
 <script type="text/javascript">
     // Cancel and log user out of Amazon
-    $('amazon-cancel').observe("click", function() {
+    function amazonCheckoutCancel() {
         amazon.Login.logout();
         window.top.location.href = "<?php echo $this->getUrl('amazon_payments/checkout/clear'); ?>";
-    });
+    }
 </script>
