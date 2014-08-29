@@ -153,6 +153,8 @@ AmazonPaymentsMageCheckout.prototype = {
       }
       params.save = true;
 
+      params.amazon_order_reference_id = this.amazonOrderReferenceId;
+
       var sandbox = $('sandbox');
       if (sandbox) {
           params.sandbox = sandbox.getValue();
