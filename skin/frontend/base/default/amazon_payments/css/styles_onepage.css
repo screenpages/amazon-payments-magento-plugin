@@ -9,22 +9,22 @@
 }
 
 #amazon-widget-address-wrapper {
-  width:60%;
+  width:48%;
   margin-right:2%;
 }
 
 #amazon-widget-wallet-wrapper {
-  width:38%;
+  width:48%;
 }
 
 #amazon-widget-address,
 #amazon-widget-wallet {
   max-width:100%;
-  height: 230px;
+  height: 250px;
 }
 
 #amazon-widget-wallet {
-  height:280px;
+  height:250px;
   margin-bottom:1em;
 }
 
