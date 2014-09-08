@@ -234,7 +234,7 @@ class Amazon_Payments_CheckoutController extends Amazon_Payments_Controller_Chec
             $this->_getCheckout()->saveOrder();
             $this->_getCheckout()->getQuote()->save();
 
-            $redirectUrl = Mage::getUrl('checkout/amazon_payments/success');
+            $redirectUrl = Mage::getUrl('checkout/onepage/success');
             $result['success'] = true;
             $result['error']   = false;
         } catch (Mage_Payment_Model_Info_Exception $e) {
