@@ -4,7 +4,7 @@
 
 
 ### Pre-Requisites
-* Magento CE 1.5-1.9 or EE 1.12+.
+* Magento CE 1.5+ or EE 1.11+.
 * SSL is installed on your site and active on Checkout and Login pages
 
 
