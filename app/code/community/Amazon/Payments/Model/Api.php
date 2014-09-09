@@ -32,9 +32,9 @@ class Amazon_Payments_Model_Api
                 'applicationName'    => 'Amazon Payments Magento Extension',
                 'applicationVersion' => current(Mage::getConfig()->getNode('modules/Amazon_Payments/version')),
                 'serviceURL'         => '',
-                'widgetURL'         => '',
-                'caBundleFile'      => '',
-                'clientId'         => '',
+                'widgetURL'          => '',
+                'caBundleFile'       => '',
+                'clientId'           => '',
              );
 
             $this->api = new OffAmazonPaymentsService_Client($config);
@@ -296,6 +296,21 @@ class Amazon_Payments_Model_Api
             'AmazonOrderReferenceId' => $orderReferenceId
         );
         return $this->request('cancelOrderReference', $request);
+    }
+
+    /**
+     * CloseOrderReference
+     *
+     * @param string $orderReferenceId
+     * @return OffAmazonPaymentsService_Model_CloseOrderReferenceResponse
+     * @link http://docs.developer.amazonservices.com/en_US/off_amazon_payments/OffAmazonPayments_CloseOrderReference.html
+     */
+    public function closeOrderReference($orderReferenceId)
+    {
+        $request = array(
+            'AmazonOrderReferenceId' => $orderReferenceId
+        );
+        return $this->request('closeOrderReference', $request);
     }
 
     /**
