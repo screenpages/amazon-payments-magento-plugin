@@ -34,6 +34,7 @@ class Amazon_Payments_CheckoutController extends Amazon_Payments_Controller_Chec
         }
         Mage::getSingleton('checkout/session')->setCartWasUpdated(false);
         Mage::getSingleton('customer/session')->setBeforeAuthUrl(Mage::getUrl('*/*/*', array('_secure' => true)));
+        $this->_initLayoutMessages('checkout/session');
         $this->_getCheckout()->initCheckout();
         $this->loadLayout();
 

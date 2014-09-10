@@ -144,7 +144,7 @@
     </checkout_onepage_progress_widget>
 
     <!--
-    Amazon page checkout
+    Amazon standalone page checkout
     -->
     <checkout_amazon_payments_index translate="label">
         <label>Pay with Amazon</label>
@@ -229,11 +229,30 @@
     <!--
     Full-page (no popup) authorize and redirect
     -->
-   <amazon_payments_checkout_authorize translate="label">
+    <amazon_payments_checkout_authorize translate="label">
         <reference name="content">
             <block type="amazon_login/script" name="amazon_login.script.authorize" template="amazon_login/script_authorize.phtml" />
         </reference>
-   </amazon_payments_checkout_authorize>
+    </amazon_payments_checkout_authorize>
+
+
+    <!--
+    Product View Shortcut
+    -->
+    <catalog_product_view>
+
+        <block type="amazon_payments/button" name="addtocart-amazon-button" template="amazon_payments/button_shortcut.phtml" />
+
+        <reference name="head">
+            <block type="core/template" name="amazon_payments.script" template="amazon_payments/script.phtml" />
+        </reference>
+
+        <reference name="product.info.addtocart">
+            <action method="append" ifconfig="payment/amazon_payments/visible_on_product">
+                <block>addtocart-amazon-button</block>
+            </action>
+        </reference>
+    </catalog_product_view>
 
 
 </layout>
