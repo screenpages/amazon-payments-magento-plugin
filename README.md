@@ -9,6 +9,8 @@
 
 
 ### Installation
+> **NOTE** Before you begin, make a backup of your Magento site.
+
 * Click the Download Zip button and save to your local machine
 * Transfer the zip file to your Magento webserver
 * Unpack the archive in the root directory of your Magento instance
