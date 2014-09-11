@@ -9,6 +9,8 @@
  */
 ?>
 
+<?php if ($this->isEnableProductPayments()) : ?>
+
 <div id="<?php echo $this->getAmazonPayButtonId(); ?>"></div>
 <script type="text/javascript">
   var authRequest;
@@ -34,3 +36,5 @@
 <br />
 <p><strong>- <?php echo $this->__('OR'); ?> -</strong></p>
 <br />
+
+<?php endif; ?>

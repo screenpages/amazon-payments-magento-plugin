@@ -37,6 +37,18 @@
             </amazon_payments_checkout>
         </rewrite>
 
+        <resources>
+            <payments_setup>
+                <setup>
+                    <module>Amazon_Payments</module>
+                    <class>Mage_Eav_Model_Entity_Setup</class>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </payments_setup>
+        </resources>
+
     </global>
     <adminhtml>
         <layout>

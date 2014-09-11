@@ -76,7 +76,6 @@ class Amazon_Payments_Block_Button extends Mage_Core_Block_Template
         return $this->helper('amazon_login')->isEnabled();
     }
 
-
     /**
      * Is button enabled?
      *
@@ -84,7 +83,21 @@ class Amazon_Payments_Block_Button extends Mage_Core_Block_Template
      */
     public function isAmazonPayButtonEnabled()
     {
-        return (!Mage::getSingleton('amazon_payments/config')->isCheckoutOnepage() || Mage::getSingleton('amazon_payments/config')->showPayOnCart());
+        // Viewing single product
+        if (Mage::registry('current_product')) {
+             return $this->helper('amazon_payments')->isEnableProductPayments();
+        }
+        else {
+            return ($this->helper('amazon_payments')->isEnableProductPayments() && (!Mage::getSingleton('amazon_payments/config')->isCheckoutOnepage() || Mage::getSingleton('amazon_payments/config')->showPayOnCart()));
+        }
+    }
+
+    /**
+     * Is Amazon Payments enabled on product level?
+     */
+    public function isEnableProductPayments()
+    {
+        return $this->helper('amazon_payments')->isEnableProductPayments();
     }
 
     /**

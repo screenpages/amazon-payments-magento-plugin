@@ -103,6 +103,28 @@ class Amazon_Payments_Helper_Data extends Mage_Core_Helper_Abstract
     }
 
     /**
+     * Does product attribute allow purchase with Amazon payments?
+     */
+    public function isEnableProductPayments()
+    {
+        // Viewing single product
+        if ($_product = Mage::registry('current_product')) {
+            return !$_product->getDisableAmazonpayments();
+        }
+        // Check cart products
+        else {
+            $cart = Mage::getModel('checkout/cart')->getQuote();
+            foreach ($cart->getAllItems() as $item) {
+                $_product = Mage::getModel('catalog/product')->load($item->getProductId());
+                if ($_product->getDisableAmazonpayments()) {
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
+
+    /**
      * Does user have Amazon order reference for checkout?
      *
      * @return string
@@ -151,6 +173,7 @@ class Amazon_Payments_Helper_Data extends Mage_Core_Helper_Abstract
     {
         return (Mage::app()->getRequest()->getParam('amazon_modal') && $this->getConfig()->isCheckoutModal());
     }
+
 
 
 }
