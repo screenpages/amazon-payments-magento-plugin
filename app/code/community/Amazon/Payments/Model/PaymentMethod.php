@@ -174,6 +174,11 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
 
         $orderReferenceId = $payment->getAdditionalInformation('order_reference');
 
+        if (!$orderReferenceId) {
+            $orderReferenceId = Mage::getSingleton('checkout/session')->getAmazonOrderReferenceId();
+            $payment->setAdditionalInformation('order_reference', $orderReferenceId);
+        }
+
         $payment->setTransactionId($orderReferenceId);
         $order = $payment->getOrder();
 
