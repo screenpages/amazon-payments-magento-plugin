@@ -147,9 +147,9 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
                 break;
 
             case self::AUTH_STATUS_DECLINED:
-                // Close order reference
+                // Cancel order reference
                 if ($status->getReasonCode() == 'TransactionTimedOut') {
-                    $this->_getApi()->closeOrderReference($payment->getTransactionId());
+                    $this->_getApi()->cancelOrderReference($payment->getTransactionId());
                 }
 
                 Mage::throwException('Amazon Payments authorization error: ' . $status->getState() . ' - ' . $status->getReasonCode() . '  ' . $status->getReasonDescription());
