@@ -152,10 +152,10 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
                     $this->_getApi()->cancelOrderReference($payment->getTransactionId());
                 }
 
-                Mage::throwException('Amazon Payments authorization error: ' . $status->getState() . ' - ' . $status->getReasonCode() . '  ' . $status->getReasonDescription());
+                Mage::throwException("Amazon could not process your order.\n\n" . $status->getStategetReasonCode() . " (" . $status->getState() . ")\n" . $status->getReasonDescription());
                 break;
             default:
-                Mage::throwException('Amazon Payments authorization error.');
+                Mage::throwException('Amazon could not process your order.');
                 break;
         }
 
