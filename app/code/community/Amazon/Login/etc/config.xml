@@ -87,6 +87,9 @@
             <settings>
                 <enabled>1</enabled>
                 <popup>1</popup>
+                <button_type>LwA</button_type>
+                <button_color>Gold</button_color>
+                <button_size>medium</button_size>
             </settings>
         </amazon_login>
     </default>

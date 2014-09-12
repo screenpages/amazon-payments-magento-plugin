@@ -58,6 +58,30 @@ class Amazon_Payments_Block_Button extends Mage_Core_Block_Template
     }
 
     /**
+     * Get button type
+     */
+    public function getButtonType()
+    {
+         return Mage::getSingleton('amazon_payments/config')->getButtonType();
+    }
+
+    /**
+     * Get button size
+     */
+    public function getButtonSize()
+    {
+         return Mage::getSingleton('amazon_payments/config')->getButtonSize();
+    }
+
+    /**
+     * Get button color
+     */
+    public function getButtonColor()
+    {
+         return Mage::getSingleton('amazon_payments/config')->getButtonColor();
+    }
+
+    /**
      * Is Disabled?
      *
      * @return bool

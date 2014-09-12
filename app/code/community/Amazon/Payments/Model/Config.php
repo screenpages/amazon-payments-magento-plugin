@@ -27,6 +27,10 @@ class Amazon_Payments_Model_Config
     const CONFIG_XML_PATH_SHOW_PAY_CART = 'payment/amazon_payments/show_pay_cart';
     const CONFIG_XML_PATH_STORE_NAME    = 'payment/amazon_payments/store_name';
 
+    const CONFIG_XML_PATH_BUTTON_TYPE    = 'payment/amazon_payments/button_type';
+    const CONFIG_XML_PATH_BUTTON_COLOR   = 'payment/amazon_payments/button_color';
+    const CONFIG_XML_PATH_BUTTON_SIZE    = 'payment/amazon_payments/button_size';
+
     const CONFIG_XML_PATH_LOGIN_ENABLED = 'amazon_login/settings/enabled';
 
     /**
@@ -215,4 +219,38 @@ class Amazon_Payments_Model_Config
     {
         return ($this->_getStoreConfig(self::CONFIG_XML_PATH_SHOW_PAY_CART, $store));
     }
+
+    /**
+     * Get button type
+     *
+     * @param   store $store
+     * @return  string
+     */
+    public function getButtonType($store = null)
+    {
+        return $this->_getStoreConfig(self::CONFIG_XML_PATH_BUTTON_TYPE, $store);
+    }
+
+    /**
+     * Get button color
+     *
+     * @param   store $store
+     * @return  string
+     */
+    public function getButtonColor($store = null)
+    {
+        return $this->_getStoreConfig(self::CONFIG_XML_PATH_BUTTON_COLOR, $store);
+    }
+
+    /**
+     * Get button size
+     *
+     * @param   store $store
+     * @return  string
+     */
+    public function getButtonSize($store = null)
+    {
+        return $this->_getStoreConfig(self::CONFIG_XML_PATH_BUTTON_SIZE, $store);
+    }
+
 }
