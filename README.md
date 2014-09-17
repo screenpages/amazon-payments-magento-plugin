@@ -50,6 +50,9 @@
     * Add your bank account for disbursements under "Deposit Information"
 
 ## Release Notes
+1.0.0
+* GA release.
+
 0.9.1-beta
 * Added configuration option to modify intial order status.
 
