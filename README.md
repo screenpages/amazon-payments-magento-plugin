@@ -50,6 +50,9 @@
     * Add your bank account for disbursements under "Deposit Information"
 
 ## Release Notes
+1.0.1
+* Fixed NOTICE and LICENSE.
+
 1.0.0
 * GA release.
 
