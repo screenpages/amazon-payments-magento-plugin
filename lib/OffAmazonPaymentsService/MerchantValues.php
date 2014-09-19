@@ -16,8 +16,10 @@
  */
 
 
-require_once 'OffAmazonPaymentsService.config.inc.php';
-require_once 'RegionSpecificProperties.php';
+if (!defined('COMPILER_INCLUDE_PATH')) {
+    require_once 'OffAmazonPaymentsService.config.inc.php';
+    require_once 'RegionSpecificProperties.php';
+}
 
 define('MERCHANT_ID', isset($merchantId) ? $merchantId : null);
 define('ACCESS_KEY', isset($accessKey) ? $accessKey : null);
@@ -45,12 +47,12 @@ class OffAmazonPaymentsService_MerchantValues
     private $_caBundleFile;
     private $_regionSpecificProperties;
     private $_clientId;
-    
+
     public function __construct(
-        $merchantId, 
-        $accessKey, 
-        $secretKey, 
-        $applicationName, 
+        $merchantId,
+        $accessKey,
+        $secretKey,
+        $applicationName,
         $applicationVersion,
         $region,
         $environment,
@@ -79,7 +81,7 @@ class OffAmazonPaymentsService_MerchantValues
         if ($this->_accessKey == "") {
             throw new InvalidArgumentException("accessKey not set in the properties file");
         }
-        
+
         if ($this->_secretKey == "") {
             throw new InvalidArgumentException("secretKey not set in the properties file");
         }
@@ -95,12 +97,12 @@ class OffAmazonPaymentsService_MerchantValues
                 "applicationVersion not set in the properties file"
             );
         }
-        
+
         if ($this->_region == "") {
             throw new InvalidArgumentException("region not set in the properties file");
-        } 
+        }
         $this->_region = $this->_validateRegion($this->_region);
-        
+
         if ($this->_environment == "") {
             throw new InvalidArgumentException("environment not set in the properties file");
         }
@@ -130,17 +132,17 @@ class OffAmazonPaymentsService_MerchantValues
     {
         return $this->_regionSpecificProperties->getServiceUrlFor($this->_region, $this->_environment, $this->_serviceUrl);
     }
-    
+
     public function getWidgetUrl()
     {
     	return $this->_regionSpecificProperties->getWidgetUrlFor($this->_region, $this->_environment, $this->_merchantId, $this->_widgetUrl);
     }
-    
+
     public function getCurrency()
     {
     	return $this->_regionSpecificProperties->getCurrencyFor($this->_region);
     }
-    
+
     public function getApplicationName()
     {
         return $this->_applicationName;
@@ -150,12 +152,12 @@ class OffAmazonPaymentsService_MerchantValues
     {
         return $this->_applicationVersion;
     }
-    
+
     public function getRegion()
     {
         return $this->_region;
     }
-    
+
     public function getEnvironment()
     {
         return $this->_environment;
@@ -165,24 +167,24 @@ class OffAmazonPaymentsService_MerchantValues
     {
         return $this->_caBundleFile;
     }
-    
+
     public function getClientId()
     {
     	return $this->_clientId;
     }
-    
+
     private function _validateRegion($region)
     {
-    	include_once 'Regions.php';
+    	if (!defined('COMPILER_INCLUDE_PATH')) include_once 'Regions.php';
         return self::_getValueForConstant($region, new OffAmazonPaymentsService_Regions());
     }
-    
+
     private static function _validateEnvironment($environment)
     {
-        include_once 'Environments.php';
+        if (!defined('COMPILER_INCLUDE_PATH')) include_once 'Environments.php';
         return self::_getValueForConstant($environment, new OffAmazonPaymentsService_Environments());
     }
-    
+
     private static function _getValueForConstant($constant, $valuesClass)
     {
         $rc = new ReflectionClass($valuesClass);
@@ -192,22 +194,22 @@ class OffAmazonPaymentsService_MerchantValues
             throw new InvalidArgumentException(
                 "check your property file: " . $constant . " is not a valid option.  Available options are: " . $allowedValues
             );
-        } 
-        
+        }
+
         return $value;
     }
-    
+
     public static function withRegionSpecificProperties(
-    		$merchantId, 
-    		$accessKey, 
-    		$secretKey, 
-    		$applicationName, 
-    		$applicationVersion, 
-    		$region, 
-    		$environment, 
-    		$serviceUrl, 
+    		$merchantId,
+    		$accessKey,
+    		$secretKey,
+    		$applicationName,
+    		$applicationVersion,
+    		$region,
+    		$environment,
+    		$serviceUrl,
     		$widgetUrl,
-    		$caBundleFile, 
+    		$caBundleFile,
     		$regionSpecificProperties,
 			$clientId)
     {

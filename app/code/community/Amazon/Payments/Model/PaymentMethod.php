@@ -152,7 +152,7 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
                     $this->_getApi()->cancelOrderReference($payment->getTransactionId());
                 }
 
-                Mage::throwException("Amazon could not process your order.\n\n" . $status->getStategetReasonCode() . " (" . $status->getState() . ")\n" . $status->getReasonDescription());
+                Mage::throwException("Amazon could not process your order.\n\n" . $status->getReasonCode() . " (" . $status->getState() . ")\n" . $status->getReasonDescription());
                 break;
             default:
                 Mage::throwException('Amazon could not process your order.');
