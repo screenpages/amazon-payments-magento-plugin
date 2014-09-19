@@ -8,7 +8,6 @@
  * @license     http://opensource.org/licenses/Apache-2.0  Apache License, Version 2.0
  */
 
-
 $installer = $this;
 
 $installer->startSetup();
@@ -35,7 +34,7 @@ $amazon_table = $installer->getConnection()
 $installer->getConnection()->createTable($amazon_table);
 
 $installer->getConnection()->addConstraint(
-    'fk_customer_entity_id',
+    'fk_amazon_login_customer_entity_id',
     $installer->getTable('amazon_login/login'),
     'customer_id',
     $installer->getTable('customer/entity'),
