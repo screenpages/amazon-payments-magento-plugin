@@ -13,10 +13,10 @@ class Amazon_Payments_Model_System_Config_Source_Buttonsize
     public function toOptionArray()
     {
         return array(
-            array('value'=>'small', 'label'=>Mage::helper('adminhtml')->__('Small (148px x 30px)')),
-            array('value'=>'medium', 'label'=>Mage::helper('adminhtml')->__('Medium (200px x 45px)')),
-            array('value'=>'large', 'label'=>Mage::helper('adminhtml')->__('Large (296px x 60px)')),
-            array('value'=>'x-large', 'label'=>Mage::helper('adminhtml')->__('X-large (400px x 90px)')),
+            array('value'=>'small', 'label'=>Mage::helper('adminhtml')->__('Small')),
+            array('value'=>'medium', 'label'=>Mage::helper('adminhtml')->__('Medium')),
+            array('value'=>'large', 'label'=>Mage::helper('adminhtml')->__('Large')),
+            array('value'=>'x-large', 'label'=>Mage::helper('adminhtml')->__('X-large')),
         );
     }
 }

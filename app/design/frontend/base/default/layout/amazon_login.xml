@@ -13,7 +13,7 @@
     <customer_account_login translate="label">
 
         <block type="amazon_login/script" name="amazon_login.script" template="amazon_login/script.phtml" />
-        <block type="core/template" name="amazon_login.button" template="amazon_login/button.phtml" after="customer_form_login" />
+        <block type="amazon_login/button" name="amazon_login.button" template="amazon_login/button.phtml" after="customer_form_login" />
 
         <!-- ifconfig only works with action -->
         <reference name="before_body_end">

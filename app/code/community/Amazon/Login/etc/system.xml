@@ -87,8 +87,6 @@
               <show_in_store>1</show_in_store>
             </popup>
 
-
-            <!--
             <heading_button translate="label">
                 <label>Button Style</label>
                 <frontend_model>adminhtml/system_config_form_field_heading</frontend_model>
@@ -127,9 +125,6 @@
                 <show_in_website>1</show_in_website>
                 <show_in_store>1</show_in_store>
             </button_size>
-            -->
-
-
 
             <heading_advanced translate="label">
                 <label>Advanced</label>
