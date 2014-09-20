@@ -31,11 +31,9 @@
 
                     <strong>Configuring Amazon Payments</strong>
                     <ol style="list-style:inside decimal;">
-                      <li>If you have not registered an account with Amazon Payments, please do so <a href="https://sellercentral.amazon.com/hz/me/sp/signup?solutionProviderOptions=lwa%3Bmws-acc%3B&marketplaceId=AGWSWK15IEJJ7&solutionProviderToken=AAAAAQAAAAEAAAAQCz2wulRfR9nOADyzVQrq5wAAAHAIIULh6RBNvlw68WY5S9ATlmInlyg2PLVF44yUVowkyjvDZPhtLf3UYn6fshHlKqwR4qptfBeltbxLtLrrIfK6JoxzuWe9FRTnCfSey8a0sFKuL3mwNenjLyMC9BAN1xU0S6pebxA2mz8t8Y1v5Axi&solutionProviderId=A2K7HE1S3M5XJ" target="_blank">here</a>.
-                      <li>Access your client credentials by registering a new application through <a href="https://sellercentral.amazon.com/" target="_blank">Amazon Seller Central</a>.
-                      <li>Add your url to "Allowed JavaScript Origins" in Amazon SellerCentral.
+                      <li>Register or login to retrieve your account keys: &nbsp<button onclick="javascript:window.open(&#39;https://sellercentral.amazon.com/hz/me/sp/signup?solutionProviderOptions=lwa%3Bmws-acc%3B&marketplaceId=AGWSWK15IEJJ7&solutionProviderToken=AAAAAQAAAAEAAAAQCz2wulRfR9nOADyzVQrq5wAAAHAIIULh6RBNvlw68WY5S9ATlmInlyg2PLVF44yUVowkyjvDZPhtLf3UYn6fshHlKqwR4qptfBeltbxLtLrrIfK6JoxzuWe9FRTnCfSey8a0sFKuL3mwNenjLyMC9BAN1xU0S6pebxA2mz8t8Y1v5Axi&solutionProviderId=A2K7HE1S3M5XJ&#39;, &#39;get_keys&#39,&#39;left=50, top=50, width=950, height=750&#39;); return false;" class="scalable" type="button"><span>Login to Get Your Keys</span></button>
+                      <li>Add your url to "Allowed JavaScript Origins" in <a href="https://sellercentral.amazon.com/" target="_blank">Amazon Seller Central</a>.
                       <li>Under General->Web, enable "Use Secure URLs in Frontend." (HTTPS is required.)
-                      <li>Configure Amazon Payments below.
                     </ol>
 
                     <div style="clear:both;"></div>
@@ -55,9 +53,9 @@
               <show_in_store>0</show_in_store>
             </enabled>
 
-
-            <heading_creds translate="label">
+           <heading_creds translate="label">
                 <label>Client Credentials</label>
+                <frontend_type>text</frontend_type>
                 <frontend_model>adminhtml/system_config_form_field_heading</frontend_model>
                 <sort_order>10</sort_order>
                 <show_in_default>1</show_in_default>
@@ -65,27 +63,7 @@
                 <show_in_store>0</show_in_store>
             </heading_creds>
 
-            <client_id translate="label">
-                <label>Client ID</label>
-                <frontend_type>text</frontend_type>
-                <backend_model>amazon_payments/system_config_backend_clientid</backend_model>
-                <sort_order>11</sort_order>
-                <show_in_default>1</show_in_default>
-                <show_in_website>1</show_in_website>
-                <show_in_store>0</show_in_store>
-            </client_id>
-
-            <client_secret translate="label">
-                <label>Client Secret</label>
-                <frontend_type>text</frontend_type>
-                <backend_model>amazon_payments/system_config_backend_clientsecret</backend_model>
-                <sort_order>12</sort_order>
-                <show_in_default>1</show_in_default>
-                <show_in_website>1</show_in_website>
-                <show_in_store>0</show_in_store>
-            </client_secret>
-
-            <seller_id translate="label">
+             <seller_id translate="label">
                 <label>Seller/Merchant ID</label>
                 <frontend_type>text</frontend_type>
                 <sort_order>15</sort_order>
@@ -95,7 +73,7 @@
             </seller_id>
 
             <access_key translate="label">
-                <label>API Access Key ID</label>
+                <label>MWS Access Key</label>
                 <frontend_type>text</frontend_type>
                 <sort_order>20</sort_order>
                 <show_in_default>1</show_in_default>
@@ -103,13 +81,33 @@
                 <show_in_store>0</show_in_store>
             </access_key>
             <access_secret translate="label">
-                <label>API Secret Access Key</label>
+                <label>MWS Secret Key</label>
                 <frontend_type>text</frontend_type>
                 <sort_order>30</sort_order>
                 <show_in_default>1</show_in_default>
                 <show_in_website>1</show_in_website>
                 <show_in_store>0</show_in_store>
             </access_secret>
+
+            <client_id translate="label">
+                <label>Client ID</label>
+                <frontend_type>text</frontend_type>
+                <backend_model>amazon_payments/system_config_backend_clientid</backend_model>
+                <sort_order>31</sort_order>
+                <show_in_default>1</show_in_default>
+                <show_in_website>1</show_in_website>
+                <show_in_store>0</show_in_store>
+            </client_id>
+
+            <client_secret translate="label">
+                <label>Client Secret</label>
+                <frontend_type>text</frontend_type>
+                <backend_model>amazon_payments/system_config_backend_clientsecret</backend_model>
+                <sort_order>32</sort_order>
+                <show_in_default>1</show_in_default>
+                <show_in_website>1</show_in_website>
+                <show_in_store>0</show_in_store>
+            </client_secret>
 
             <!--
             <region translate="label">
