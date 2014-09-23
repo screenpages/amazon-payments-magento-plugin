@@ -50,6 +50,12 @@
     * Add your bank account for disbursements under "Deposit Information"
 
 ## Release Notes
+1.1.0
+* Updated payments admin screen to make it easier to configure.
+* Fixed JQuery conflict on product detail button shortcut.
+* Fixed compilation issue. (Issue #52)
+* Added button styling options.  (Issue #47)
+
 1.0.1
 * Fixed NOTICE and LICENSE.
 
