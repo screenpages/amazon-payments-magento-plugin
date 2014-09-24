@@ -21,7 +21,7 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
     protected $_canRefundInvoicePartial = true;
     protected $_canVoid                 = true;  // Can void transactions online?
     protected $_canUseInternal          = false; // Can use this payment method in administration panel?
-    protected $_canUseCheckout          = true;  // Can show this payment method as an option on checkout payment page?
+    protected $_canUseCheckout          = false; // Can show this payment method as an option on checkout payment page?
     protected $_canUseForMultishipping  = false; // Is this payment method suitable for multi-shipping checkout?
     protected $_isInitializeNeeded      = true;
     protected $_canFetchTransactionInfo = true;
@@ -384,6 +384,19 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
             }
         }
         return parent::canInvoice();
+    }
+
+
+    /**
+     * Allow payment method in checkout?
+     *
+     * Disable for third-party checkout methods.
+     *
+     * @return bool
+     */
+    public function canUseCheckout()
+    {
+        return Mage::helper('amazon_payments')->isCheckoutAmazonSession();
     }
 
 }
