@@ -64,7 +64,7 @@
             }
 
             // Add via Ajax and redirect to login/payment page
-            OffAmazonPayments.jQuery.post(url: url, data,
+            OffAmazonPayments.jQuery.post(url, data,
                 function(){
                     OffAmazonPayments.jQuery('#ajax_loader').hide();
                     OffAmazonPayments.jQuery("#<?php echo $this->getAmazonPayButtonId(); ?> img[id!='amazon-button-clone']").click();
