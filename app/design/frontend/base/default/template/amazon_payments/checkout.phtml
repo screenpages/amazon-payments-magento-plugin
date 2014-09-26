@@ -143,6 +143,7 @@ AmazonPaymentsMageCheckout.prototype = {
     renderReview: function(transport, id) {
         $(id).update(transport.responseText);
         $$(".button.btn-checkout").invoke('writeAttribute','onclick', 'amazonPaymentsMageCheckout.saveOrder()');
+        this.agreementsForm = $('checkout-agreements')
     },
 
     saveOrder: function() {
@@ -196,14 +197,12 @@ AmazonPaymentsMageCheckout.prototype = {
             }
 
             // Widget reload requried
-            if (msg.indexOf("TransactionTimedOut")) {
+            if (msg.indexOf("TransactionTimedOut") != -1) {
                 location.reload();
             }
-            else {
+            else if (msg.indexOf("terms and conditions") == -1) {
                 setTimeout(loadAmazonWallet, 2000); // Refresh Wallet
             }
-
-
 
         }
 
