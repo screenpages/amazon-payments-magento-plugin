@@ -60,8 +60,11 @@
             <block type="core/template" name="amazon_payments.script" template="amazon_payments/script.phtml" />
         </reference>
 
-        <reference name="checkout.onepage.login">
+        <reference name="checkout.onepage">
+            <block type="amazon_payments/button" name="amazonpaymentsbutton" template="amazon_payments/onepage/button.phtml"/>
+        </reference>
 
+        <reference name="checkout.onepage.login">
             <action method="setTemplate" ifconfig="payment/amazon_payments/enabled">
                 <template helper="amazon_payments/data/switchOnepageLoginTemplateIf">
                     <template_amazon>amazon_payments/onepage/login.phtml</template_amazon>
