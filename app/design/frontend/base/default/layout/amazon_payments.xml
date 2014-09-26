@@ -97,16 +97,15 @@
         <remove name="checkout.onepage.shipping" />
         <remove name="checkout.onepage.payment" />
 
-        <remove name="billing.progress" />
-        <!--<remove name="shipping.progress" />-->
-        <remove name="payment.progress" />
-
         <reference name="head">
             <action method="addItem"><type>skin_css</type><name>amazon_payments/css/styles_onepage.css</name><params/></action>
         </reference>
 
-        <reference name="checkout.progress">
-            <block type="checkout/onepage_progress" name="shipping.progress" template="amazon_payments/onepage/progress/widget.phtml"></block>
+        <reference name="checkout.progress.wrapper">
+            <block type="amazon_payments/onepage_progress" name="checkout.progress" before="-" template="checkout/onepage/progress.phtml">
+                <block type="amazon_payments/onepage_progress" name="shipping.progress" template="amazon_payments/onepage/progress/widget.phtml"></block>
+                <block type="amazon_payments/onepage_progress" name="shippingmethod.progress" template="checkout/onepage/progress/shipping_method.phtml"></block>
+            </block>
         </reference>
 
         <block type="amazon_payments/onepage" name="checkout.onepage" template="checkout/onepage.phtml">
@@ -125,7 +124,6 @@
                 </block>
             </block>
             <block type="checkout/onepage_review" name="checkout.onepage.review" as="review" template="checkout/onepage/review.phtml"/>
-
 
         </block>
 
