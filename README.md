@@ -11,9 +11,9 @@
 ### Installation
 > **NOTE** Before you begin, make a backup of your Magento site.
 
-* (Recommended) Via Magento Connect:
+* Using Magento Connect (Recommended):
     * http://www.magentocommerce.com/magento-connect/pay-with-amazon-for-magento.html
-* Manual Installation:
+* Using Manual Installation:
     * Click the Download Zip button and save to your local machine
     * Transfer the zip file to your Magento webserver
     * Unpack the archive in the root directory of your Magento instance
