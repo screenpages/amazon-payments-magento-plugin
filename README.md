@@ -1,6 +1,6 @@
 ## Quick Start - Pay with Amazon for Magento
 
-[View the more detailed User Guide here.](https://github.com/paywithamazon/amazon-payments-magento-plugin/raw/gh-pages/resources/Pay%20with%20Amazon%20for%20Magento%20User%20Guide.pdf)
+[View the Complete User Guide here.](https://github.com/paywithamazon/amazon-payments-magento-plugin/raw/gh-pages/resources/Pay%20with%20Amazon%20for%20Magento%20User%20Guide.pdf)
 
 
 ### Pre-Requisites
@@ -11,14 +11,17 @@
 ### Installation
 > **NOTE** Before you begin, make a backup of your Magento site.
 
-* Click the Download Zip button and save to your local machine
-* Transfer the zip file to your Magento webserver
-* Unpack the archive in the root directory of your Magento instance
-* Flush your Magento caches
-    * In the admin page for your Magento instance, navigate to System->Cache Management
-    * Click the 'Flush Magento Cache'
-    * More information on Magento Cache Management [here](http://www.magentocommerce.com/knowledge-base/entry/cache-storage-management)
-* Log out of the admin page and then log back in to ensure activation of the module
+* (Recommended) Via Magento Connect:
+    * http://www.magentocommerce.com/magento-connect/pay-with-amazon-for-magento.html
+* Manual Installation:
+    * Click the Download Zip button and save to your local machine
+    * Transfer the zip file to your Magento webserver
+    * Unpack the archive in the root directory of your Magento instance
+    * Flush your Magento caches
+        * In the admin page for your Magento instance, navigate to System->Cache Management
+        * Click the 'Flush Magento Cache'
+        * More information on Magento Cache Management [here](http://www.magentocommerce.com/knowledge-base/entry/cache-storage-management)
+    * Log out of the admin page and then log back in to ensure activation of the module
 
 
 ### Configure Magento
