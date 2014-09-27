@@ -32,82 +32,83 @@
         </header>
 
         <section id="downloads" class="clearfix">
-          <a href="https://github.com/amzn/amazon-payments-magento-plugin/archive/v1.1.0.zip" id="download-zip" class="button" onClick="ga('send','event','button','click','download-zip')"><span>Download .zip</span></a>
-          <a href="https://github.com/amzn/amazon-payments-magento-plugin/archive/v1.1.0.tar.gz" id="download-tar-gz" class="button" onClick="ga('send','event','button','click','download-tar-gz')"><span>Download .tar.gz</span></a>
-         </section>
-
-        <section id="links" class="clearfix">
-           <a href="https://github.com/paywithamazon/amazon-payments-magento-plugin/raw/gh-pages/resources/Pay%20with%20Amazon%20for%20Magento%20User%20Guide.pdf" id="download-user-guide" class="button" onClick="ga('send','event','button','click','user-guide')"><span>User Guide</span></a>
+          <a href="https://github.com/amzn/amazon-payments-magento-plugin/releases/latest" id="download-zip" class="button" onClick="ga('send','event','button','click','download-zip')"><span>Download</span></a>
+          <a href="https://github.com/paywithamazon/amazon-payments-magento-plugin/raw/gh-pages/resources/Pay%20with%20Amazon%20for%20Magento%20User%20Guide.pdf" id="download-user-guide" class="button" onClick="ga('send','event','button','click','user-guide')"><span>User Guide</span></a>
           <a href="https://github.com/paywithamazon/amazon-payments-magento-plugin" id="view-on-github" class="button" onClick="ga('send','event','button','click','github')"><span>View on GitHub</span></a>
-        </section>
-
+         </section>
         <hr>
 
         <section id="main_content">
-          <h2>
-<a name="welcome-to-the-amazon-payments-plugin-for-the-magento" class="anchor" href="#welcome-to-the-amazon-payments-plugin-for-the-magento"><span class="octicon octicon-link"></span></a>Welcome to Pay with Amazon for Magento</h2>
-
-<h3>
-<a name="pre-requisites" class="anchor" href="#pre-requisites"><span class="octicon octicon-link"></span></a>Pre-Requisites</h3>
+<h3><a name="pre-requisites" class="anchor" href="#pre-requisites"><span class="octicon octicon-link"></span></a>Pre-Requisites</h3>
 
 <ul>
-<li>Magento CE 1.5-1.9 or EE 1.12+.</li>
-<li>SSL is installed on your site and active on Checkout and Login pages</li>
-</ul><h3>
-<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h3>
-
-<div class="warning"><em>NOTE:</em> Please make a backup of your Magento site before beginning this install</div>
-<ul>
-<li>Click one of the download buttons and save the archive to your local machine</li>
-<li>Transfer the file to your Magento webserver</li>
-<li>Unpack the archive in the root directory of your Magento instance</li>
-<ul>
-  <li>Make sure you are unpacking the archive as the web user (or the same user/permissions as the other directories in your magento root folder)
+  <li>Magento CE 1.5-1.9 or EE 1.12+.</li>
+  <li>SSL is installed on your site and active on Checkout and Login pages</li>
 </ul>
-<li>Flush your Magento caches
+
+<h3><a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h3>
+
+<div class="warning"><em>NOTE:</em> Please make a backup of your Magento site before beginning this installation.</div>
+
+<h5>Using Magento Connect (Recommended)</h5>
 
 <ul>
-<li>In the admin page for your Magento instance, navigate to System-&gt;Cache Management</li>
-<li>Click the 'Flush Magento Cache'</li>
-<li>More information on Magento Cache Management <a href="http://www.magentocommerce.com/knowledge-base/entry/cache-storage-management" onClick="ga('send','event','link','click','cache')">here</a>
-</li>
+  <li><a href="http://www.magentocommerce.com/magento-connect/pay-with-amazon-for-magento.html" onClick="ga('send','event','link','click','connect')">http://www.magentocommerce.com/magento-connect/pay-with-amazon-for-magento.html</a></li>
 </ul>
-</li>
-<li>Log out of the admin page and then log back in to ensure activation of the module</li>
-</ul><h3>
-<a name="configure-magento" class="anchor" href="#configure-magento"><span class="octicon octicon-link"></span></a>Configure Magento</h3>
+
+<h5>Using Manual Installation</h5>
 
 <ul>
-<li>The plugin is configured under "System" (top-nav) -&gt; "Configuration" (menu) -&gt; "Payment Methods" (left nav) -&gt; "Amazon Payments" (main page).</li>
-<li>If you haven't already registered, use this <a href="https://sellercentral.amazon.com/hz/me/sp/signup?solutionProviderOptions=lwa%3Bmws-acc%3B&marketplaceId=AGWSWK15IEJJ7&solutionProviderToken=AAAAAQAAAAEAAAAQCz2wulRfR9nOADyzVQrq5wAAAHAIIULh6RBNvlw68WY5S9ATlmInlyg2PLVF44yUVowkyjvDZPhtLf3UYn6fshHlKqwR4qptfBeltbxLtLrrIfK6JoxzuWe9FRTnCfSey8a0sFKuL3mwNenjLyMC9BAN1xU0S6pebxA2mz8t8Y1v5Axi&solutionProviderId=A2K7HE1S3M5XJ" onClick="ga('send','event','link','click','register')">link</a> or the link in the module create an Amazon Payments account.</li>
-<li>Apply your Amazon account keys, shown during registration or find them in Seller Central:
-
-<ul>
-<li>Merchant/Seller ID
-
-<ul>
-<li>Switch to "Amazon Payments Advanced" in the top nav</li>
-<li>Navigate to "Settings" (top-nav) -&gt; "Integration Settings" (menu)</li>
+  <li>Click one of the download buttons and save the archive to your local machine</li>
+  <li>Transfer the file to your Magento webserver</li>
+  <li>Unpack the archive in the root directory of your Magento instance
+    <ul>
+      <li>Make sure you are unpacking the archive as the web user (or the same user/permissions as the other directories in your magento root folder)</li>
+    </ul>
+  </li>
+  <li>Flush your Magento caches
+    <ul>
+      <li>In the admin page for your Magento instance, navigate to System-&gt;Cache Management</li>
+      <li>Click the 'Flush Magento Cache'
+        <ul>
+          <li>More information on Magento Cache Management <a href="http://www.magentocommerce.com/knowledge-base/entry/cache-storage-management" onClick="ga('send','event','link','click','cache')">here</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Log out of the admin page and then log back in to ensure activation of the module</li>
 </ul>
-</li>
-<li>API Access and Secret Key
+
+<h3><a name="configure-magento" class="anchor" href="#configure-magento"><span class="octicon octicon-link"></span></a>Configure Magento</h3>
 
 <ul>
-<li>Navigate to "Integration" (top-nav) -&gt; "MWS Access Keys" (menu)</li>
+  <li>The plugin is configured under "System" (top-nav) -&gt; "Configuration" (menu) -&gt; "Payment Methods" (left nav) -&gt; "Amazon Payments" (main page).</li>
+  <li>If you haven't already registered, use this <a href="https://sellercentral.amazon.com/hz/me/sp/signup?solutionProviderOptions=lwa%3Bmws-acc%3B&marketplaceId=AGWSWK15IEJJ7&solutionProviderToken=AAAAAQAAAAEAAAAQCz2wulRfR9nOADyzVQrq5wAAAHAIIULh6RBNvlw68WY5S9ATlmInlyg2PLVF44yUVowkyjvDZPhtLf3UYn6fshHlKqwR4qptfBeltbxLtLrrIfK6JoxzuWe9FRTnCfSey8a0sFKuL3mwNenjLyMC9BAN1xU0S6pebxA2mz8t8Y1v5Axi&solutionProviderId=A2K7HE1S3M5XJ" onClick="ga('send','event','link','click','register')">link</a> or the link in the module create an Amazon Payments account.</li>
+  <li>Apply your Amazon account keys, shown during registration or find them in Seller Central:
+    <ul>
+      <li>Merchant/Seller ID
+        <ul>
+          <li>Switch to "Amazon Payments Advanced" in the top nav</li>
+          <li>Navigate to "Settings" (top-nav) -&gt; "Integration Settings" (menu)</li>
+        </ul>
+      </li>
+      <li>API Access and Secret Key
+        <ul>
+          <li>Navigate to "Integration" (top-nav) -&gt; "MWS Access Keys" (menu)</li>
+        </ul>
+      </li>
+      <li>Client and Secret Key (under "Login with Amazon")
+        <ul>
+          <li>Switch to "Login with Amazon" in the top-nav</li>
+          <li>Click "Register a New Application" if you haven't done so already</li>
+          <li>Find the client and secret key under "Web Settings"</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
 </ul>
-</li>
-<li>Client and Secret Key (under "Login with Amazon")
 
-<ul>
-<li>Switch to "Login with Amazon" in the top-nav</li>
-<li>Click "Register a New Application" if you haven't done so already</li>
-<li>Find the client and secret key under "Web Settings"</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul><h3>
-<a name="configure-amazon-payments" class="anchor" href="#configure-amazon-payments"><span class="octicon octicon-link"></span></a>Configure Amazon Payments</h3>
+<h3><a name="configure-amazon-payments" class="anchor" href="#configure-amazon-payments"><span class="octicon octicon-link"></span></a>Configure Amazon Payments</h3>
 
 <ul>
 <li>Allow your site to use your Login with Amazon account:
