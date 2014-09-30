@@ -93,7 +93,7 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
 
         $result = $this->_getApi()->authorize(
             $payment->getTransactionId(),
-            $this->_getMagentoReferenceId($payment) . '-authorize',
+            $this->_getMagentoReferenceId($payment) . '-auth',
             $amount,
             $order->getBaseCurrencyCode(),
             $captureNow,
