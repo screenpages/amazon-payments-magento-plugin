@@ -49,6 +49,9 @@
 
             <div id="col-3-amz" class="col-amz">
                 <h2><?php echo $this->__('Order Summary'); ?></h2>
+
+                <div id="amz-review-loader" style="display:none;"></div>
+
                 <?php echo $this->getChildHtml('review') ?>
 
                 <?php if ($this->isDebugMode()) : ?>
@@ -144,6 +147,7 @@ AmazonPaymentsMageCheckout.prototype = {
         $(id).update(transport.responseText);
         $$(".button.btn-checkout").invoke('writeAttribute','onclick', 'amazonPaymentsMageCheckout.saveOrder()');
         this.agreementsForm = $('checkout-agreements')
+        $("amz-review-loader").hide();
     },
 
     saveOrder: function() {
@@ -211,9 +215,21 @@ AmazonPaymentsMageCheckout.prototype = {
 
     toggleOrderSubmit: function(isDisabled) {
         var btn = $$(".button.btn-checkout");
+        var review = $("checkout-review-table-wrapper");
+        var loader = $("amz-review-loader");
+
         if (isDisabled) {
+            if (review) {
+                review.setOpacity(0.5);
+                loader.show();
+            }
             btn.invoke('writeAttribute','disabled','disabled');
         } else {
+            if (review) {
+                review.setOpacity(1);
+                loader.hide();
+            }
+
             btn.invoke('removeAttribute','disabled');
         }
     }

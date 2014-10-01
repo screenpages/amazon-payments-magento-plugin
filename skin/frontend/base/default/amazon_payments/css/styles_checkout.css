@@ -18,6 +18,7 @@
 
 #col-3-amz {
   padding-left:2%;
+  position:relative;
 }
 
 #checkout-amazon-payments {
@@ -80,6 +81,18 @@ button.btn-checkout span {
 }
 button.btn-checkout span span {
   padding:0;
+}
+
+/* Ajax Loader */
+#amz-review-loader {
+  position:absolute;
+  left:48%;
+  top:30%;
+  width:60px;
+  height:60px;
+  padding:5px;
+  background:#fff url(https://images-na.ssl-images-amazon.com/images/G/01/ep/loading-large.gif) center center no-repeat;
+  z-index:10;
 }
 
 
