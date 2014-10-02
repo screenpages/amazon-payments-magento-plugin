@@ -171,6 +171,9 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
      */
     public function order(Varien_Object $payment, $amount)
     {
+        if (!$amount) {
+            return $this;
+        }
 
         $orderReferenceId = $payment->getAdditionalInformation('order_reference');
 
