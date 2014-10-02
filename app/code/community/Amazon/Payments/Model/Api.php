@@ -83,6 +83,8 @@ class Amazon_Payments_Model_Api
         $className     = 'OffAmazonPaymentsService_Model_' . ucfirst($method) . 'Request';
         $requestObject = new $className($request);
 
+        $start_time = microtime(TRUE);
+
         // Execute request
         try {
             $response = $this->getApi()->$method($requestObject);
@@ -96,6 +98,9 @@ class Amazon_Payments_Model_Api
         if ($this->_isLoggingEnabled()) {
 
             Mage::log('Request: ' . $method . "\n" . print_r($request, true), null, $this->log_file);
+
+            $time = round(microtime(TRUE) - $start_time, 2) . ' seconds.';
+            Mage::log($method . " Time: " . $time, null, $this->log_file);
 
             if (isset($exception)) {
                 Mage::log($exception->__toString(), Zend_Log::ERR, $this->log_file);
