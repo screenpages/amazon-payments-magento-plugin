@@ -99,7 +99,15 @@
                     </amazon_payments_observer>
                 </observers>
             </payment_method_is_active>
-            </events>
+            <sales_order_place_after>
+                <observers>
+                    <amazon_payments_observer>
+                        <class>Amazon_Payments_Model_Observer_Order</class>
+                        <method>updateCustomerAddress</method>
+                    </amazon_payments_observer>
+                </observers>
+            </sales_order_place_after>
+        </events>
     </frontend>
 
     <default>
