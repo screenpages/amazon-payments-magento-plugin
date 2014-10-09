@@ -53,7 +53,7 @@ class Amazon_Payments_Block_Onepage_Progress extends Amazon_Payments_Block_Onepa
 
         $toStep = $this->getRequest()->getParam('toStep');
 
-        if (empty($toStep) || !isset($stepsRevertIndex[$currentStep])) {
+        if (empty($toStep) || !isset($stepsRevertIndex[$currentStep]) || !isset($stepsRevertIndex[$toStep])) {
             return $this->getCheckout()->getStepData($currentStep, 'complete');
         }
 
