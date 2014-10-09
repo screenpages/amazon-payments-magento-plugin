@@ -26,6 +26,7 @@ class Amazon_Payments_Model_Config
     const CONFIG_XML_PATH_CHECKOUT_PAGE = 'payment/amazon_payments/checkout_page';
     const CONFIG_XML_PATH_SHOW_PAY_CART = 'payment/amazon_payments/show_pay_cart';
     const CONFIG_XML_PATH_STORE_NAME    = 'payment/amazon_payments/store_name';
+    const CONFIG_XML_PATH_SECURE_CART   = 'payment/amazon_payments/secure_cart';
 
     const CONFIG_XML_PATH_BUTTON_TYPE    = 'payment/amazon_payments/button_type';
     const CONFIG_XML_PATH_BUTTON_COLOR   = 'payment/amazon_payments/button_color';
@@ -49,7 +50,7 @@ class Amazon_Payments_Model_Config
      * Is sandbox?
      *
      * @param   store $store
-     * @return  string
+     * @return  bool
      */
     public function isSandbox($store = null)
     {
@@ -60,7 +61,7 @@ class Amazon_Payments_Model_Config
      * Is module enabled?
      *
      * @param   store $store
-     * @return  string
+     * @return  bool
      */
     public function isEnabled($store = null)
     {
@@ -71,7 +72,7 @@ class Amazon_Payments_Model_Config
      * Is guest checkout/pay only? (does not create customer account)
      *
      * @param   store $store
-     * @return  string
+     * @return  bool
      */
     public function isGuestCheckout($store = null)
     {
@@ -82,7 +83,7 @@ class Amazon_Payments_Model_Config
      * Is debug mode enabled?
      *
      * @param   store $store
-     * @return  string
+     * @return  bool
      */
     public function isDebugMode($store = null)
     {
@@ -191,7 +192,7 @@ class Amazon_Payments_Model_Config
      * Is Checkout using OnePage?
      *
      * @param   store $store
-     * @return  string
+     * @return  bool
      */
     public function isCheckoutOnepage($store = null)
     {
@@ -202,7 +203,7 @@ class Amazon_Payments_Model_Config
      * Is Checkout modal?
      *
      * @param   store $store
-     * @return  string
+     * @return  bool
      */
     public function isCheckoutModal($store = null)
     {
@@ -218,6 +219,17 @@ class Amazon_Payments_Model_Config
     public function showPayOnCart($store = null)
     {
         return ($this->_getStoreConfig(self::CONFIG_XML_PATH_SHOW_PAY_CART, $store));
+    }
+
+    /**
+     * Is secure cart?
+     *
+     * @param   store $store
+     * @return  bool
+     */
+    public function isSecureCart($store = null)
+    {
+        return ($this->_getStoreConfig(self::CONFIG_XML_PATH_SECURE_CART, $store));
     }
 
     /**
