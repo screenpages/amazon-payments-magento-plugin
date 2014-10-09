@@ -67,7 +67,7 @@
 
     <frontend>
         <secure_url>
-            <checkout_cart>/checkout/cart</checkout_cart>
+            <cart_updatepost>/checkout/cart/updatePost</cart_updatepost>
             <checkout_amazon>/checkout/amazon_payments</checkout_amazon>
             <amazon_checkout>/amazon_payments/checkout</amazon_checkout>
         </secure_url>
@@ -112,6 +112,14 @@
                     </amazon_payments_observer>
                 </observers>
             </sales_order_place_after>
+            <controller_action_predispatch_checkout_cart_index>
+                <observers>
+                    <amazon_payments_observer>
+                        <class>Amazon_Payments_Model_Observer_Action</class>
+                        <method>secureCart</method>
+                    </amazon_payments_observer>
+                </observers>
+            </controller_action_predispatch_checkout_cart_index>
         </events>
     </frontend>
 
@@ -124,6 +132,7 @@
                 <show_pay_cart>1</show_pay_cart>
                 <order_status>processing</order_status>
                 <active>1</active>
+                <secure_cart>1</secure_cart>
                 <button_type>PwA</button_type>
                 <button_color>Gold</button_color>
                 <button_size>medium</button_size>
