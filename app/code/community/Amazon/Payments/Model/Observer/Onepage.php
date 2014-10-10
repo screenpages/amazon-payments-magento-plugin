@@ -29,20 +29,4 @@ class Amazon_Payments_Model_Observer_Onepage
         }
 
     }
-
-    /**
-     * Event: payment_method_is_active
-     */
-    public function paymentMethodIsActive(Varien_Event_Observer $observer) {
-        $event           = $observer->getEvent();
-        $method          = $event->getMethodInstance();
-        $result          = $event->getResult();
-
-        if ($method->getCode() == 'amazon_payments') {
-            // Disable Payment Option if no session found
-            if (!Mage::helper('amazon_payments/data')->isCheckoutAmazonSession()) {
-                $result->isAvailable = false;
-            }
-        }
-    }
 }

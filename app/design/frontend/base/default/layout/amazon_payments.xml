@@ -271,4 +271,24 @@
     </catalog_product_view>
 
 
+
+    <!--
+    Fire Checkout
+    -->
+    <firecheckout_index_index translate="label">
+        <reference name="head">
+            <block type="core/template" name="amazon_payments.script" template="amazon_payments/script.phtml" />
+        </reference>
+    </firecheckout_index_index>
+
+    <!--
+    IWD Onepage Checkout
+    -->
+    <opc_index_index translate="label">
+        <reference name="head">
+            <block type="core/template" name="amazon_payments.script" template="amazon_payments/script.phtml" />
+        </reference>
+    </opc_index_index>
+
+
 </layout>

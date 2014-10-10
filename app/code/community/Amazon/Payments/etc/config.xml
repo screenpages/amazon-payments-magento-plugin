@@ -96,14 +96,6 @@
                    </amazon_payments_observer>
                 </observers>
             </controller_action_layout_load_before>
-            <payment_method_is_active>
-                <observers>
-                    <amazon_payments_observer>
-                        <class>Amazon_Payments_Model_Observer_Onepage</class>
-                        <method>paymentMethodIsActive</method>
-                    </amazon_payments_observer>
-                </observers>
-            </payment_method_is_active>
             <sales_order_place_after>
                 <observers>
                     <amazon_payments_observer>

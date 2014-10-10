@@ -14,6 +14,9 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
     // Unique internal payment method identifier
     protected $_code                    = 'amazon_payments';
 
+    protected $_formBlockType           = 'amazon_payments/form';
+    //protected $_infoBlockType           = 'amazon_payments/info';
+
     protected $_canAuthorize            = true;  // Can authorize online?
     protected $_canCapture              = true;  // Can capture funds online?
     protected $_canCapturePartial       = false; // Can capture partial amounts online?
@@ -21,7 +24,7 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
     protected $_canRefundInvoicePartial = true;
     protected $_canVoid                 = true;  // Can void transactions online?
     protected $_canUseInternal          = false; // Can use this payment method in administration panel?
-    protected $_canUseCheckout          = false; // Can show this payment method as an option on checkout payment page?
+    protected $_canUseCheckout          = true;  // Can show this payment method as an option on checkout payment page?
     protected $_canUseForMultishipping  = false; // Is this payment method suitable for multi-shipping checkout?
     protected $_isInitializeNeeded      = true;
     protected $_canFetchTransactionInfo = true;
@@ -197,6 +200,11 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
 
         if (!$orderReferenceId) {
             $orderReferenceId = Mage::getSingleton('checkout/session')->getAmazonOrderReferenceId();
+
+            if (!$orderReferenceId) {
+                Mage::throwException('Please log in to your Amazon account by clicking the Amazon pay button.');
+            }
+
             $payment->setAdditionalInformation('order_reference', $orderReferenceId);
         }
 
@@ -417,13 +425,12 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
     /**
      * Allow payment method in checkout?
      *
-     * Disable for third-party checkout methods.
-     *
      * @return bool
      */
     public function canUseCheckout()
     {
-        return Mage::helper('amazon_payments')->isCheckoutAmazonSession();
+        return (Mage::helper('amazon_payments')->isCheckoutAmazonSession() || $this->getConfigData('use_in_checkout'));
     }
+
 
 }
