@@ -23,8 +23,10 @@ class Amazon_Payments_Model_Observer_Order
 
         if ($customer->getId() && $payment->getMethodInstance()->getCode() == 'amazon_payments') {
 
+            $customerAddress = $order->getShippingAddress() ? $order->getShippingAddress() : $order->getBillingAddress();
+
             $newAddress = Mage::getModel('customer/address')
-                ->addData($order->getShippingAddress()->getData())
+                ->addData($customerAddress->getData())
                 ->setCustomerId($customer->getId())
       			    ->setSaveInAddressBook('1');
 
