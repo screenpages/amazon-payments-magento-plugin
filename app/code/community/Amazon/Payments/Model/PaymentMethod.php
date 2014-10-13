@@ -96,7 +96,7 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
             $stateObject->setState(Mage_Sales_Model_Order::STATE_PROCESSING);
         }
 
-        $stateObject->setStatus(true);
+        $stateObject->setStatus($this->getConfigData('order_status'));
         $stateObject->setIsNotified(Mage_Sales_Model_Order_Status_History::CUSTOMER_NOTIFICATION_NOT_APPLICABLE);
     }
 
