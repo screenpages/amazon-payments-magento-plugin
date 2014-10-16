@@ -54,7 +54,7 @@
 
                 <?php echo $this->getChildHtml('review') ?>
 
-                <?php if ($this->isDebugMode()) : ?>
+                <?php if ($this->helper('amazon_payments')->isAmazonSandbox()) : ?>
                 <br />
                 <h3>Authorization Sandbox Simulation:</h3>
                 <textarea id="sandbox"></textarea>
