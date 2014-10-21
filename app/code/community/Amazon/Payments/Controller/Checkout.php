@@ -27,7 +27,7 @@ abstract class Amazon_Payments_Controller_Checkout extends Mage_Checkout_Control
     public function preDispatch()
     {
         parent::preDispatch();
-        $this->_amazonOrderReferenceId = $this->getRequest()->getParam('amazon_order_reference_id');
+        $this->_amazonOrderReferenceId = htmlentities($this->getRequest()->getParam('amazon_order_reference_id'));
 
         if (!$this->_amazonOrderReferenceId) {
             $this->_amazonOrderReferenceId = Mage::getSingleton('checkout/session')->getAmazonOrderReferenceId();
@@ -38,7 +38,7 @@ abstract class Amazon_Payments_Controller_Checkout extends Mage_Checkout_Control
 
         // User is logging in...
 
-        $token = $this->getRequest()->getParam('access_token');
+        $token = htmlentities($this->getRequest()->getParam('access_token'));
 
         if ($token) {
             $_amazonLogin = Mage::getModel('amazon_login/customer');

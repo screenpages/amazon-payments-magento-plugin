@@ -90,7 +90,7 @@ AmazonModal.prototype.resize = function() {
 
 document.observe("dom:loaded", function() {
     var amazonModal = new AmazonModal(1020);
-    amazonModal.show('<?php print $_helper->getStandaloneUrl(); ?>?ajax=1&<?php print $_SERVER['QUERY_STRING']; ?>');
+    amazonModal.show('<?php print $_helper->getStandaloneUrl(); ?>?ajax=1&<?php print htmlentities($_SERVER['QUERY_STRING']); ?>');
 });
 
 

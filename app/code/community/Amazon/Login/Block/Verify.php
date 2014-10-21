@@ -18,7 +18,7 @@ class Amazon_Login_Block_Verify extends Mage_Core_Block_Template
 
     public function getPostActionUrl()
     {
-        return $this->helper('amazon_login')->getVerifyUrl() . '?redirect=' . $this->getRequest()->getParam('redirect');
+        return $this->helper('amazon_login')->getVerifyUrl() . '?redirect=' . htmlentities($this->getRequest()->getParam('redirect'));
     }
 
     public function getForgotPasswordUrl()
