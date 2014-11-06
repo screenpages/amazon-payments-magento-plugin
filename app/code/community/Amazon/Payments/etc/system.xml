@@ -215,6 +215,18 @@
                 <show_in_store>0</show_in_store>
             </use_in_checkout>
 
+            <sort_order translate="label">
+                <label>Sort Order</label>
+                <frontend_type>text</frontend_type>
+                <sort_order>68</sort_order>
+                <show_in_default>1</show_in_default>
+                <show_in_website>1</show_in_website>
+                <show_in_store>0</show_in_store>
+                <frontend_class>validate-number</frontend_class>
+                <depends><use_in_checkout>1</use_in_checkout></depends>
+            </sort_order>
+
+
             <heading_button translate="label">
                 <label>Button Style</label>
                 <frontend_model>adminhtml/system_config_form_field_heading</frontend_model>
