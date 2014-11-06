@@ -14,25 +14,27 @@ class Amazon_Payments_Model_Config
      * Paths to Payment Method config
      */
 
-    const CONFIG_XML_PATH_ENABLED       = 'payment/amazon_payments/enabled';
-    const CONFIG_XML_PATH_CLIENT_ID     = 'payment/amazon_payments/client_id';
-    const CONFIG_XML_PATH_CLIENT_SECRET = 'payment/amazon_payments/client_secret';
-    const CONFIG_XML_PATH_SELLER_ID     = 'payment/amazon_payments/seller_id';
-    const CONFIG_XML_PATH_ACCESS_KEY    = 'payment/amazon_payments/access_key';
-    const CONFIG_XML_PATH_ACCESS_SECRET = 'payment/amazon_payments/access_secret';
-    const CONFIG_XML_PATH_REGION        = 'payment/amazon_payments/region';
-    const CONFIG_XML_PATH_SANDBOX       = 'payment/amazon_payments/sandbox';
-    const CONFIG_XML_PATH_DEBUG         = 'payment/amazon_payments/debug';
-    const CONFIG_XML_PATH_CHECKOUT_PAGE = 'payment/amazon_payments/checkout_page';
-    const CONFIG_XML_PATH_SHOW_PAY_CART = 'payment/amazon_payments/show_pay_cart';
-    const CONFIG_XML_PATH_STORE_NAME    = 'payment/amazon_payments/store_name';
-    const CONFIG_XML_PATH_SECURE_CART   = 'payment/amazon_payments/secure_cart';
+    const CONFIG_XML_PATH_ENABLED        = 'payment/amazon_payments/enabled';
+    const CONFIG_XML_PATH_CLIENT_ID      = 'payment/amazon_payments/client_id';
+    const CONFIG_XML_PATH_CLIENT_SECRET  = 'payment/amazon_payments/client_secret';
+    const CONFIG_XML_PATH_SELLER_ID      = 'payment/amazon_payments/seller_id';
+    const CONFIG_XML_PATH_ACCESS_KEY     = 'payment/amazon_payments/access_key';
+    const CONFIG_XML_PATH_ACCESS_SECRET  = 'payment/amazon_payments/access_secret';
+    const CONFIG_XML_PATH_REGION         = 'payment/amazon_payments/region';
+    const CONFIG_XML_PATH_SANDBOX        = 'payment/amazon_payments/sandbox';
+    const CONFIG_XML_PATH_DEBUG          = 'payment/amazon_payments/debug';
+    const CONFIG_XML_PATH_CHECKOUT_PAGE  = 'payment/amazon_payments/checkout_page';
+    const CONFIG_XML_PATH_SHOW_PAY_CART  = 'payment/amazon_payments/show_pay_cart';
+    const CONFIG_XML_PATH_STORE_NAME     = 'payment/amazon_payments/store_name';
+    const CONFIG_XML_PATH_SECURE_CART    = 'payment/amazon_payments/secure_cart';
+    const CONFIG_XML_PATH_RESTRICTED_IPS = 'payment/amazon_payments/restricted_ips';
 
     const CONFIG_XML_PATH_BUTTON_TYPE    = 'payment/amazon_payments/button_type';
     const CONFIG_XML_PATH_BUTTON_COLOR   = 'payment/amazon_payments/button_color';
     const CONFIG_XML_PATH_BUTTON_SIZE    = 'payment/amazon_payments/button_size';
 
-    const CONFIG_XML_PATH_LOGIN_ENABLED = 'amazon_login/settings/enabled';
+    const CONFIG_XML_PATH_LOGIN_ENABLED  = 'amazon_login/settings/enabled';
+
 
     /**
      * Retrieve config value for store by path
@@ -65,6 +67,13 @@ class Amazon_Payments_Model_Config
      */
     public function isEnabled($store = null)
     {
+        // Check for IP Restriction
+        if ($this->_getStoreConfig(self::CONFIG_XML_PATH_RESTRICTED_IPS, $store)) {
+            if ( !Mage::helper('core')->isDevAllowed() ) {
+                return false;
+            }
+        }
+
         return ($this->_getStoreConfig(self::CONFIG_XML_PATH_ENABLED, $store) && $this->getClientId($store) && $this->getClientSecret($store));
     }
 

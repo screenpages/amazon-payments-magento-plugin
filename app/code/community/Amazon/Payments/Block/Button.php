@@ -107,8 +107,11 @@ class Amazon_Payments_Block_Button extends Mage_Core_Block_Template
      */
     public function isAmazonPayButtonEnabled()
     {
+        if (!Mage::getSingleton('amazon_payments/config')->isEnabled()) {
+            return false;
+        }
         // Viewing single product
-        if (Mage::registry('current_product')) {
+        else if (Mage::registry('current_product')) {
              return $this->helper('amazon_payments')->isEnableProductPayments();
         }
         else {

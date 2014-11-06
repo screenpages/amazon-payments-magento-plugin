@@ -433,7 +433,7 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
      */
     public function canUseCheckout()
     {
-        return ((Mage::helper('amazon_payments')->isCheckoutAmazonSession() && $this->getConfigData('checkout_page') == 'onepage') || $this->getConfigData('use_in_checkout'));
+        return (Mage::getSingleton('amazon_payments/config')->isEnabled() && ((Mage::helper('amazon_payments')->isCheckoutAmazonSession() && $this->getConfigData('checkout_page') == 'onepage') || $this->getConfigData('use_in_checkout')));
     }
 
 
