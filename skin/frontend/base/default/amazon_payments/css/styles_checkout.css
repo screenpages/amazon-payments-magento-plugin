@@ -50,8 +50,8 @@
   border-top:0;
 }
 
-.button.btn-checkout,
-.button.btn-checkout:hover {
+#checkout-amazon-payments .button.btn-checkout,
+#checkout-amazon-payments .button.btn-checkout:hover {
   background: #efd57f; /* Old browsers */
   background: -moz-linear-gradient(top,  #efd57f 0%, #e5b842 100%); /* FF3.6+ */
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#efd57f), color-stop(100%,#e5b842)); /* Chrome,Safari4+ */
@@ -73,13 +73,13 @@
 
 }
 
-button.btn-checkout span {
+#checkout-amazon-payments button.btn-checkout span {
   color:#4f3310;
   background:none;
   height:auto;
   padding:0;
 }
-button.btn-checkout span span {
+#checkout-amazon-payments button.btn-checkout span span {
   padding:0;
 }
 
