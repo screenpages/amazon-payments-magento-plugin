@@ -57,5 +57,26 @@ class Amazon_Payments_Block_Adminhtml_Notifications extends Mage_Adminhtml_Block
         return $this->getUrl('adminhtml/system_config/edit/section/payment');
     }
 
+    /**
+     * Is patch requried for 1.5?
+     *
+     * @return string
+     */
+    public function isPaymentPatchRequired()
+    {
+        $version = Mage::getVersionInfo();
+
+        if ($version['major'] == '1' && $version['minor'] == '5') {
+            $payment = Mage::getSingleton('sales/order_payment');
+
+            if (!method_exists($payment, 'lookupTransaction')) {
+                return true;
+            }
+
+            return false;
+        }
+    }
+
+
 }
 
