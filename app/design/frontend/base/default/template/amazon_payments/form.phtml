@@ -12,3 +12,26 @@
 <ul class="form-list" id="payment_form_<?php echo $this->getMethodCode() ?>" style="display:none;">
     <li class="form-alt"><?php echo Mage::app()->getLayout()->createBlock('amazon_payments/button')->setTemplate('amazon_payments/button.phtml')->toHtml(); ?></li>
 </ul>
+
+<script type='text/javascript'>
+
+Element.prototype.triggerEvent = function(eventName) {
+    if (document.createEvent) {
+        var evt = document.createEvent('HTMLEvents');
+        evt.initEvent(eventName, true, true);
+        return this.dispatchEvent(evt);
+    }
+    if (this.fireEvent)
+        return this.fireEvent('on' + eventName);
+}
+
+// Display login on radio select
+$$("input[name='payment[method]']").each(function(el) {
+    el.observe('change', function() {
+        if (el.value == 'amazon_payments') {
+            $$("#payment_form_amazon_payments img")[0].triggerEvent('click');
+        }
+    })
+})
+
+</script>
