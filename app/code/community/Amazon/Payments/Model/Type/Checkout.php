@@ -59,6 +59,7 @@ class Amazon_Payments_Model_Type_Checkout extends Mage_Checkout_Model_Type_Onepa
         $address = $this->getQuote()->getShippingAddress();
 
         /* @var $addressForm Mage_Customer_Model_Form */
+        /*
         $addressForm    = Mage::getModel('customer/form');
         $addressForm->setFormCode('customer_address_edit')
             ->setEntityType('customer_address')
@@ -75,6 +76,7 @@ class Amazon_Payments_Model_Type_Checkout extends Mage_Checkout_Model_Type_Onepa
                 $address->setData($attribute->getAttributeCode(), NULL);
             }
         }
+        */
 
         $address->setCustomerAddressId(null);
         // Additional form data, not fetched by extractData (as it fetches only attributes)
@@ -100,6 +102,9 @@ class Amazon_Payments_Model_Type_Checkout extends Mage_Checkout_Model_Type_Onepa
         $this->getCheckout()
             ->setStepData('shipping', 'complete', true)
             ->setStepData('shipping_method', 'allow', true);
+
+
+        Mage::getSingleton('checkout/session')->setAmazonAddressId($address->getId());
 
         return array();
     }

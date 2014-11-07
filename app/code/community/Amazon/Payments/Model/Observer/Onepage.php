@@ -10,8 +10,12 @@
 
 class Amazon_Payments_Model_Observer_Onepage
 {
+    protected $_quote;
+
     /**
      * Event: controller_action_layout_load_before
+     *
+     * Load layout handle override for OnePage
      */
     public function beforeLoadLayout(Varien_Event_Observer $observer)
     {
@@ -25,8 +29,53 @@ class Amazon_Payments_Model_Observer_Onepage
                 Mage::app()->getFrontController()->getResponse()->setRedirect($_helper->getStandaloneUrl());
             }
 
+            // Use custom checkout layout
             $observer->getEvent()->getLayout()->getUpdate()->addHandle('checkout_onepage_index_amazon_payments');
         }
-
     }
+
+
+    /**
+     * Event: custom_quote_process
+     *
+     * Clear address if user switches from Amazon Checkout to third-party checkout
+     */
+    public function clearShippingAddress(Varien_Event_Observer $observer)
+    {
+        $_helper = Mage::helper('amazon_payments/data');
+        $session = $observer->getEvent()->getCheckoutSession();
+
+        $action = Mage::app()->getFrontController()->getAction()->getFullActionName();
+        $action_reset = array('opc_index_index', 'firecheckout_index_index');
+
+        if (in_array($action, $action_reset) && $session && $session->getCheckoutState() == 'begin' && $session->getAmazonAddressId() && $session->getQuoteId() && $this->_quote === null) {
+
+            $quote = $this->_quote = Mage::getModel('sales/quote')->setStoreId(Mage::app()->getStore()->getId())->load($session->getQuoteId());
+            $address = $quote->getShippingAddress();
+
+            if ($address->getId() == $session->getAmazonAddressId()) {
+
+                $reset = array(
+                    'firstname'   => '',
+                    'lastname'    => '',
+                    'street'      => '',
+                    'city'        => '',
+                    'region_id'   => '',
+                    'postcode'    => '',
+                    'country_id'  => '',
+                    'telephone'   => '',
+                );
+
+                $address->setData($reset);
+                $quote->setShippingAddress($address);
+                $quote->setBillingAddress($address);
+
+                $quote->collectTotals()->save();
+
+                $session->unsAmazonAddressId();
+            }
+
+        }
+    }
+
 }
