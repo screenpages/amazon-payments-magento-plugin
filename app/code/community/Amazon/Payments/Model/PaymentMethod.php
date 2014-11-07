@@ -230,7 +230,14 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
             );
         }
 
-        $apiResult = $this->_getApi()->confirmOrderReference($orderReferenceId);
+        try {
+            $apiResult = $this->_getApi()->confirmOrderReference($orderReferenceId);
+        }
+        catch (Exception $e) {
+            Mage::throwException("Please try another Amazon payment method." . "\n\n" . substr($e->getMessage(), 0, strpos($e->getMessage(), 'Stack trace')));
+            $this->_setErrorCheck();
+            return;
+        }
 
         $payment->setIsTransactionClosed(false);
         $payment->setSkipOrderProcessing(true);
