@@ -63,7 +63,11 @@
     </global>
 
 
+
     <frontend>
+        <secure_url>
+            <amazon_login_verify>/amazon_login/customer/verify</amazon_login_verify>
+        </secure_url>
         <routers>
             <amazon_login>
                 <use>standard</use>
