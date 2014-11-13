@@ -344,7 +344,7 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
 
         $result = $this->_getApi()->refund(
             $payment->getRefundTransactionId(),
-            $this->_getMagentoReferenceId($payment) . '-refund',
+            $this->_getMagentoReferenceId($payment) . substr(md5($this->_getMagentoReferenceId($payment) . microtime() ),-4) . '-refund',
             $amount,
             $order->getBaseCurrencyCode(),
             null,
