@@ -24,9 +24,12 @@ class Amazon_Payments_Model_Config
     const CONFIG_XML_PATH_SANDBOX        = 'payment/amazon_payments/sandbox';
     const CONFIG_XML_PATH_DEBUG          = 'payment/amazon_payments/debug';
     const CONFIG_XML_PATH_CHECKOUT_PAGE  = 'payment/amazon_payments/checkout_page';
+    const CONFIG_XML_PATH_PAYMENT_ACTION = 'payment/amazon_payments/payment_action';
+    const CONFIG_XML_PATH_ORDER_STATUS   = 'payment/amazon_payments/order_status';
     const CONFIG_XML_PATH_SHOW_PAY_CART  = 'payment/amazon_payments/show_pay_cart';
     const CONFIG_XML_PATH_STORE_NAME     = 'payment/amazon_payments/store_name';
     const CONFIG_XML_PATH_SECURE_CART    = 'payment/amazon_payments/secure_cart';
+    const CONFIG_XML_PATH_IS_ASYNC       = 'payment/amazon_payments/is_async';
     const CONFIG_XML_PATH_RESTRICTED_IPS = 'payment/amazon_payments/restricted_ips';
 
     const CONFIG_XML_PATH_BUTTON_TYPE    = 'payment/amazon_payments/button_type';
@@ -181,6 +184,28 @@ class Amazon_Payments_Model_Config
     }
 
     /**
+     * Get payment action
+     *
+     * @param store $store
+     * @return string
+     */
+    public function getPaymentAction($store = null)
+    {
+        return $this->_getStoreConfig(self::CONFIG_XML_PATH_PAYMENT_ACTION, $store);
+    }
+
+    /**
+     * Get new order status
+     *
+     * @param store $store
+     * @return string
+     */
+    public function getNewOrderStatus($store = null)
+    {
+        return $this->_getStoreConfig(self::CONFIG_XML_PATH_ORDER_STATUS, $store);
+    }
+
+    /**
      * Get customzied store name, if used
      *
      * @param   store $store
@@ -239,6 +264,17 @@ class Amazon_Payments_Model_Config
     public function isSecureCart($store = null)
     {
         return ($this->_getStoreConfig(self::CONFIG_XML_PATH_SECURE_CART, $store));
+    }
+
+    /**
+     * Is async mode?
+     *
+     * @param   store $store
+     * @return  bool
+     */
+    public function isAsync($store = null)
+    {
+        return ($this->_getStoreConfig(self::CONFIG_XML_PATH_IS_ASYNC, $store));
     }
 
     /**
