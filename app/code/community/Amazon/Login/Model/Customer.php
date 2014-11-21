@@ -78,7 +78,7 @@ class Amazon_Login_Model_Customer extends Mage_Customer_Model_Customer
 	// if the user only has a first name, handle accordingly
         $trimmedName = trim($name);
         if(strpos($trimmedName,' ')===false) {
-            return array($trimmedName,'');
+            return array($trimmedName,'.');
         }
 
         $firstName = substr($name, 0, strrpos($name, ' '));
