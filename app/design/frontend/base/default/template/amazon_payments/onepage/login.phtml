@@ -85,7 +85,15 @@
     <div class="col-1">
         <div class="buttons-set">
             <p class="required">&nbsp;</p>
-            <button type="button" class="button" onclick="checkout.setMethod();"><span><span><?php echo ($this->getQuote()->isAllowedGuestCheckout() ? $this->__('Continue') : $this->__('Register')) ?></span></span></button>
+
+            <?php if ($this->getQuote()->isAllowedGuestCheckout()): ?>
+                <button id="onepage-guest-register-button" type="button" class="button" onclick="checkout.setMethod();"><span><span><?php echo $this->__('Continue') ?></span></span></button>
+            <?php elseif ($this->helper('checkout')->isCustomerMustBeLogged()): ?>
+                <button id="onepage-guest-register-button" type="button" class="button" onclick="window.location='<?php echo $this->helper('checkout/url')->getRegistrationUrl();?>'"><span><span><?php echo $this->__('Register') ?></span></span></button>
+            <?php else: ?>
+                <button type="button" class="button" onclick="checkout.setMethod();"><span><span><?php echo ($this->getQuote()->isAllowedGuestCheckout() ? $this->__('Continue') : $this->__('Register')) ?></span></span></button>
+            <?php endif; ?>
+
         </div>
     </div>
     <div class="col-2">
