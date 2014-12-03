@@ -81,7 +81,7 @@ class Amazon_Payments_Model_Async extends Mage_Core_Model_Abstract
                     }
                 }
                 // Declined
-                elseif ($status == Amazon_Payments_Model_Api::AUTH_STATUS_DECLINED) {
+                elseif ($status == Amazon_Payments_Model_Api::AUTH_STATUS_SUSPENDED) {
                     $order->setState(Mage_Sales_Model_Order::STATE_HOLDED);
                     $order->setStatus(Mage_Sales_Model_Order::ACTION_FLAG_HOLD);
                     $message .= ' Order placed on hold. Please direct customer to Amazon Payments site to update their payment method.';
