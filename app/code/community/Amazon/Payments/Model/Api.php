@@ -18,6 +18,7 @@ class Amazon_Payments_Model_Api
     const AUTH_STATUS_DECLINED  = 'Declined';
     const AUTH_STATUS_CLOSED    = 'Closed';
     const AUTH_STATUS_COMPLETED = 'Completed';
+    const AUTH_STATUS_SUSPENDED = 'Suspended';
 
     protected $api;
     protected $log_file = 'amazon.log';
