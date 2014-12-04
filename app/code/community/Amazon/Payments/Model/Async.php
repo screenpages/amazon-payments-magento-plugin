@@ -79,9 +79,7 @@ class Amazon_Payments_Model_Async extends Mage_Core_Model_Abstract
               // Declined
               case Amazon_Payments_Model_Api::AUTH_STATUS_DECLINED:
                   if ($order->getState() != Mage_Sales_Model_Order::STATE_HOLDED) {
-                      $order->setHoldBeforeState($order->getState());
-                      $order->setHoldBeforeStatus($order->getStatus());
-                      $order->setState(Mage_Sales_Model_Order::STATE_HOLDED);
+                      $order->setState(Mage_Sales_Model_Order::STATE_HOLDED, true);
                   }
 
                   $message .= " Order placed on hold due to $reasonCode. Please direct customer to Amazon Payments site to update their payment method.";
@@ -107,9 +105,7 @@ class Amazon_Payments_Model_Async extends Mage_Core_Model_Abstract
                       }
                   }
                   else {
-                      $order->setHoldBeforeState($order->getState());
-                      $order->setHoldBeforeStatus($order->getStatus());
-                      $order->setState(Mage_Sales_Model_Order::STATE_HOLDED);
+                      $order->setState(Mage_Sales_Model_Order::STATE_HOLDED, true);
 
                       $message .= ' Unable to create invoice due to Authorization Reason Code: ' . $reasonCode;
                   }
