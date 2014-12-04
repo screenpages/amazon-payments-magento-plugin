@@ -48,50 +48,78 @@ class Amazon_Payments_Model_Async extends Mage_Core_Model_Abstract
      */
     public function syncOrderStatus(Mage_Sales_Model_Order $order, $isManualSync = false)
     {
-        $amazonOrderReference = $order->getPayment()->getAdditionalInformation('order_reference');
-
         $_api = $this->_getApi();
         $message = '';
+        $amazonOrderReference = $order->getPayment()->getAdditionalInformation('order_reference');
 
-        $result = $this->_getApi()->getOrderReferenceDetails($amazonOrderReference);
+        $result = $_api->getOrderReferenceDetails($amazonOrderReference);
 
         if ($result) {
-            $status = $result->getOrderReferenceStatus()->getState();
 
-            $message = Mage::helper('payment')->__('Sync with Amazon: Amazon order status is %s.',  $status);
+            // Retrieve Amazon Authorization Details
+            try {
+                // Last transaction ID is Amazon Authorize Reference ID
+                $lastAmazonReference = $order->getPayment()->getLastTransId();
+                $resultAuthorize = $this->_getApi()->getAuthorizationDetails($lastAmazonReference);
+                $amazonAuthorizationState = $resultAuthorize->getAuthorizationStatus()->getState();
+                $reasonCode = $resultAuthorize->getAuthorizationStatus()->getReasonCode();
+            } catch (Exception $e) {
+                Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+                return;
+            }
 
-            if ($order->getState() == Mage_Sales_Model_Order::STATE_PENDING_PAYMENT) {
+            $message = Mage::helper('payment')->__('Sync with Amazon: Authorization state is %s.', $amazonAuthorizationState);
 
-                $order->setStatus($_api->getConfig()->getNewOrderStatus());
+            switch ($amazonAuthorizationState) {
+              // Pending (All Authorization objects are in the Pending state for 30 seconds after Authorize request)
+              case Amazon_Payments_Model_Api::AUTH_STATUS_PENDING:
+                  $message .= ' (Payment is currently authorizing. Please try again momentarily.)';
+                  break;
 
-                // Payment accepted...
-                if ($status == Amazon_Payments_Model_Api::AUTH_STATUS_OPEN) {
+              // Declined
+              case Amazon_Payments_Model_Api::AUTH_STATUS_DECLINED:
+                  if ($order->getState() != Mage_Sales_Model_Order::STATE_HOLDED) {
+                      $order->setHoldBeforeState($order->getState());
+                      $order->setHoldBeforeStatus($order->getStatus());
+                      $order->setState(Mage_Sales_Model_Order::STATE_HOLDED);
+                  }
 
-                    // Authorize & Capture -- create invoice
-                    if ($_api->getConfig()->getPaymentAction() == Mage_Payment_Model_Method_Abstract::ACTION_AUTHORIZE_CAPTURE) {
-                        $order->setState(Mage_Sales_Model_Order::STATE_PROCESSING);
+                  $message .= " Order placed on hold due to $reasonCode. Please direct customer to Amazon Payments site to update their payment method.";
+                  break;
 
-                        if ($this->_createInvoice($order, $result->getIdList()->getmember())) {
-                            $message .= ' ' . Mage::helper('payment')->__('Invoice created.');
-                        }
-                    }
-                    // Capture only
-                    else {
-                        $order->setState(Mage_Sales_Model_Order::STATE_NEW);
-                    }
-                }
-                // Declined/Suspended
-                elseif ($status == Amazon_Payments_Model_Api::AUTH_STATUS_SUSPENDED) {
-                    $order->setHoldBeforeState($order->getState());
-                    $order->setHoldBeforeStatus($order->getStatus());
-                    $order->setState(Mage_Sales_Model_Order::STATE_HOLDED);
+              // Open (Authorize Only)
+              case Amazon_Payments_Model_Api::AUTH_STATUS_OPEN:
+                  $order->setState(Mage_Sales_Model_Order::STATE_NEW);
+                  $order->setStatus($_api->getConfig()->getNewOrderStatus());
+                  break;
 
-                    $message .= ' Order placed on hold. Please direct customer to Amazon Payments site to update their payment method.';
-                }
+              // Closed (Authorize and Capture)
+              case Amazon_Payments_Model_Api::AUTH_STATUS_CLOSED:
 
 
+                  // Payment captured; create invoice
+                  if ($reasonCode == 'MaxCapturesProcessed') {
+                      $order->setState(Mage_Sales_Model_Order::STATE_PROCESSING);
+                      $order->setStatus($_api->getConfig()->getNewOrderStatus());
+
+                      if ($this->_createInvoice($order, $result->getIdList()->getmember())) {
+                          $message .= ' ' . Mage::helper('payment')->__('Invoice created.');
+                      }
+                  }
+                  else {
+                      $order->setHoldBeforeState($order->getState());
+                      $order->setHoldBeforeStatus($order->getStatus());
+                      $order->setState(Mage_Sales_Model_Order::STATE_HOLDED);
+
+                      $message .= ' Unable to create invoice due to Authorization Reason Code: ' . $reasonCode;
+                  }
+
+                  break;
+            }
+
+            // Update order
+            if ($amazonAuthorizationState != Amazon_Payments_Model_Api::AUTH_STATUS_PENDING) {
                 $order->addStatusToHistory($order->getStatus(), $message, false);
-
                 $order->save();
             }
 

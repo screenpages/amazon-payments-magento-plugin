@@ -247,6 +247,31 @@ class Amazon_Payments_Model_Api
     }
 
     /**
+     * GetAuthorizationDetails
+     *
+     * @param string $amazonAuthorizationId
+     * @return OffAmazonPaymentsService_Model_GetAuthorizationDetails
+     * @link http://docs.developer.amazonservices.com/en_US/off_amazon_payments/OffAmazonPayments_GetAuthorizationDetails.html
+     */
+    public function getAuthorizationDetails($amazonAuthorizationId)
+    {
+        $request = array(
+            'AmazonAuthorizationId' => $amazonAuthorizationId,
+        );
+
+        $response = $this->request('getAuthorizationDetails', $request);
+
+        if ($response && $response->isSetGetAuthorizationDetailsResult()) {
+            $result = $response->getGetAuthorizationDetailsResult();
+            if ($result->isSetAuthorizationDetails()) {
+                return $result->getAuthorizationDetails();
+            }
+        }
+
+        return $response;
+    }
+
+    /**
      * SetOrderReferenceDetails
      *
      * @param string $orderReferenceId
