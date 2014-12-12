@@ -132,7 +132,7 @@ AmazonWidgetStep.prototype = {
 
         checkout.setShippingMethod();
     }
-}
+};
 
 
     var amazonWidgetStep = new AmazonWidgetStep('co-widget-form', "<?php echo $this->getUrl('amazon_payments/onepage/saveWidget', array('_secure' => true)) ?>");
@@ -154,6 +154,52 @@ AmazonWidgetStep.prototype = {
         if (typeof shippingMethod != "undefined") {
             shippingMethod.saveUrl = '<?php echo $this->getUrl('amazon_payments/onepage/saveShippingMethod', array('_secure' => true)) ?>';
         }
+
+        // Add error checking for payment declines
+        Review.prototype.nextStep = function(transport){
+            if (transport && transport.responseText) {
+                try{
+                    response = eval('(' + transport.responseText + ')');
+                }
+                catch (e) {
+                    response = {};
+                }
+                if (response.redirect) {
+                    this.isSuccess = true;
+                    location.href = response.redirect;
+                    return;
+                }
+                if (response.success) {
+                    this.isSuccess = true;
+                    window.location=this.successUrl;
+                }
+                else{
+                    var msg = response.error_messages;
+                    if (typeof(msg)=='object') {
+                        msg = msg.join("\n");
+                    }
+                    if (msg) {
+                        alert(msg);
+                    }
+
+                    // Refresh Wallet
+                    if (msg.indexOf("terms and conditions") == -1) {
+                      checkout.gotoSection("widget", true);
+                      setTimeout(loadAmazonWallet, 2000);
+                    }
+                }
+
+                if (response.update_section) {
+                    $('checkout-'+response.update_section.name+'-load').update(response.update_section.html);
+                }
+
+                if (response.goto_section) {
+                    checkout.gotoSection(response.goto_section, true);
+                }
+            }
+        }
+
+
     });
 
     // 1.9

@@ -111,9 +111,13 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
 
         $sellerAuthorizationNote = null;
 
+        // Sandbox simulation testing for Stand Alone Checkout
         if ($payment->getAdditionalInformation('sandbox') && $this->_getApi()->getConfig()->isSandbox()) {
             $sellerAuthorizationNote = $payment->getAdditionalInformation('sandbox');
         }
+
+        // For core and third-party checkouts, may test credit card decline by uncommenting:
+        //$sellerAuthorizationNote = '{"SandboxSimulation": {"State":"Declined", "ReasonCode":"InvalidPaymentMethod", "PaymentMethodUpdateTimeInMins":5}}';
 
         $result = $this->_getApi()->authorize(
             $payment->getTransactionId(),
