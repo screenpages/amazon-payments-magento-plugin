@@ -31,6 +31,9 @@ $amazon_table = $installer->getConnection()
     ->addColumn('amazon_billing_agreement_id', Varien_Db_Ddl_Table::TYPE_VARCHAR, 255, array (
         'nullable' => false,
     ), 'Amazon Billing Agreement ID')
+    ->addColumn('shipping_method', Varien_Db_Ddl_Table::TYPE_VARCHAR, 255, array (
+        'nullable' => false,
+    ), 'Shipping Method')
     ->addIndex($installer->getIdxName('amazon_payments_token', array('customer_id')), array('customer_id'))
     ->addIndex($installer->getIdxName('amazon_payments_token', array('amazon_uid'), Varien_Db_Adapter_Interface::INDEX_TYPE_UNIQUE), array('amazon_uid'));
 
