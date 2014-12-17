@@ -24,7 +24,8 @@
             loginOptions = {
                 scope: "profile payments:widget payments:shipping_address<?php print $this->getAdditionalScope(); ?>",
                 response_type: 'token',
-                popup: <?php print $this->isPopup(); ?>
+                popup: <?php print $this->isPopup(); ?>,
+                state: 'shortcut'
             };
 
             authRequest = amazon.Login.authorize (loginOptions, "<?php echo !$this->isPopup() ? $this->getLoginAuthUrl() : $this->getCheckoutUrl(); ?>");

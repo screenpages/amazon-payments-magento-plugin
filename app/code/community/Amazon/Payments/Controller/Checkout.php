@@ -83,9 +83,11 @@ abstract class Amazon_Payments_Controller_Checkout extends Mage_Checkout_Control
                 $this->_redirectUrl(Mage::helper('amazon_payments')->getCheckoutUrl(false) . '#access_token=' . $token);
 
             }
-            // Product was added to cart via Ajax and redirected to checkout
+            // User signed-in via popup
             else if (!$this->getRequest()->getParam('ajax')) {
-                if ($this->_getConfig()->isTokenEnabled()) {
+                $state = $this->getRequest()->getParam('state');
+                // Shortcut clicked (e.g. from product page)
+                if ($state == 'shortcut' && $this->_getConfig()->isTokenEnabled()) {
                     // Does user have billing agreement token?
                     $token = Mage::getModel('amazon_payments/token')->getBillingAgreement();
                     if ($amazonBillingAgreementId = $token->getAmazonBillingAgreementId()) {
@@ -96,10 +98,12 @@ abstract class Amazon_Payments_Controller_Checkout extends Mage_Checkout_Control
 
                 // Redirect to clean URL
                 $this->_redirect($this->_checkoutUrl, array('_secure' => true));
-
-
                 return;
             }
+
+
+
+
 
 
         }
