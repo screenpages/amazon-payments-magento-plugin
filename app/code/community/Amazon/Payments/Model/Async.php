@@ -52,9 +52,9 @@ class Amazon_Payments_Model_Async extends Mage_Core_Model_Abstract
         $message = '';
         $amazonOrderReference = $order->getPayment()->getAdditionalInformation('order_reference');
 
-        $result = $_api->getOrderReferenceDetails($amazonOrderReference);
+        $orderReferenceDetails = $_api->getOrderReferenceDetails($amazonOrderReference);
 
-        if ($result) {
+        if ($orderReferenceDetails) {
 
             // Retrieve Amazon Authorization Details
             try {
@@ -65,6 +65,32 @@ class Amazon_Payments_Model_Async extends Mage_Core_Model_Abstract
                 $reasonCode = $resultAuthorize->getAuthorizationStatus()->getReasonCode();
             } catch (Exception $e) {
                 Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+                return;
+            }
+
+            // Re-authorize if holded, an Open order reference, and manual sync
+            if ($order->getState() == Mage_Sales_Model_Order::STATE_HOLDED && $orderReferenceDetails->getOrderReferenceStatus()->getState() == 'Open' && $isManualSync) {
+                $payment = $order->getPayment();
+                $amount = $payment->getAmountOrdered();
+                $method = $payment->getMethodInstance();
+
+                // Re-authorize
+                $payment->setTransactionId($amazonOrderReference);
+
+                switch ($method->getConfigData('payment_action')) {
+                    case $method::ACTION_AUTHORIZE:
+                        $method->authorize($payment, $amount, false);
+                        break;
+
+                    case $method::ACTION_AUTHORIZE_CAPTURE:
+                        $this->authorize($payment, $amount, true);
+                        break;
+                    default:
+                        break;
+                }
+
+                // Resync
+                $this->syncOrderStatus($order);
                 return;
             }
 
@@ -100,7 +126,7 @@ class Amazon_Payments_Model_Async extends Mage_Core_Model_Abstract
                       $order->setState(Mage_Sales_Model_Order::STATE_PROCESSING);
                       $order->setStatus($_api->getConfig()->getNewOrderStatus());
 
-                      if ($this->_createInvoice($order, $result->getIdList()->getmember())) {
+                      if ($this->_createInvoice($order, $orderReferenceDetails->getIdList()->getmember())) {
                           $message .= ' ' . Mage::helper('payment')->__('Invoice created.');
                       }
                   }

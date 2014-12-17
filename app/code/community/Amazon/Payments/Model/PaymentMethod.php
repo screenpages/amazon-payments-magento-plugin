@@ -276,9 +276,9 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
      *
      * @return Amazon_Payments_Model_PaymentMethod
      */
-    public function authorize(Varien_Object $payment, $amount)
+    public function authorize(Varien_Object $payment, $amount, $captureNow = false)
     {
-        $this->_authorize($payment, $amount, false);
+        $this->_authorize($payment, $amount, $captureNow);
         return $this;
     }
 
