@@ -278,7 +278,7 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
             $apiResult = $this->_getApi()->confirmBillingAgreement($billingAgreementId);
             // Save token
             if ($apiResult && $payment->getAdditionalInformation('billing_agreement_consent')) {
-                Mage::getModel('amazon_payments/token')->saveBillingAgreementId($billingAgreementId, Mage::getSingleton('checkout/session')->getAmazonAccessToken());
+                Mage::getModel('amazon_payments/token')->saveBillingAgreementId($billingAgreementId, $order->getQuote()->getShippingAddress()->getShippingMethod());
             }
         }
 

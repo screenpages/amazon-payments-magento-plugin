@@ -83,9 +83,21 @@ abstract class Amazon_Payments_Controller_Checkout extends Mage_Checkout_Control
                 $this->_redirectUrl(Mage::helper('amazon_payments')->getCheckoutUrl(false) . '#access_token=' . $token);
 
             }
-            // Redirect to clean URL
+            // Product was added to cart via Ajax and redirected to checkout
             else if (!$this->getRequest()->getParam('ajax')) {
+                if ($this->_getConfig()->isTokenEnabled()) {
+                    // Does user have billing agreement token?
+                    $token = Mage::getModel('amazon_payments/token')->getBillingAgreement();
+                    if ($amazonBillingAgreementId = $token->getAmazonBillingAgreementId()) {
+                        $this->_redirect('amazon_payments/index/tokencheckout');
+                        return;
+                    }
+                }
+
+                // Redirect to clean URL
                 $this->_redirect($this->_checkoutUrl, array('_secure' => true));
+
+
                 return;
             }
 

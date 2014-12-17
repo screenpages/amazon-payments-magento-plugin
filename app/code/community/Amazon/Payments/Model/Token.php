@@ -17,31 +17,55 @@ class Amazon_Payments_Model_Token extends Mage_Core_Model_Abstract
     }
 
     /**
-     * Save token
+     * Get token info (Amazon billing agreement ID and shipping method)
      */
-    public function saveBillingAgreementId($amazonBillingAgreementId, $amazonUid)
+    public function getBillingAgreement($customerId = null, $amazonUid = null)
     {
-        //$model = Mage::getModel('amazon_payments/token');
+        if ($customerId) {
+            $row = $this->load($customerId, 'customer_id');
+        }
+        elseif ($amazonUid) {
+            $row = $this->load($amazonUid, 'amazon_uid');
+        }
+        else {
+            $amazonProfile = Mage::getSingleton('customer/session')->getAmazonProfile();
+            $amazonUid = $amazonProfile['user_id'];
+            $row = $this->load($amazonUid, 'amazon_uid');
+        }
 
-        //var_dump(self::debug());
-        //exit;
+        return $row;
+    }
+
+    /**
+     * Save token (Amazon billing agreement ID)
+     */
+    public function saveBillingAgreementId($amazonBillingAgreementId, $shippingMethod, $amazonUid = null)
+    {
+        if (!$amazonUid) {
+            $amazonProfile = Mage::getSingleton('customer/session')->getAmazonProfile();
+            $amazonUid = $amazonProfile['user_id'];
+        }
 
         $row = $this->load($amazonUid, 'amazon_uid');
 
-        if ($row)  {
-            $row->setAmazonBillingAgreementId($amazonBillingAgreementId)->save();
+        if ($row->getTokenId())  {
+            $row
+                ->setAmazonBillingAgreementId($amazonBillingAgreementId)
+                ->setShippingMethod($shippingMethod)
+                ->save();
         }
         else {
             if (Mage::getSingleton('customer/session')->isLoggedIn()) {
-              $customer_id = Mage::getSingleton('customer/session')->getCustomer()->getId();
+              $customerId = Mage::getSingleton('customer/session')->getCustomer()->getId();
             }
             else {
-              $customer_id = null;
+              $customerId = null;
             }
 
             $this->setAmazonBillingAgreementId($amazonBillingAgreementId)
                  ->setAmazonUid($amazonUid)
-                 ->setCustomerId($customer_id)
+                 ->setCustomerId($customerId)
+                 ->setShippingMethod($shippingMethod)
                  ->save();
         }
     }
