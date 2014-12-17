@@ -100,8 +100,8 @@ class Amazon_Payments_IndexController extends Mage_Core_Controller_Front_Action
             $id = $service->getOrder()->getId();
 
             // Clear cart
-            $quote->setIsActive(false);
-            $quote->delete();
+            //$quote->setIsActive(false);
+            //$quote->delete();
 
             Mage::getSingleton('core/session')->addSuccess('Thank you for your order.');
 
