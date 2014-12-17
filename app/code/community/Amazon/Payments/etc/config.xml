@@ -10,7 +10,7 @@
 <config>
     <modules>
         <Amazon_Payments>
-            <version>0.1.0</version>
+            <version>0.1.1</version>
         </Amazon_Payments>
     </modules>
     <global>
@@ -23,6 +23,14 @@
             <amazon_payments>
                 <class>Amazon_Payments_Model</class>
             </amazon_payments>
+            <payments_mysql4>
+                <class>Amazon_Payments_Model_Resource</class>
+                <entities>
+                    <token>
+                        <table>amazon_payments_token</table>
+                    </token>
+                </entities>
+            </payments_mysql4>
             <sales>
                 <rewrite>
                     <order_creditmemo>Amazon_Payments_Model_Order_Creditmemo</order_creditmemo>
@@ -52,6 +60,16 @@
                     <use>core_setup</use>
                 </connection>
             </payments_setup>
+            <payments_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </payments_write>
+            <payments_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </payments_read>
         </resources>
 
     </global>

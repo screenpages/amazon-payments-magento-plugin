@@ -398,5 +398,88 @@ class Amazon_Payments_Model_Api
         return $response;
     }
 
+    /**
+     * GetBillingAgreementDetails
+     *
+     * @param string $amazonBillingAgreementId
+     * @param string $addressConsentToken
+     * @return OffAmazonPaymentsService_Model_GetBillingAgreementDetails
+     * @link http://docs.developer.amazonservices.com/en_US/off_amazon_payments/OffAmazonPayments_GetBillingAgreementDetails.html
+     */
+    public function getBillingAgreementDetails($amazonBillingAgreementId, $addressConsentToken = null)
+    {
+        $request = array(
+            'AmazonBillingAgreementId' => $amazonBillingAgreementId,
+            'AddressConsentToken'      => $addressConsentToken,
+        );
+
+        $response = $this->request('getBillingAgreementDetails', $request);
+
+        if ($response && $response->isSetGetBillingAgreementDetailsResult()) {
+            $result = $response->getGetBillingAgreementDetailsResult();
+            if ($result->isSetBillingAgreementDetails()) {
+                return $result->getBillingAgreementDetails();
+            }
+        }
+
+        return $response;
+    }
+
+    /**
+     * ConfirmBillingAgreement
+     *
+     * @param string $amazonBillingAgreementId
+     * @return OffAmazonPaymentsService_Model_ConfirmBillingAgreementResponse
+     * @link http://docs.developer.amazonservices.com/en_US/off_amazon_payments/OffAmazonPayments_ConfirmOrderReference.html
+     */
+    public function confirmBillingAgreement($amazonBillingAgreementId)
+    {
+        $request = array(
+            'AmazonBillingAgreementId' => $amazonBillingAgreementId,
+        );
+
+        return $this->request('confirmBillingAgreement', $request);
+    }
+
+    /**
+     * AuthorizeOnBillingAgreement
+     *
+     * @param string $amazonBillingAgreementId
+     * @return OffAmazonPaymentsService_Model_AuthorizeOnBillingAgreementResult
+     * @link http://docs.developer.amazonservices.com/en_US/off_amazon_payments/OffAmazonPayments_AuthorizeOnBillingAgreement.html
+     */
+    public function authorizeOnBillingAgreement($amazonBillingAgreementId, $authorizationReferenceId, $authorizationAmount, $authorizationCurrency, $captureNow = false, $softDescriptor = null, $sellerAuthorizationNote = null)
+    {
+        $request = array(
+            'AmazonBillingAgreementId' => $amazonBillingAgreementId,
+            'AuthorizationReferenceId' => $authorizationReferenceId,
+            'AuthorizationAmount' => array(
+                'Amount'       => $authorizationAmount,
+                'CurrencyCode' => $authorizationCurrency
+            ),
+            'CaptureNow' => $captureNow,
+        );
+
+        if (!$this->getConfig()->isAsync()) {
+            $request['TransactionTimeout'] = 0; // Synchronous Mode
+        }
+
+        if ($softDescriptor) {
+            $request['SoftDescriptor'] = $softDescriptor;
+        }
+
+        if ($sellerAuthorizationNote) {
+            $request['SellerAuthorizationNote'] = trim($sellerAuthorizationNote);
+        }
+
+        $response = $this->request('authorizeOnBillingAgreement', $request);
+
+        if ($response && $response->isSetAuthorizeOnBillingAgreementResult()) {
+            return $response->getAuthorizeOnBillingAgreementResult();
+        }
+
+        return $response;
+    }
+
 }
 

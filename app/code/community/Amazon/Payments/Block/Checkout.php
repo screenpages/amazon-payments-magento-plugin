@@ -37,4 +37,12 @@ class Amazon_Payments_Block_Checkout extends Mage_Core_Block_Template
         return Mage::getSingleton('amazon_payments/config')->isDebugMode();
     }
 
+    /**
+     * Is tokenized payments enabled?
+     */
+    public function isTokenEnabled()
+    {
+        return Mage::getSingleton('amazon_payments/config')->isTokenEnabled();
+    }
+
 }

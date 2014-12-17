@@ -10,7 +10,7 @@
 
 abstract class Amazon_Payments_Controller_Checkout extends Mage_Checkout_Controller_Action
 {
-    protected $_amazonOrderReferenceId;
+    protected $_amazonOrderReferenceId, $_amazonBillingAgreementId, $_amazonBillingAgreementConsent;
     protected $_checkoutUrl;
 
     /**
@@ -19,6 +19,22 @@ abstract class Amazon_Payments_Controller_Checkout extends Mage_Checkout_Control
     public function getAmazonOrderReferenceId()
     {
         return $this->_amazonOrderReferenceId;
+    }
+
+    /**
+     * Return Amazon Billing Agreement Id
+     */
+    public function getAmazonBillingAgreementId()
+    {
+        return $this->_amazonBillingAgreementId;
+    }
+
+    /**
+     * Return Amazon Billing Agreement Consent
+     */
+    public function getAmazonBillingAgreementConsent()
+    {
+        return $this->_amazonBillingAgreementConsent;
     }
 
     /**
@@ -35,6 +51,9 @@ abstract class Amazon_Payments_Controller_Checkout extends Mage_Checkout_Control
         else {
             Mage::getSingleton('checkout/session')->setAmazonOrderReferenceId($this->_amazonOrderReferenceId);
         }
+
+        $this->_amazonBillingAgreementId = htmlentities($this->getRequest()->getParam('amazon_billing_agreement_id'));
+        $this->_amazonBillingAgreementConsent = (bool) $this->getRequest()->getParam('amazon_billing_agreement_consent');
 
         // User is logging in...
 
@@ -183,11 +202,16 @@ abstract class Amazon_Payments_Controller_Checkout extends Mage_Checkout_Control
      */
     protected function _saveShipping()
     {
-        if ($this->getAmazonOrderReferenceId()) {
+        if ($this->getAmazonOrderReferenceId() || $this->getAmazonBillingAgreementId()) {
 
-            $orderReferenceDetails = $this->_getApi()->getOrderReferenceDetails($this->getAmazonOrderReferenceId(), Mage::getSingleton('checkout/session')->getAmazonAccessToken());
+            if ($this->getAmazonBillingAgreementId()) {
+                $orderDetails = $this->_getApi()->getBillingAgreementDetails($this->getAmazonBillingAgreementId(), Mage::getSingleton('checkout/session')->getAmazonAccessToken());
+            }
+            else {
+                $orderDetails = $this->_getApi()->getOrderReferenceDetails($this->getAmazonOrderReferenceId(), Mage::getSingleton('checkout/session')->getAmazonAccessToken());
+            }
 
-            $address = $orderReferenceDetails->getDestination()->getPhysicalDestination();
+            $address = $orderDetails->getDestination()->getPhysicalDestination();
 
             // Split name into first/last
             $name      = $address->getName();
@@ -216,8 +240,8 @@ abstract class Amazon_Payments_Controller_Checkout extends Mage_Checkout_Control
 
 
             // Set billing address (if allowed by scope)
-            if ($orderReferenceDetails->getBillingAddress()) {
-                $billing = $orderReferenceDetails->getBillingAddress()->getPhysicalAddress();
+            if ($orderDetails->getBillingAddress()) {
+                $billing = $orderDetails->getBillingAddress()->getPhysicalAddress();
                 $data['use_for_shipping'] = false;
 
                 $name      = $billing->getName();
