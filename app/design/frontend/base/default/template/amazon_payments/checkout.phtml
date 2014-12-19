@@ -148,6 +148,7 @@ AmazonPaymentsMageCheckout.prototype = {
         $$(".button.btn-checkout").invoke('writeAttribute','onclick', 'amazonPaymentsMageCheckout.saveOrder()');
         this.agreementsForm = $('checkout-agreements')
         $("amz-review-loader").hide();
+        this.toggleOrderSubmit(false);
     },
 
     saveOrder: function() {
@@ -223,14 +224,13 @@ AmazonPaymentsMageCheckout.prototype = {
                 review.setOpacity(0.5);
                 loader.show();
             }
-            btn.invoke('writeAttribute','disabled','disabled');
+            btn.each(function(el, i) { el.disable(); });
         } else {
             if (review) {
                 review.setOpacity(1);
                 loader.hide();
             }
-
-            btn.invoke('removeAttribute','disabled');
+            btn.each(function(el, i) { el.enable(); });
         }
     }
 };
