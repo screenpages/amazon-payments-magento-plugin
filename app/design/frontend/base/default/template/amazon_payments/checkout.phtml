@@ -295,9 +295,6 @@ new OffAmazonPayments.Widgets.AddressBook({
     },
     onAddressSelect: function(orderReference) {
         amazonPaymentsMageCheckout.setShippingMethod();
-        <?php if ($this->isTokenEnabled()) : ?>
-        loadAmazonWallet();
-        <?php endif; ?>
     },
     design: {
         designMode: 'responsive'
@@ -336,9 +333,7 @@ function loadAmazonWallet() {
     }).bind("amazon-widget-wallet");
 }
 
-<?php if (!$this->isTokenEnabled()) : ?>
 loadAmazonWallet();
-<?php endif; ?>
 
 </script>
 

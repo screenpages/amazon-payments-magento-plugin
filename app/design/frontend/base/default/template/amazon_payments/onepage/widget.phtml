@@ -34,7 +34,7 @@
     <?php endif; ?>
 
     <div class="buttons-set" id="widget-buttons-container">
-        <button type="button" title="<?php echo $this->__('Continue') ?>" class="button" onclick="amazonWidgetStep.save()"><span><span><?php echo $this->__('Continue') ?></span></span></button>
+        <button type="button" title="<?php echo $this->__('Continue') ?>" class="button btn-widget-contd" onclick="amazonWidgetStep.save()"><span><span><?php echo $this->__('Continue') ?></span></span></button>
         <span class="please-wait" id="widget-please-wait" style="display:none;">
             <img src="<?php echo $this->getSkinUrl('images/opc-ajax-loader.gif') ?>" alt="<?php echo $this->__('Loading next step...') ?>" title="<?php echo $this->__('Loading next step...') ?>" class="v-middle" /> <?php echo $this->__('Loading next step...') ?>
         </span>
@@ -138,6 +138,15 @@ AmazonWidgetStep.prototype = {
         }
 
         checkout.setShippingMethod();
+    },
+
+    toggleOrderSubmit: function(isDisabled) {
+        var btn = $$(".btn-widget-contd");
+        if (isDisabled) {
+            btn.invoke('writeAttribute','disabled','disabled');
+        } else {
+            btn.invoke('removeAttribute','disabled');
+        }
     }
 };
 
@@ -237,10 +246,8 @@ new OffAmazonPayments.Widgets.AddressBook({
         amazonWidgetStep.setAmazonOrderReferenceId(orderReference.getAmazonOrderReferenceId());
     },
     onAddressSelect: function(orderReference) {
+      amazonWidgetStep.toggleOrderSubmit(true);
       amazonWidgetStep.hasAddress = true;
-      <?php if ($this->isTokenEnabled()) : ?>
-      loadAmazonWallet();
-      <?php endif; ?>
     },
     design: {
        designMode: 'responsive'
@@ -252,6 +259,8 @@ new OffAmazonPayments.Widgets.AddressBook({
       console.log(error.getErrorMessage());
     }
 }).bind("amazon-widget-address");
+
+amazonWidgetStep.toggleOrderSubmit(true);
 </script>
 <?php endif; ?>
 
@@ -277,10 +286,17 @@ function loadAmazonWallet() {
       amazonBillingAgreementId: amazonBillingAgreementId,
       <?php endif; ?>
 
+      onReady: function() {
+        <?php if (!$this->isTokenEnabled()) : ?>
+        amazonWidgetStep.toggleOrderSubmit(false);
+        <?php endif; ?>
+      },
       onPaymentSelect: function(orderReference) {
         amazonWidgetStep.hasPayment = true;
         <?php if ($this->isTokenEnabled()) : ?>
         loadAmazonConsent();
+        <?php else: ?>
+        amazonWidgetStep.toggleOrderSubmit(false);
         <?php endif; ?>
       },
       onError: function(error) {
@@ -289,14 +305,13 @@ function loadAmazonWallet() {
     }).bind("amazon-widget-wallet");
 }
 
-<?php if (!$this->isTokenEnabled()) : ?>
 loadAmazonWallet();
-<?php endif; ?>
 
 
 <?php if ($this->isTokenEnabled()) : ?>
 <!-- Consent Widget JS -->
 function loadAmazonConsent() {
+    amazonWidgetStep.toggleOrderSubmit(true);
 
     new OffAmazonPayments.Widgets.Consent({
       sellerId: '<?php echo $this->getSellerId(); ?>',
@@ -310,6 +325,7 @@ function loadAmazonConsent() {
           if (typeof billingAgreementConsentStatus != "undefined") {
               amazonWidgetStep.amazonBillingAgreementConsent = billingAgreementConsentStatus.getConsentStatus();
           }
+          amazonWidgetStep.toggleOrderSubmit(false);
       },
       onConsent: function(billingAgreementConsentStatus) {
           if (typeof billingAgreementConsentStatus != "undefined") {
