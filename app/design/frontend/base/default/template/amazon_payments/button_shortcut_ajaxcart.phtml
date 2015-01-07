@@ -35,4 +35,13 @@
 
   OffAmazonPayments.Button("<?php echo $this->getAmazonPayButtonId(); ?>", "<?php echo $this->getSellerId(); ?>", AmazonButtonOptions);
 
+  // jQuery wrapper -- OffAmazonPayments.jQuery loaded by Amazon API
+  (function($j) {
+
+      // Open links in parent window of modal
+      $j("a").attr("target", "_top");
+
+  })(OffAmazonPayments.jQuery);
+
+
 </script>
