@@ -91,7 +91,7 @@ abstract class Amazon_Payments_Controller_Checkout extends Mage_Checkout_Control
                     // Does user have billing agreement token?
                     $token = Mage::getModel('amazon_payments/token')->getBillingAgreement();
                     if ($amazonBillingAgreementId = $token->getAmazonBillingAgreementId()) {
-                        $this->_redirect('amazon_payments/index/tokencheckout');
+                        $this->_redirect('amazon_payments/token/checkout');
                         return;
                     }
                 }

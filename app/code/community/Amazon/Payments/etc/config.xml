@@ -110,6 +110,7 @@
             <cart_updatepost>/checkout/cart/updatePost</cart_updatepost>
             <checkout_amazon>/checkout/amazon_payments</checkout_amazon>
             <amazon_checkout>/amazon_payments/checkout</amazon_checkout>
+            <amazon_ajaxcart>/amazon_payments/token/ajaxcart</amazon_ajaxcart>
         </secure_url>
         <routers>
             <amazon_payments>
