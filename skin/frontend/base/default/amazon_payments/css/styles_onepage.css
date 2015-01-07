@@ -32,6 +32,12 @@
   z-index:50;
 }
 
+#amazon-widget-consent {
+  clear:both;
+  height:100px;
+  width:98%;
+}
+
 @media all and (max-width: 640px) {
   #amazon-widget-address-wrapper,
   #amazon-widget-wallet-wrapper {

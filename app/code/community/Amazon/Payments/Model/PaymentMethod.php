@@ -231,6 +231,12 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
             return $this;
         }
 
+        // Admin order using token (Amazon Billing Agreement id)
+        if ($adminBillingAgreementId = Mage::getSingleton('adminhtml/session_quote')->getAmazonBillingAgreementId()) {
+            $payment->setAdditionalInformation('order_reference', $adminBillingAgreementId);
+            $payment->setAdditionalInformation('billing_agreement_id', $adminBillingAgreementId);
+        }
+
         $orderReferenceId = $payment->getAdditionalInformation('order_reference');
         $billingAgreementId = $payment->getAdditionalInformation('billing_agreement_id'); // token payment. orderReferenceId will be the same.
 
@@ -492,5 +498,32 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
         return (Mage::getSingleton('amazon_payments/config')->isEnabled() && ((Mage::helper('amazon_payments')->isCheckoutAmazonSession() && $this->getConfigData('checkout_page') == 'onepage') || $this->getConfigData('use_in_checkout')));
     }
 
+    /**
+     * Using internal pages for input payment data
+     * Can be used in admin
+     *
+     * @return bool
+     */
+    public function canUseInternal()
+    {
+        // Allow admin to create order using token (Amazon billing agreement id)
+        if ($this->getConfigData('token_enabled')) {
+            // Admin session
+            $session = Mage::getSingleton('adminhtml/session_quote');
+            if ($session) {
+                if (($quote = $session->getQuote()) && $quote->getCustomerId() != null) {
+                    $row = Mage::getSingleton('amazon_payments/token')->getBillingAgreement($quote->getCustomerId());
 
+                    if ($token = $row->getAmazonBillingAgreementId()) {
+                        $session->setAmazonBillingAgreementId($token);
+                        return true;
+                    }
+                }
+                else {
+                    $session->unsAmazonBillingAgreementId();
+                }
+            }
+        }
+        return $this->_canUseInternal;
+    }
 }

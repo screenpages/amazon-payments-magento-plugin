@@ -37,4 +37,12 @@ class Amazon_Payments_Block_Onepage_Widget extends Mage_Checkout_Block_Onepage_A
         //return !$this->getQuote()->isVirtual();
     }
 
+    /**
+     * Is tokenized payments enabled?
+     */
+    public function isTokenEnabled()
+    {
+        return Mage::getSingleton('amazon_payments/config')->isTokenEnabled();
+    }
+
 }

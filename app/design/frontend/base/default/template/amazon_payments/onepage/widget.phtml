@@ -12,6 +12,7 @@
 <form id="co-widget-form" action="">
 <div class="amazon-widget" id="checkout-widget">
     <input type="hidden" name="amazon_order_reference_id" value="" />
+    <input type="hidden" name="amazon_billing_agreement_id" value="" />
     <input type="hidden" name="payment[method]" value="amazon_payments" />
 
 
@@ -28,6 +29,9 @@
     </div>
 
 
+    <?php if ($this->isTokenEnabled()) : ?>
+        <div id="amazon-widget-consent"></div>
+    <?php endif; ?>
 
     <div class="buttons-set" id="widget-buttons-container">
         <button type="button" title="<?php echo $this->__('Continue') ?>" class="button" onclick="amazonWidgetStep.save()"><span><span><?php echo $this->__('Continue') ?></span></span></button>
@@ -42,8 +46,6 @@
 
 <script type="text/javascript">
 //<![CDATA[
-
-
 
 var AmazonWidgetStep = Class.create();
 AmazonWidgetStep.prototype = {
@@ -64,6 +66,10 @@ AmazonWidgetStep.prototype = {
 
     setAmazonOrderReferenceId: function(id) {
         $(this.form)["amazon_order_reference_id"].value = id;
+    },
+
+    setAmazonBillingAgreementId: function(id) {
+        $(this.form)["amazon_billing_agreement_id"].value = id;
     },
 
     validate: function() {
@@ -89,6 +95,7 @@ AmazonWidgetStep.prototype = {
         if (checkout.loadWaiting!=false) return;
         if (this.validate()) {
           checkout.setLoadWaiting('widget');
+
           var request = new Ajax.Request(
               this.saveUrl,
               {
@@ -215,23 +222,35 @@ AmazonWidgetStep.prototype = {
 <!-- Address Book Widget JS -->
 <script>
 
+var amazonBillingAgreementId;
+
 new OffAmazonPayments.Widgets.AddressBook({
-  sellerId: '<?php echo $this->getSellerId(); ?>',
-  onOrderReferenceCreate: function(orderReference) {
-      amazonWidgetStep.setAmazonOrderReferenceId(orderReference.getAmazonOrderReferenceId());
-  },
-  onAddressSelect: function(orderReference) {
-    amazonWidgetStep.hasAddress = true;
-  },
-  design: {
-     designMode: 'responsive'
-  },
-  onError: function(error) {
-    if (error.getErrorCode() == "BuyerSessionExpired") {
-         document.location.href = '<?php echo $this->getUrl('checkout/amazon_payments/clear'); ?>';
+    sellerId: '<?php echo $this->getSellerId(); ?>',
+    <?php if ($this->isTokenEnabled()) : ?>
+    agreementType: 'BillingAgreement',
+    onReady: function(billingAgreement) {
+        amazonBillingAgreementId = billingAgreement.getAmazonBillingAgreementId();
+        amazonWidgetStep.setAmazonBillingAgreementId(amazonBillingAgreementId);
+    },
+    <?php endif; ?>
+    onOrderReferenceCreate: function(orderReference) {
+        amazonWidgetStep.setAmazonOrderReferenceId(orderReference.getAmazonOrderReferenceId());
+    },
+    onAddressSelect: function(orderReference) {
+      amazonWidgetStep.hasAddress = true;
+      <?php if ($this->isTokenEnabled()) : ?>
+      loadAmazonWallet();
+      <?php endif; ?>
+    },
+    design: {
+       designMode: 'responsive'
+    },
+    onError: function(error) {
+      if (error.getErrorCode() == "BuyerSessionExpired") {
+           document.location.href = '<?php echo $this->getUrl('checkout/amazon_payments/clear'); ?>';
+      }
+      console.log(error.getErrorMessage());
     }
-    console.log(error.getErrorMessage());
-  }
 }).bind("amazon-widget-address");
 </script>
 <?php endif; ?>
@@ -254,15 +273,57 @@ function loadAmazonWallet() {
           designMode: 'responsive',
       },
 
+      <?php if ($this->isTokenEnabled()) : ?>
+      amazonBillingAgreementId: amazonBillingAgreementId,
+      <?php endif; ?>
+
       onPaymentSelect: function(orderReference) {
         amazonWidgetStep.hasPayment = true;
+        <?php if ($this->isTokenEnabled()) : ?>
+        loadAmazonConsent();
+        <?php endif; ?>
       },
       onError: function(error) {
         console.log(error.getErrorMessage());
       }
     }).bind("amazon-widget-wallet");
 }
+
+<?php if (!$this->isTokenEnabled()) : ?>
 loadAmazonWallet();
+<?php endif; ?>
+
+
+<?php if ($this->isTokenEnabled()) : ?>
+<!-- Consent Widget JS -->
+function loadAmazonConsent() {
+
+    new OffAmazonPayments.Widgets.Consent({
+      sellerId: '<?php echo $this->getSellerId(); ?>',
+      // amazonBillingAgreementId obtained from the Amazon Address Book widget.
+      amazonBillingAgreementId: amazonBillingAgreementId,
+      design: {
+          designMode: 'responsive'
+      },
+      onReady: function(billingAgreementConsentStatus){
+          // Called after widget renders
+          if (typeof billingAgreementConsentStatus != "undefined") {
+              amazonWidgetStep.amazonBillingAgreementConsent = billingAgreementConsentStatus.getConsentStatus();
+          }
+      },
+      onConsent: function(billingAgreementConsentStatus) {
+          if (typeof billingAgreementConsentStatus != "undefined") {
+              amazonWidgetStep.amazonBillingAgreementConsent = billingAgreementConsentStatus.getConsentStatus();
+          }
+      },
+      onError: function(error) {
+        console.log(error.getErrorMessage());
+      }
+    }).bind("amazon-widget-consent");
+}
+
+<?php endif; ?>
+
 </script>
 
 
