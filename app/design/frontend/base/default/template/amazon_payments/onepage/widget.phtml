@@ -13,6 +13,7 @@
 <div class="amazon-widget" id="checkout-widget">
     <input type="hidden" name="amazon_order_reference_id" value="" />
     <input type="hidden" name="amazon_billing_agreement_id" value="" />
+    <input type="hidden" name="amazon_billing_agreement_consent" value="" />
     <input type="hidden" name="payment[method]" value="amazon_payments" />
 
 
@@ -70,6 +71,10 @@ AmazonWidgetStep.prototype = {
 
     setAmazonBillingAgreementId: function(id) {
         $(this.form)["amazon_billing_agreement_id"].value = id;
+    },
+
+    setAmazonBillingAgreementConsent: function(hasConsent) {
+        $(this.form)["amazon_billing_agreement_consent"].value = hasConsent;
     },
 
     validate: function() {
@@ -240,6 +245,7 @@ new OffAmazonPayments.Widgets.AddressBook({
     onReady: function(billingAgreement) {
         amazonBillingAgreementId = billingAgreement.getAmazonBillingAgreementId();
         amazonWidgetStep.setAmazonBillingAgreementId(amazonBillingAgreementId);
+        loadAmazonWallet();
     },
     <?php endif; ?>
     onOrderReferenceCreate: function(orderReference) {
@@ -270,6 +276,10 @@ amazonWidgetStep.toggleOrderSubmit(true);
 
 function loadAmazonWallet() {
     new OffAmazonPayments.Widgets.Wallet({
+      <?php if ($this->isTokenEnabled()) : ?>
+      amazonBillingAgreementId: amazonBillingAgreementId,
+      <?php endif; ?>
+
       <?php if (!$this->isShowShip()) : ?>
       onOrderReferenceCreate: function(orderReference) {
           amazonWidgetStep.showShipping = false;
@@ -278,13 +288,9 @@ function loadAmazonWallet() {
       <?php endif; ?>
 
       sellerId: '<?php echo $this->getSellerId(); ?>',
-        design: {
+      design: {
           designMode: 'responsive',
       },
-
-      <?php if ($this->isTokenEnabled()) : ?>
-      amazonBillingAgreementId: amazonBillingAgreementId,
-      <?php endif; ?>
 
       onReady: function() {
         <?php if (!$this->isTokenEnabled()) : ?>
@@ -305,7 +311,9 @@ function loadAmazonWallet() {
     }).bind("amazon-widget-wallet");
 }
 
+<?php if (!$this->isTokenEnabled()) : ?>
 loadAmazonWallet();
+<?php endif; ?>
 
 
 <?php if ($this->isTokenEnabled()) : ?>
@@ -323,13 +331,13 @@ function loadAmazonConsent() {
       onReady: function(billingAgreementConsentStatus){
           // Called after widget renders
           if (typeof billingAgreementConsentStatus != "undefined") {
-              amazonWidgetStep.amazonBillingAgreementConsent = billingAgreementConsentStatus.getConsentStatus();
+              amazonWidgetStep.setAmazonBillingAgreementConsent(billingAgreementConsentStatus.getConsentStatus());
           }
           amazonWidgetStep.toggleOrderSubmit(false);
       },
       onConsent: function(billingAgreementConsentStatus) {
           if (typeof billingAgreementConsentStatus != "undefined") {
-              amazonWidgetStep.amazonBillingAgreementConsent = billingAgreementConsentStatus.getConsentStatus();
+              amazonWidgetStep.setAmazonBillingAgreementConsent(billingAgreementConsentStatus.getConsentStatus());
           }
       },
       onError: function(error) {

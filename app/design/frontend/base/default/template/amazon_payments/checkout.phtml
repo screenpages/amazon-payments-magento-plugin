@@ -288,6 +288,7 @@ new OffAmazonPayments.Widgets.AddressBook({
     onReady: function(billingAgreement) {
         amazonBillingAgreementId = billingAgreement.getAmazonBillingAgreementId();
         amazonPaymentsMageCheckout.amazonBillingAgreementId = amazonBillingAgreementId;
+        loadAmazonWallet();
     },
     <?php endif; ?>
     onOrderReferenceCreate: function(orderReference) {
@@ -333,7 +334,9 @@ function loadAmazonWallet() {
     }).bind("amazon-widget-wallet");
 }
 
+<?php if (!$this->isTokenEnabled()) : ?>
 loadAmazonWallet();
+<?php endif; ?>
 
 </script>
 
