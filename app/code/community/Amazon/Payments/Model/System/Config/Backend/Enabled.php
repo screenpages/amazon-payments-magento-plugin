@@ -26,39 +26,56 @@ class Amazon_Payments_Model_System_Config_Backend_Enabled extends Mage_Core_Mode
         }
         return parent::save();
     }
-
-
     /**
      * Perform API call to Amazon to validate keys
      *
      */
-    /*
     public function _afterSaveCommit()
     {
-
         $data = $this->getFieldsetData();
         $isEnabled = $this->getValue();
-        $idTest = 'S23-1234567-1234567';
 
         if ($isEnabled) {
-            $_api = Mage::getSingleton('amazon_payments/api');
+            include_once(Mage::getBaseDir('lib') . "/MarketplaceWebServiceSellers/KeycheckClient.php");
+            $config = array (
+                'ServiceURL' => "https://mws.amazonservices.com/Sellers/2011-07-01",
+                'ProxyHost' => null,
+                'ProxyPort' => -1,
+                'ProxyUsername' => null,
+                'ProxyPassword' => null,
+                'MaxErrorRetry' => 3,
+            );
+            $service = new MarketplaceWebServiceSellers_Client(
+                $data['access_key'],
+                $data['access_secret'],
+                'Login and Pay for Magento',
+                '1.3',
+                $config);
 
+            $request = new MarketplaceWebServiceSellers_Model_ListMarketplaceParticipationsRequest();
+            $request->setSellerId($data['seller_id']);
             try {
-                $result = $_api->getOrderReferenceDetails($idTest);
-            }
-            catch (Exception $e) {
-                if (strpos($e->getMessage(), $idTest) === FALSE) {
-                    $matches = array();
-                    preg_match("/'(.*)'/", $e->getMessage(), $matches);
-                    if ($matches[0]) {
-                        Mage::getSingleton('core/session')->addError('Error: ' . $matches[0]);
-                    }
-
+                $service->ListMarketplaceParticipations($request);
+                Mage::getSingleton('core/session')->addSuccess("All of your Amazon API keys are correct!");
+                }
+            catch (MarketplaceWebServiceSellers_Exception $ex) {
+                if ($ex->getErrorCode() == 'InvalidAccessKeyId'){
+                    Mage::getSingleton('core/session')->addError("The MWS Access Key is incorrect");
+                }
+                else if ($ex->getErrorCode() == 'SignatureDoesNotMatch'){
+                    Mage::getSingleton('core/session')->addError("The MWS Secret Key is incorrect");
+                }
+                else if ($ex->getErrorCode() == 'InvalidParameterValue'){
+                    Mage::getSingleton('core/session')->addError("The Seller/Merchant ID is incorrect");
+                }
+                else{
+                    $string =  " Error Message: " . $ex->getMessage();
+                    $string .= " Response Status Code: " . $ex->getStatusCode();
+                    $string .= " Error Code: " . $ex->getErrorCode();
+                    Mage::getSingleton('core/session')->addError($string);
                 }
             }
         }
-
         return parent::_afterSaveCommit();
     }
-    */
 }
