@@ -68,6 +68,9 @@ class Amazon_Payments_Model_System_Config_Backend_Enabled extends Mage_Core_Mode
                 else if ($ex->getErrorCode() == 'InvalidParameterValue'){
                     Mage::getSingleton('core/session')->addError("The Seller/Merchant ID is incorrect");
                 }
+                else if ($ex->getErrorCode() == 'AccessDenied') {
+                    Mage::getSingleton('core/session')->addError("The Seller/Merchant ID does not match the MWS keys provided");
+                }
                 else{
                     $string =  " Error Message: " . $ex->getMessage();
                     $string .= " Response Status Code: " . $ex->getStatusCode();
