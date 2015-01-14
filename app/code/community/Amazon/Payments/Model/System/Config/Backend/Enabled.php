@@ -36,7 +36,6 @@ class Amazon_Payments_Model_System_Config_Backend_Enabled extends Mage_Core_Mode
         $isEnabled = $this->getValue();
 
         if ($isEnabled) {
-            include_once(Mage::getBaseDir('lib') . "/MarketplaceWebServiceSellers/KeycheckClient.php");
             $config = array (
                 'ServiceURL' => "https://mws.amazonservices.com/Sellers/2011-07-01",
                 'ProxyHost' => null,
