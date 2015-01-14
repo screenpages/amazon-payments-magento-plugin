@@ -240,6 +240,17 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
         $orderReferenceId = $payment->getAdditionalInformation('order_reference');
         $billingAgreementId = $payment->getAdditionalInformation('billing_agreement_id'); // token payment. orderReferenceId will be the same.
 
+        // User did not agree to billing agreement; create order reference ID from billing agreement ID
+        if ($billingAgreementId && !$adminBillingAgreementId && !$payment->getAdditionalInformation('billing_agreement_consent')) {
+            $orderReferenceDetails = $this->_getApi()->createOrderReferenceForId($billingAgreementId, 'BillingAgreement');
+            $orderReferenceId = $orderReferenceDetails->getAmazonOrderReferenceId();
+            $billingAgreementId = false;
+
+            $payment->setAdditionalInformation('order_reference', $orderReferenceId);
+            $payment->unsAdditionalInformation('billing_agreement_id');
+            $payment->unsAdditionalInformation('billing_agreement_consent');
+        }
+
         if (!$orderReferenceId) {
             $orderReferenceId = Mage::getSingleton('checkout/session')->getAmazonOrderReferenceId();
 

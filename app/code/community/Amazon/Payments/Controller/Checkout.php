@@ -53,7 +53,7 @@ abstract class Amazon_Payments_Controller_Checkout extends Mage_Checkout_Control
         }
 
         $this->_amazonBillingAgreementId = htmlentities($this->getRequest()->getParam('amazon_billing_agreement_id'));
-        $this->_amazonBillingAgreementConsent = (bool) $this->getRequest()->getParam('amazon_billing_agreement_consent');
+        $this->_amazonBillingAgreementConsent = $this->getRequest()->getParam('amazon_billing_agreement_consent') == 'true' ? true : false;
 
         // User is logging in...
 

@@ -77,6 +77,10 @@ AmazonWidgetStep.prototype = {
         $(this.form)["amazon_billing_agreement_consent"].value = hasConsent;
     },
 
+    getAmazonBillingAgreementConsent: function() {
+        return $(this.form)["amazon_billing_agreement_consent"].value == "true" ? true : false;
+    },
+
     validate: function() {
         if (!$(this.form)["amazon_order_reference_id"].value) {
            alert("Amazon Order Reference ID required. Please try again.");
@@ -91,6 +95,14 @@ AmazonWidgetStep.prototype = {
             alert(Translator.translate('Please select a payment method.').stripTags());
             return false;
         }
+
+        <?php if ($this->isTokenRequired()) : ?>
+        if (!this.getAmazonBillingAgreementConsent()) {
+            alert("Please check 'Use my selected payment method for future purchases and payments to this merchant' to complete this purchase.");
+            return false;
+        }
+        <?php endif; ?>
+
 
         return true;
     },
@@ -245,6 +257,7 @@ new OffAmazonPayments.Widgets.AddressBook({
     onReady: function(billingAgreement) {
         amazonBillingAgreementId = billingAgreement.getAmazonBillingAgreementId();
         amazonWidgetStep.setAmazonBillingAgreementId(amazonBillingAgreementId);
+        console.log(amazonBillingAgreementId);
         loadAmazonWallet();
     },
     <?php endif; ?>

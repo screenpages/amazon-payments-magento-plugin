@@ -157,6 +157,13 @@ AmazonPaymentsMageCheckout.prototype = {
     },
 
     saveOrder: function() {
+      <?php if ($this->isTokenRequired()) : ?>
+      if (!this.amazonBillingAgreementConsent) {
+          alert("Please check 'Use my selected payment method for future purchases and payments to this merchant' to complete this purchase.");
+          return;
+      }
+      <?php endif; ?>
+
       var params = {};
 
       if (this.agreementsForm) {
@@ -289,6 +296,7 @@ new OffAmazonPayments.Widgets.AddressBook({
         amazonBillingAgreementId = billingAgreement.getAmazonBillingAgreementId();
         amazonPaymentsMageCheckout.amazonBillingAgreementId = amazonBillingAgreementId;
         loadAmazonWallet();
+
     },
     <?php endif; ?>
     onOrderReferenceCreate: function(orderReference) {
@@ -355,12 +363,12 @@ function loadAmazonConsent() {
       onReady: function(billingAgreementConsentStatus){
           // Called after widget renders
           if (typeof billingAgreementConsentStatus != "undefined") {
-              amazonPaymentsMageCheckout.amazonBillingAgreementConsent = billingAgreementConsentStatus.getConsentStatus();
+              amazonPaymentsMageCheckout.amazonBillingAgreementConsent = billingAgreementConsentStatus.getConsentStatus() == "true" ? true : false;
           }
       },
       onConsent: function(billingAgreementConsentStatus) {
           if (typeof billingAgreementConsentStatus != "undefined") {
-              amazonPaymentsMageCheckout.amazonBillingAgreementConsent = billingAgreementConsentStatus.getConsentStatus();
+              amazonPaymentsMageCheckout.amazonBillingAgreementConsent = billingAgreementConsentStatus.getConsentStatus() == "true" ? true : false;
           }
       },
       onError: function(error) {
