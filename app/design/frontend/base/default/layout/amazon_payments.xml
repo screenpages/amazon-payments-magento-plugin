@@ -103,8 +103,8 @@
 
         <reference name="checkout.progress.wrapper">
             <block type="amazon_payments/onepage_progress" name="checkout.progress" before="-" template="checkout/onepage/progress.phtml">
-                <block type="amazon_payments/onepage_progress" name="shipping.progress" template="amazon_payments/onepage/progress/widget.phtml"></block>
-                <block type="amazon_payments/onepage_progress" name="shippingmethod.progress" template="checkout/onepage/progress/shipping_method.phtml"></block>
+                <block type="amazon_payments/onepage_progress" name="shipping.progress" template="amazon_payments/onepage/progress/widget.phtml" />
+                <block type="amazon_payments/onepage_progress" name="shippingmethod.progress" template="checkout/onepage/progress/shipping_method.phtml" />
             </block>
         </reference>
 
