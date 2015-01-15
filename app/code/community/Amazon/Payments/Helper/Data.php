@@ -174,6 +174,13 @@ class Amazon_Payments_Helper_Data extends Mage_Core_Helper_Abstract
         return (Mage::app()->getRequest()->getParam('amazon_modal') && $this->getConfig()->isCheckoutModal());
     }
 
-
-
+    /**
+     * Is button bade (acceptance mark) enabled?
+     *
+     * @return bool
+     */
+    public function isButtonBadgeEnabled($store = null)
+    {
+        return ($this->getConfig()->isButtonBadgeEnabled() && $this->getConfig()->isEnabled());
+    }
 }

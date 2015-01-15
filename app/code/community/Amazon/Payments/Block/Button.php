@@ -120,6 +120,16 @@ class Amazon_Payments_Block_Button extends Mage_Core_Block_Template
     }
 
     /**
+     * Is button badge enabled?
+     *
+     * @return bool
+     */
+    public function isButtonBadgeEnabled()
+    {
+        return $this->helper('amazon_payments')->isButtonBadgeEnabled();
+    }
+
+    /**
      * Is Amazon Payments enabled on product level?
      */
     public function isEnableProductPayments()

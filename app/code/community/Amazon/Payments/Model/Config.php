@@ -35,6 +35,7 @@ class Amazon_Payments_Model_Config
     const CONFIG_XML_PATH_BUTTON_TYPE    = 'payment/amazon_payments/button_type';
     const CONFIG_XML_PATH_BUTTON_COLOR   = 'payment/amazon_payments/button_color';
     const CONFIG_XML_PATH_BUTTON_SIZE    = 'payment/amazon_payments/button_size';
+    const CONFIG_XML_PATH_BUTTON_BADGE   = 'payment/amazon_payments/button_badge';
 
     const CONFIG_XML_PATH_LOGIN_ENABLED  = 'amazon_login/settings/enabled';
 
@@ -308,6 +309,17 @@ class Amazon_Payments_Model_Config
     public function getButtonSize($store = null)
     {
         return $this->_getStoreConfig(self::CONFIG_XML_PATH_BUTTON_SIZE, $store);
+    }
+
+    /**
+     * Is button bade (acceptance mark) enabled?
+     *
+     * @param   store $store
+     * @return  bool
+     */
+    public function isButtonBadgeEnabled($store = null)
+    {
+        return ($this->_getStoreConfig(self::CONFIG_XML_PATH_BUTTON_BADGE, $store));
     }
 
 }
