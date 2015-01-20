@@ -46,7 +46,6 @@ class Amazon_Diagnostics_Adminhtml_DiagnosticsController extends Mage_Adminhtml_
         $payments_seller_id = Mage::getStoreConfig('payment/amazon_payments/seller_id');
         $payments_access_key = Mage::getStoreConfig('payment/amazon_payments/access_key');
 
-
         /* set global results */
         $this->_global_results['magento_version'] = Mage::getVersion();
         $this->_global_results['magento_edition'] = Mage::getEdition();
@@ -75,9 +74,9 @@ class Amazon_Diagnostics_Adminhtml_DiagnosticsController extends Mage_Adminhtml_
             $this->_global_results['payments_secret_key'] .= "** white space detected **";
         }
         $this->_global_results['payments_sandbox'] = (Mage::getStoreConfig('payment/amazon_payments/sandbox') == 1 ? 'yes' : 'no');
-
         $this->_global_results['enabled'] = (Mage::getStoreConfig('amazon_login/settings/enabled') == 1 ? 'yes' : 'no');
         $this->_global_results['secure_cart'] = (Mage::getSingleton('amazon_payments/config')->isSecureCart() == 1 ? 'yes' : 'no');
+        $this->_global_results['secure_frontend'] = (Mage::getStoreConfig('web/secure/use_in_frontend') == 1 ? 'yes' : 'no');
         $this->_global_results['modules'] = $this->_modules;
         $this->_global_results['logs'] = $this->_logs;
 
