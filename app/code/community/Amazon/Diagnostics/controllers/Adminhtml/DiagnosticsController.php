@@ -147,7 +147,7 @@ class Amazon_Diagnostics_Adminhtml_DiagnosticsController extends Mage_Adminhtml_
             }
         } catch (Exception $e) {
             /* log any errors */
-            $this->_global_results['errors'][] = $r->getMessage();
+            $this->_global_results['errors'][] = $e->getMessage();
         }
         @closedir($h);
     }
@@ -192,7 +192,7 @@ class Amazon_Diagnostics_Adminhtml_DiagnosticsController extends Mage_Adminhtml_
             }
         } catch (Exception $e) {
             /* log any errors */
-            $this->_global_results['errors'][] = $r->getMessage();
+            $this->_global_results['errors'][] = $e->getMessage();
         }
         @closedir($h);
     }
