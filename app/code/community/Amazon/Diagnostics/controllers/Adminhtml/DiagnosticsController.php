@@ -30,15 +30,24 @@ class Amazon_Diagnostics_Adminhtml_DiagnosticsController extends Mage_Adminhtml_
         $this->_layoutpath = $this->_designpath . "/frontend/base/default/layout";
 
         /* do some diagnostics */
+        $this->getMagento();
+        $this->getPayments();
+        $this->getLogin();
         $this->getModules();
         $this->getLogs();
 
-        /* set some settings variables */
-        $login_client_id = Mage::getStoreConfig('amazon_login/settings/client_id');
-        $login_client_secret = Mage::getStoreConfig('amazon_login/settings/client_secret');
-        if (strlen($login_client_secret) > 6) {
-            $login_client_secret = substr($login_client_secret, 0, 3) . "..." . substr($login_client_secret, strlen($login_client_secret - 3), 3);
-        }
+        /* send the response */
+        Mage::app()->getResponse()->setBody(print_r($this->_global_results, true));
+    }
+
+    private function getMagento() {
+        $this->_global_results['magento']['version'] = Mage::getVersion();
+        $this->_global_results['magento']['edition'] = Mage::getEdition();
+        $this->_global_results['magento']['base_path'] = $this->_basepath;
+        $this->_global_results['magento']['secure_frontend'] = (Mage::getStoreConfig('web/secure/use_in_frontend') == 1 ? 'yes' : 'no');
+    }
+
+    private function getPayments() {
         $payments_secret_key = Mage::getStoreConfig('payment/amazon_payments/access_secret');
         if (strlen($payments_secret_key) > 6) {
             $payments_secret_key = substr($payments_secret_key, 0, 3) . "..." . substr($payments_secret_key, strlen($payments_secret_key - 3), 3);
@@ -46,42 +55,57 @@ class Amazon_Diagnostics_Adminhtml_DiagnosticsController extends Mage_Adminhtml_
         $payments_seller_id = Mage::getStoreConfig('payment/amazon_payments/seller_id');
         $payments_access_key = Mage::getStoreConfig('payment/amazon_payments/access_key');
 
-        /* set global results */
-        $this->_global_results['magento_version'] = Mage::getVersion();
-        $this->_global_results['magento_edition'] = Mage::getEdition();
-        $this->_global_results['base_path'] = $this->_basepath;
-
-        $this->_global_results['login_client_id'] = "'" . $login_client_id . "'";
-        if (preg_match('/\s/', $login_client_id)) {
-            $this->_global_results['login_client_id'] = " ** white space detected **";
+        /* get checkout page type, make it clear which one is being used */
+        $page_type = Mage::getStoreConfig('payment/amazon_payments/checkout_page');
+        switch ($page_type) {
+            case "amazon":
+                $page_type = "amazon standalone";
+                break;
+            case "onepage":
+                $page_type = "magento core onepage";
+                break;
         }
-        $this->_global_results['login_client_secret'] = "'" . $login_client_secret . "'";
-        if (preg_match('/\s/', $login_client_secret)) {
-            $this->_global_results['login_client_secret'] .= "** white space detected **";
-        }
-        $this->_global_results['login_button_type'] = Mage::getStoreConfig('amazon_login/settings/button_type');
 
-        $this->_global_results['payments_seller_id'] = "'" . $payments_seller_id . "'";
+        $this->_global_results['payments']['enabled'] = (Mage::getStoreConfig('payment/amazon_payments/enabled') == 1 ? 'yes' : 'no');
+        $this->_global_results['payments']['seller_id'] = "'" . $payments_seller_id . "'";
         if (preg_match('/\s/', $payments_seller_id)) {
-            $this->_global_results['payments_seller_id'] .= " ** white space detected **";
+            $this->_global_results['payments']['seller_id'] .= " ** white space detected **";
         }
-        $this->_global_results['payments_access_key'] = "'" . $payments_access_key . "'";
+        $this->_global_results['payments']['access_key'] = "'" . $payments_access_key . "'";
         if (preg_match('/\s/', $payments_access_key)) {
-            $this->_global_results['payments_access_key'] .= " ** white space detected **";
+            $this->_global_results['payments']['access_key'] .= " ** white space detected **";
         }
-        $this->_global_results['payments_secret_key'] = "'" . $payments_secret_key . "'";
+        $this->_global_results['payments']['secret_key'] = "'" . $payments_secret_key . "'";
         if (preg_match('/\s/', $payments_secret_key)) {
-            $this->_global_results['payments_secret_key'] .= "** white space detected **";
+            $this->_global_results['secret_key'] .= "** white space detected **";
         }
-        $this->_global_results['payments_sandbox'] = (Mage::getStoreConfig('payment/amazon_payments/sandbox') == 1 ? 'yes' : 'no');
-        $this->_global_results['enabled'] = (Mage::getStoreConfig('amazon_login/settings/enabled') == 1 ? 'yes' : 'no');
-        $this->_global_results['secure_cart'] = (Mage::getSingleton('amazon_payments/config')->isSecureCart() == 1 ? 'yes' : 'no');
-        $this->_global_results['secure_frontend'] = (Mage::getStoreConfig('web/secure/use_in_frontend') == 1 ? 'yes' : 'no');
-        $this->_global_results['modules'] = $this->_modules;
-        $this->_global_results['logs'] = $this->_logs;
+        $this->_global_results['payments']['page_type'] = $page_type;
+        $this->_global_results['payments']['button_on_cart'] = (Mage::getStoreConfig('payment/amazon_payments/show_pay_cart') == 1 ? 'yes' : 'no');
+        $this->_global_results['payments']['action'] = Mage::getStoreConfig('payment/amazon_payments/payment_action');
+        $this->_global_results['payments']['secure_cart'] = (Mage::getSingleton('amazon_payments/config')->isSecureCart() == 1 ? 'yes' : 'no');
+        $this->_global_results['payments']['payment_option'] = (Mage::getStoreConfig('payment/amazon_payments/use_in_checkout') == 1 ? 'yes' : 'no');
+        $this->_global_results['payments']['async'] = (Mage::getStoreConfig('payment/amazon_payments/is_async') == 1 ? 'yes' : 'no');
+        $this->_global_results['payments']['sandbox'] = (Mage::getStoreConfig('payment/amazon_payments/sandbox') == 1 ? 'yes' : 'no');
+    }
 
-        /* send the response */
-        Mage::app()->getResponse()->setBody(print_r($this->_global_results, true));
+    private function getLogin() {
+        $login_client_id = Mage::getStoreConfig('amazon_login/settings/client_id');
+        $login_client_secret = Mage::getStoreConfig('amazon_login/settings/client_secret');
+        if (strlen($login_client_secret) > 6) {
+            $login_client_secret = substr($login_client_secret, 0, 3) . "..." . substr($login_client_secret, strlen($login_client_secret - 3), 3);
+        }
+
+        $this->_global_results['login']['enabled'] = (Mage::getStoreConfig('amazon_login/settings/enabled') == 1 ? 'yes' : 'no');
+        $this->_global_results['login']['button_type'] = Mage::getStoreConfig('amazon_login/settings/button_type');
+        $this->_global_results['login']['popup'] = (Mage::getStoreConfig('amazon_login/settings/popup') == 1 ? 'yes' : 'no');
+        $this->_global_results['login']['client_id'] = "'" . $login_client_id . "'";
+        if (preg_match('/\s/', $login_client_id)) {
+            $this->_global_results['login']['client_id'] = " ** white space detected **";
+        }
+        $this->_global_results['login']['client_secret'] = "'" . $login_client_secret . "'";
+        if (preg_match('/\s/', $login_client_secret)) {
+            $this->_global_results['login']['client_secret'] .= "** white space detected **";
+        }
     }
 
     private function getModules() {
@@ -150,6 +174,7 @@ class Amazon_Diagnostics_Adminhtml_DiagnosticsController extends Mage_Adminhtml_
             $this->_global_results['errors'][] = $e->getMessage();
         }
         @closedir($h);
+        $this->_global_results['modules'] = $this->_modules;
     }
 
     private function getLogs() {
@@ -195,6 +220,7 @@ class Amazon_Diagnostics_Adminhtml_DiagnosticsController extends Mage_Adminhtml_
             $this->_global_results['errors'][] = $e->getMessage();
         }
         @closedir($h);
+        $this->_global_results['logs'] = $this->_logs;
     }
 
 }
