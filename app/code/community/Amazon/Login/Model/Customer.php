@@ -22,12 +22,11 @@ class Amazon_Login_Model_Customer extends Mage_Customer_Model_Customer
         $amazonProfile = $this->getAmazonProfile($token);
 
         if ($amazonProfile && isset($amazonProfile['email'])) {
-
-            // Load customer by email
-            $this->setWebsiteId(Mage::app()->getWebsite()->getId())->loadByEmail($amazonProfile['email']);
-
             // Load Amazon Login association
             $row = Mage::getModel('amazon_login/login')->load($amazonProfile['user_id'], 'amazon_uid');
+            
+            // Load customer by ID
+            $this->setWebsiteId(Mage::app()->getWebsite()->getId())->load($row->getCustomerId());
 
             // If Magento customer account exists and there is no association, then the Magento account
             // must be verified, as Amazon does not verify email addresses.
