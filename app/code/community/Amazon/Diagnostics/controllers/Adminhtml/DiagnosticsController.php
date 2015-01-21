@@ -45,6 +45,7 @@ class Amazon_Diagnostics_Adminhtml_DiagnosticsController extends Mage_Adminhtml_
         $this->_global_results['magento']['edition'] = Mage::getEdition();
         $this->_global_results['magento']['base_path'] = $this->_basepath;
         $this->_global_results['magento']['secure_frontend'] = (Mage::getStoreConfig('web/secure/use_in_frontend') == 1 ? 'yes' : 'no');
+        $this->_global_results['magento']['store_name'] = Mage::getStoreConfig('general/store_information/name');
     }
 
     private function getPayments() {
