@@ -21,7 +21,7 @@ class Amazon_Login_Model_Customer extends Mage_Customer_Model_Customer
     {
         $amazonProfile = $this->getAmazonProfile($token);
 
-        if ($amazonProfile && isset($amazonProfile['email'])) {
+        if ($amazonProfile && isset($amazonProfile['user_id']) && isset($amazonProfile['email'])) {
             // Load Amazon Login association
             $row = Mage::getModel('amazon_login/login')->load($amazonProfile['user_id'], 'amazon_uid');
             
