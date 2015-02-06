@@ -11,6 +11,8 @@
 
 <form id="co-widget-form" action="">
 <div class="amazon-widget" id="checkout-widget">
+    <input type="checkbox" style="display:none;"> <!-- MageMonkey Mailchimp compatibility (their JS requires a form element to dynamically append input element) -->
+
     <input type="hidden" name="amazon_order_reference_id" value="" />
     <input type="hidden" name="payment[method]" value="amazon_payments" />
 
