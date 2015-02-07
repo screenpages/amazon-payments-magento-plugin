@@ -12,6 +12,14 @@ class Amazon_Payments_Model_Api
 {
     const ORDER_PLATFORM_ID = 'A2K7HE1S3M5XJ';
 
+    // Amazon Authorization Order States
+    const AUTH_STATUS_PENDING   = 'Pending';
+    const AUTH_STATUS_OPEN      = 'Open';
+    const AUTH_STATUS_DECLINED  = 'Declined';
+    const AUTH_STATUS_CLOSED    = 'Closed';
+    const AUTH_STATUS_COMPLETED = 'Completed';
+    const AUTH_STATUS_SUSPENDED = 'Suspended';
+
     protected $api;
     protected $log_file = 'amazon.log';
 
@@ -143,8 +151,11 @@ class Amazon_Payments_Model_Api
                 'CurrencyCode' => $authorizationCurrency
             ),
             'CaptureNow' => $captureNow,
-            'TransactionTimeout' => 0, // Synchronous Mode
         );
+
+        if (!$this->getConfig()->isAsync()) {
+            $request['TransactionTimeout'] = 0; // Synchronous Mode
+        }
 
         if ($softDescriptor) {
             $request['SoftDescriptor'] = $softDescriptor;
@@ -186,8 +197,11 @@ class Amazon_Payments_Model_Api
                 'Amount' => $captureAmount,
                 'CurrencyCode' => $captureCurrency
             ),
-            'TransactionTimeout' => 0, // Synchronous Mode
         );
+
+        if (!$this->getConfig()->isAsync()) {
+            $request['TransactionTimeout'] = 0; // Synchronous Mode
+        }
 
         if ($softDescriptor) {
             $request['SoftDescriptor'] = $softDescriptor;
@@ -226,6 +240,31 @@ class Amazon_Payments_Model_Api
             $result = $response->getGetOrderReferenceDetailsResult();
             if ($result->isSetOrderReferenceDetails()) {
                 return $result->getOrderReferenceDetails();
+            }
+        }
+
+        return $response;
+    }
+
+    /**
+     * GetAuthorizationDetails
+     *
+     * @param string $amazonAuthorizationId
+     * @return OffAmazonPaymentsService_Model_GetAuthorizationDetails
+     * @link http://docs.developer.amazonservices.com/en_US/off_amazon_payments/OffAmazonPayments_GetAuthorizationDetails.html
+     */
+    public function getAuthorizationDetails($amazonAuthorizationId)
+    {
+        $request = array(
+            'AmazonAuthorizationId' => $amazonAuthorizationId,
+        );
+
+        $response = $this->request('getAuthorizationDetails', $request);
+
+        if ($response && $response->isSetGetAuthorizationDetailsResult()) {
+            $result = $response->getGetAuthorizationDetailsResult();
+            if ($result->isSetAuthorizationDetails()) {
+                return $result->getAuthorizationDetails();
             }
         }
 

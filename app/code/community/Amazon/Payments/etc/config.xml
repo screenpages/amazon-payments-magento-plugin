@@ -55,6 +55,17 @@
         </resources>
 
     </global>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <Amazon_Payments after="Mage_Adminhtml">Amazon_Payments_Adminhtml</Amazon_Payments>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
     <adminhtml>
         <layout>
             <updates>
@@ -63,6 +74,16 @@
                 </tax>
             </updates>
         </layout>
+        <events>
+            <adminhtml_widget_container_html_before>
+                <observers>
+                    <amazon_payments>
+                        <class>Amazon_Payments_Model_Observer_Adminhtml</class>
+                        <method>addAsyncButton</method>
+                    </amazon_payments>
+                </observers>
+            </adminhtml_widget_container_html_before>
+        </events>
     </adminhtml>
 
     <frontend>
@@ -136,8 +157,18 @@
                 <button_type>PwA</button_type>
                 <button_color>Gold</button_color>
                 <button_size>medium</button_size>
+                <button_badge>1</button_badge>
             </amazon_payments>
         </payment>
     </default>
+
+    <crontab>
+        <jobs>
+            <amazon_payments_async>
+                <schedule><cron_expr>*/5 * * * *</cron_expr></schedule>
+                <run><model>amazon_payments/async::cron</model></run>
+            </amazon_payments_async>
+        </jobs>
+    </crontab>
 
 </config>

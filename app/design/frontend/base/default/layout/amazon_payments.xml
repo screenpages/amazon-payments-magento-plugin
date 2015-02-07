@@ -103,8 +103,8 @@
 
         <reference name="checkout.progress.wrapper">
             <block type="amazon_payments/onepage_progress" name="checkout.progress" before="-" template="checkout/onepage/progress.phtml">
-                <block type="amazon_payments/onepage_progress" name="shipping.progress" template="amazon_payments/onepage/progress/widget.phtml"></block>
-                <block type="amazon_payments/onepage_progress" name="shippingmethod.progress" template="checkout/onepage/progress/shipping_method.phtml"></block>
+                <block type="amazon_payments/onepage_progress" name="shipping.progress" template="amazon_payments/onepage/progress/widget.phtml" />
+                <block type="amazon_payments/onepage_progress" name="shippingmethod.progress" template="checkout/onepage/progress/shipping_method.phtml" />
             </block>
         </reference>
 
@@ -268,9 +268,33 @@
                 <block>addtocart-amazon-button</block>
             </action>
         </reference>
+
+        <reference name="right">
+            <block type="amazon_payments/button" name="amazon_payments.button.right.logo" template="amazon_payments/button_badge.phtml" />
+        </reference>
+
     </catalog_product_view>
 
+    <!--
+    Acceptance Mark/Badge
+    -->
+    <catalog_category_default>
+        <reference name="right">
+            <block type="amazon_payments/button" name="amazon_payments.button.right.logo" template="amazon_payments/button_badge.phtml" />
+        </reference>
+    </catalog_category_default>
 
+    <catalog_category_layered>
+        <reference name="right">
+            <block type="amazon_payments/button" name="amazon_payments.button.right.logo" template="amazon_payments/button_badge.phtml" />
+        </reference>
+    </catalog_category_layered>
+
+    <cms_index_index>
+        <reference name="right">
+            <block type="amazon_payments/button" name="amazon_payments.button.right.logo" template="amazon_payments/button_badge.phtml" />
+        </reference>
+    </cms_index_index>
 
     <!--
     Fire Checkout

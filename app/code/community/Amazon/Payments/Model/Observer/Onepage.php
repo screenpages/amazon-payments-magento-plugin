@@ -23,7 +23,7 @@ class Amazon_Payments_Model_Observer_Onepage
         $fullActionName = $observer->getEvent()->getAction()->getFullActionName();
 
 
-        if ($fullActionName == 'checkout_onepage_index' && $_helper->getConfig()->isEnabled() && $_helper->isCheckoutAmazonSession()) {
+        if ($fullActionName == 'checkout_onepage_index' && $_helper->getConfig()->isEnabled() && $_helper->isCheckoutAmazonSession() && $_helper->isEnableProductPayments()) {
             // If One Page is disable and user has active Amazon Session, redirect to standalone checkout
             if (!$_helper->getConfig()->isCheckoutOnepage()) {
                 Mage::app()->getFrontController()->getResponse()->setRedirect($_helper->getStandaloneUrl());
