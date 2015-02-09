@@ -212,6 +212,12 @@ AmazonPaymentsMageCheckout.prototype = {
             if (typeof(msg)=='object') {
                 msg = msg.join("\n");
             }
+
+            // Clean BillingAgreement error message
+            if (msg.indexOf("BillingAgreement") != -1 && msg.indexOf("total authorization amount cannot exceed") != -1) {
+                msg = "You have exceeded your total authorization amount for this billing agreement period. Please contact the store manager."
+            }
+
             if (msg) {
                 alert(msg);
             }
