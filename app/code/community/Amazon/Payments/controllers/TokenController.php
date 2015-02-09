@@ -39,10 +39,6 @@ class Amazon_Payments_TokenController extends Mage_Core_Controller_Front_Action
 
             $quote->setSendCconfirmation(1);
 
-
-            //var_dump($quote->debug());
-
-            ///*
             $orderDetails = $_api->getBillingAgreementDetails($amazonBillingAgreementId, Mage::getSingleton('checkout/session')->getAmazonAccessToken());
 
             $address = $orderDetails->getDestination()->getPhysicalDestination();
@@ -93,9 +89,6 @@ class Amazon_Payments_TokenController extends Mage_Core_Controller_Front_Action
                 ),
             ));
 
-            //var_dump($quote->getPayment()->debug());
-            //exit;
-
             // Collect Totals & Save Quote
             $quote->collectTotals()->save();
 
@@ -124,13 +117,11 @@ class Amazon_Payments_TokenController extends Mage_Core_Controller_Front_Action
             catch (Exception $e) {
                 $redirectUrl = Mage::helper('core/http')->getHttpReferer() ? Mage::helper('core/http')->getHttpReferer() : Mage::getUrl();
                 Mage::getSingleton('core/session')->addError($e->getMessage());
-                //$this->_redirectUrl($url);
-                //return;
+
+                if (strpos($redirectUrl, 'ajaxcart') !== false) {
+                    $redirectUrl = Mage::getUrl();
+                }
             }
-
-
-            //$this->_redirect("sales/order/view/order_id/$id");
-            //$this->_redirect($redirectUrl);
 
             // Use JS to redirect from ajaxcart modal
             $this->getResponse()->setHeader('Content-Type', 'text/html')
