@@ -41,6 +41,19 @@
       // Open links in parent window of modal
       $j("a").attr("target", "_top");
 
+      <?php if (!$this->isPopup()) : // Open Amazon Login in parent window (not Ajax iframe) ?>
+      // Duplicate Amazon button
+      $j("#<?php echo $this->getAmazonPayButtonId(); ?> img")
+          .hide()
+          .clone()
+          .attr("id", "amazon-button-clone")
+          .show()
+          .appendTo("#<?php echo $this->getAmazonPayButtonId(); ?>")
+          .click(function() {
+            $j(window.parent.document).find("#<?php echo $this->getAmazonPayButtonId(); ?> img[id!='amazon-button-clone']").click();
+          });
+      <?php endif; ?>
+
   })(OffAmazonPayments.jQuery);
 
 

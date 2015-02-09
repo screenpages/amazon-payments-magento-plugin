@@ -103,7 +103,6 @@
                         var amazonModal = new AmazonConfirmModal();
                         amazonModal.show('<?php print $this->getAjaxCartModalUrl(); ?>');
                         <?php else : ?>
-                        amazonModal.show('http://192.168.0.13');
                         $j("#<?php echo $this->getAmazonPayButtonId(); ?> img[id!='amazon-button-clone']").click();
                         <?php endif; ?>
                     }
