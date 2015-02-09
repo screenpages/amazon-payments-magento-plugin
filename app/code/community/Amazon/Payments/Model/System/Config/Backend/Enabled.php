@@ -80,4 +80,15 @@ class Amazon_Payments_Model_System_Config_Backend_Enabled extends Mage_Core_Mode
         }
         return parent::_afterSaveCommit();
     }
+
+    /**
+     * Return dynamic help/comment text
+     *
+     */
+    public function getCommentText(Mage_Core_Model_Config_Element $element, $currentValue)
+    {
+        $version = Mage::getConfig()->getModuleConfig("Amazon_Payments")->version;
+        return "v$version";
+    }
+
 }
