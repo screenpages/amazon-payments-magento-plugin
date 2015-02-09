@@ -83,7 +83,7 @@ class Amazon_Payments_Model_Async extends Mage_Core_Model_Abstract
                         break;
 
                     case $method::ACTION_AUTHORIZE_CAPTURE:
-                        $this->authorize($payment, $amount, true);
+                        $method->authorize($payment, $amount, true);
                         break;
                     default:
                         break;
