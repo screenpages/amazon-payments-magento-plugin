@@ -52,6 +52,7 @@ class Amazon_Payments_Model_Async extends Mage_Core_Model_Abstract
         $message = '';
 
         try {
+
             $amazonOrderReference = $order->getPayment()->getAdditionalInformation('order_reference');
 
             $orderReferenceDetails = $_api->getOrderReferenceDetails($amazonOrderReference);
@@ -59,16 +60,12 @@ class Amazon_Payments_Model_Async extends Mage_Core_Model_Abstract
             if ($orderReferenceDetails) {
 
                 // Retrieve Amazon Authorization Details
-                try {
-                    // Last transaction ID is Amazon Authorize Reference ID
-                    $lastAmazonReference = $order->getPayment()->getLastTransId();
-                    $resultAuthorize = $this->_getApi()->getAuthorizationDetails($lastAmazonReference);
-                    $amazonAuthorizationState = $resultAuthorize->getAuthorizationStatus()->getState();
-                    $reasonCode = $resultAuthorize->getAuthorizationStatus()->getReasonCode();
-                } catch (Exception $e) {
-                    Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
-                    return;
-                }
+
+                // Last transaction ID is Amazon Authorize Reference ID
+                $lastAmazonReference = $order->getPayment()->getLastTransId();
+                $resultAuthorize = $this->_getApi()->getAuthorizationDetails($lastAmazonReference);
+                $amazonAuthorizationState = $resultAuthorize->getAuthorizationStatus()->getState();
+                $reasonCode = $resultAuthorize->getAuthorizationStatus()->getReasonCode();
 
                 // Re-authorize if holded, an Open order reference, and manual sync
                 if ($order->getState() == Mage_Sales_Model_Order::STATE_HOLDED && $orderReferenceDetails->getOrderReferenceStatus()->getState() == 'Open' && $isManualSync) {
@@ -122,7 +119,6 @@ class Amazon_Payments_Model_Async extends Mage_Core_Model_Abstract
                   // Closed (Authorize and Capture)
                   case Amazon_Payments_Model_Api::AUTH_STATUS_CLOSED:
 
-
                       // Payment captured; create invoice
                       if ($reasonCode == 'MaxCapturesProcessed') {
                           $order->setState(Mage_Sales_Model_Order::STATE_PROCESSING);
@@ -150,6 +146,14 @@ class Amazon_Payments_Model_Async extends Mage_Core_Model_Abstract
                 Mage::getSingleton('adminhtml/session')->addSuccess($message);
             }
         } catch (Exception $e) {
+            // Change order to "On Hold"
+            if ($order->getState() != Mage_Sales_Model_Order::STATE_HOLDED) {
+                $message = 'Error exception during sync. Please check exception.log';
+                $order->setState(Mage_Sales_Model_Order::STATE_HOLDED, true);
+                $order->addStatusToHistory($order->getStatus(), $message, false);
+                $order->save();
+            }
+
             Mage::logException($e);
             Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
         }
