@@ -237,14 +237,25 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
             $payment->setAdditionalInformation('billing_agreement_id', $adminBillingAgreementId);
         }
 
-        $orderReferenceId = $payment->getAdditionalInformation('order_reference');
+        $orderReferenceId   = $payment->getAdditionalInformation('order_reference');
         $billingAgreementId = $payment->getAdditionalInformation('billing_agreement_id'); // token payment. orderReferenceId will be the same.
+
+        $orderConfirmed = false;
 
         // User did not agree to billing agreement; create order reference ID from billing agreement ID
         if ($billingAgreementId && !$adminBillingAgreementId && !$payment->getAdditionalInformation('billing_agreement_consent')) {
-            $orderReferenceDetails = $this->_getApi()->createOrderReferenceForId($billingAgreementId, 'BillingAgreement');
+            $orderAttributes = array(
+                'PlatformId' => Amazon_Payments_Model_Api::ORDER_PLATFORM_ID,
+                'OrderTotal' => array(
+                    'CurrencyCode' => $payment->getOrder()->getBaseCurrencyCode(),
+                    'Amount' => $amount,
+                )
+             );
+
+            $orderReferenceDetails = $this->_getApi()->createOrderReferenceForId($billingAgreementId, 'BillingAgreement', true, true, $orderAttributes);
             $orderReferenceId = $orderReferenceDetails->getAmazonOrderReferenceId();
             $billingAgreementId = false;
+            $orderConfirmed = true;
 
             $payment->setAdditionalInformation('order_reference', $orderReferenceId);
             $payment->unsAdditionalInformation('billing_agreement_id');
@@ -265,7 +276,7 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
         $order = $payment->getOrder();
 
         // Normal order (no token)
-        if (!$billingAgreementId) {
+        if (!$billingAgreementId && !$orderConfirmed) {
             // If previous order submission failed (e.g. bad credit card), must validate order status to prevent multiple setOrderReferenceDetails()
             if ($this->_getErrorCheck()) {
                 $orderReferenceDetails = $this->_getApi()->getOrderReferenceDetails($orderReferenceId);
@@ -291,7 +302,7 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
             }
         }
         // Token payment
-        else {
+        else if ($billingAgreementId) {
             $apiResult = $this->_getApi()->confirmBillingAgreement($billingAgreementId);
             // Save token
             if ($apiResult && $payment->getAdditionalInformation('billing_agreement_consent')) {
