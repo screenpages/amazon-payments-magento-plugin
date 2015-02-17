@@ -136,6 +136,8 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
 
         // Token payment (i.e. authorize against billing agreement id)
         if ($amazonBillingAgreementId = $payment->getAdditionalInformation('billing_agreement_id')) {
+            $forceSync = $this->_isPreorder($payment) && $this->getConfig('is_async'); // Manual Sync
+
             $result = $this->_getApi()->authorizeOnBillingAgreement(
                 $amazonBillingAgreementId,
                 $this->_getMagentoReferenceId($payment) . '-bill',
@@ -143,7 +145,8 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
                 $order->getBaseCurrencyCode(),
                 $captureNow,
                 ($captureNow) ? $this->_getSoftDescriptor() : null,
-                $sellerAuthorizationNote
+                $sellerAuthorizationNote,
+                $forceSync
             );
 
             $authorizationDetails = $result->getAuthorizationDetails();

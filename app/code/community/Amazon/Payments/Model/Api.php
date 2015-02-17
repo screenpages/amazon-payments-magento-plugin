@@ -448,7 +448,7 @@ class Amazon_Payments_Model_Api
      * @return OffAmazonPaymentsService_Model_AuthorizeOnBillingAgreementResult
      * @link http://docs.developer.amazonservices.com/en_US/off_amazon_payments/OffAmazonPayments_AuthorizeOnBillingAgreement.html
      */
-    public function authorizeOnBillingAgreement($amazonBillingAgreementId, $authorizationReferenceId, $authorizationAmount, $authorizationCurrency, $captureNow = false, $softDescriptor = null, $sellerAuthorizationNote = null)
+    public function authorizeOnBillingAgreement($amazonBillingAgreementId, $authorizationReferenceId, $authorizationAmount, $authorizationCurrency, $captureNow = false, $softDescriptor = null, $sellerAuthorizationNote = null, $forceSync = false)
     {
         $request = array(
             'AmazonBillingAgreementId' => $amazonBillingAgreementId,
@@ -460,7 +460,7 @@ class Amazon_Payments_Model_Api
             'CaptureNow' => $captureNow,
         );
 
-        if (!$this->getConfig()->isAsync()) {
+        if (!$this->getConfig()->isAsync() || $forceSync) {
             $request['TransactionTimeout'] = 0; // Synchronous Mode
         }
 
@@ -492,7 +492,7 @@ class Amazon_Payments_Model_Api
      * @return OffAmazonPaymentsService_Model_CreateOrderReferenceForIdResult
      * @link http://docs.developer.amazonservices.com/en_US/off_amazon_payments/OffAmazonPayments_CreateOrderReferenceForId.html
      */
-    public function createOrderReferenceForId($id, $idType, $inheritShippingAddress = true, $confirmNow = false, $orderReferenceAttributes = null)
+    public function createOrderReferenceForId($id, $idType, $inheritShippingAddress = true, $confirmNow = false, array $orderReferenceAttributes = null)
     {
         $request = array(
             'Id' => $id,
