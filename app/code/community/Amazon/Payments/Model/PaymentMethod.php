@@ -509,7 +509,7 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
         // Pre-order (delayed tokenized) payment must authorize and capture
         if ($payment->getAdditionalInformation('billing_agreement_id')) {
             $lastTrans = $payment->lookupTransaction($payment->getLastTransId());
-            if ($lastTrans->getTxnType() == Mage_Sales_Model_Order_Payment_Transaction::TYPE_ORDER) {
+            if ($lastTrans && $lastTrans->getTxnType() == Mage_Sales_Model_Order_Payment_Transaction::TYPE_ORDER) {
                 return true;
             }
         }
