@@ -259,17 +259,8 @@ AmazonWidgetStep.prototype = {
 
 var amazonBillingAgreementId;
 
-new OffAmazonPayments.Widgets.AddressBook({
+var addressBookOpts = {
     sellerId: '<?php echo $this->getSellerId(); ?>',
-    <?php if ($this->isTokenEnabled()) : ?>
-    agreementType: 'BillingAgreement',
-    onReady: function(billingAgreement) {
-        amazonBillingAgreementId = billingAgreement.getAmazonBillingAgreementId();
-        amazonWidgetStep.setAmazonBillingAgreementId(amazonBillingAgreementId);
-        console.log(amazonBillingAgreementId);
-        loadAmazonWallet();
-    },
-    <?php endif; ?>
     onOrderReferenceCreate: function(orderReference) {
         amazonWidgetStep.setAmazonOrderReferenceId(orderReference.getAmazonOrderReferenceId());
     },
@@ -286,7 +277,27 @@ new OffAmazonPayments.Widgets.AddressBook({
       }
       console.log(error.getErrorMessage());
     }
-}).bind("amazon-widget-address");
+};
+
+<?php if ($this->isTokenEnabled()) : ?>
+amazonBillingAgreementId = Mage.Cookies.get("amazonBillingAgreementId");
+
+if (amazonBillingAgreementId) {
+    addressBookOpts.agreementType = "BillingAgreement";
+    addressBookOpts.amazonBillingAgreementId = amazonBillingAgreementId;
+}
+
+addressBookOpts.onReady = function(billingAgreement) {
+    if (!amazonBillingAgreementId) {
+        amazonBillingAgreementId = billingAgreement.getAmazonBillingAgreementId();
+    }
+    amazonWidgetStep.setAmazonBillingAgreementId(amazonBillingAgreementId);
+    loadAmazonWallet();
+};
+<?php endif; ?>
+
+
+new OffAmazonPayments.Widgets.AddressBook(addressBookOpts).bind("amazon-widget-address");
 
 amazonWidgetStep.toggleOrderSubmit(true);
 </script>
@@ -298,38 +309,38 @@ amazonWidgetStep.toggleOrderSubmit(true);
 
 function loadAmazonWallet() {
     new OffAmazonPayments.Widgets.Wallet({
-      <?php if ($this->isTokenEnabled()) : ?>
-      amazonBillingAgreementId: amazonBillingAgreementId,
-      <?php endif; ?>
-
-      <?php if (!$this->isShowShip()) : ?>
-      onOrderReferenceCreate: function(orderReference) {
-          amazonWidgetStep.showShipping = false;
-          amazonWidgetStep.setAmazonOrderReferenceId(orderReference.getAmazonOrderReferenceId());
-      },
-      <?php endif; ?>
-
-      sellerId: '<?php echo $this->getSellerId(); ?>',
-      design: {
-          designMode: 'responsive',
-      },
-
-      onReady: function() {
-        <?php if (!$this->isTokenEnabled()) : ?>
-        amazonWidgetStep.toggleOrderSubmit(false);
-        <?php endif; ?>
-      },
-      onPaymentSelect: function(orderReference) {
-        amazonWidgetStep.hasPayment = true;
         <?php if ($this->isTokenEnabled()) : ?>
-        loadAmazonConsent();
-        <?php else: ?>
-        amazonWidgetStep.toggleOrderSubmit(false);
+        amazonBillingAgreementId: amazonBillingAgreementId,
         <?php endif; ?>
-      },
-      onError: function(error) {
-        console.log(error.getErrorMessage());
-      }
+
+        <?php if (!$this->isShowShip()) : ?>
+        onOrderReferenceCreate: function(orderReference) {
+            amazonWidgetStep.showShipping = false;
+            amazonWidgetStep.setAmazonOrderReferenceId(orderReference.getAmazonOrderReferenceId());
+        },
+        <?php endif; ?>
+
+        sellerId: '<?php echo $this->getSellerId(); ?>',
+        design: {
+            designMode: 'responsive',
+        },
+
+        onReady: function() {
+            <?php if (!$this->isTokenEnabled()) : ?>
+            amazonWidgetStep.toggleOrderSubmit(false);
+            <?php endif; ?>
+        },
+        onPaymentSelect: function(orderReference) {
+            amazonWidgetStep.hasPayment = true;
+            <?php if ($this->isTokenEnabled()) : ?>
+            loadAmazonConsent();
+            <?php else: ?>
+            amazonWidgetStep.toggleOrderSubmit(false);
+            <?php endif; ?>
+        },
+        onError: function(error) {
+            console.log(error.getErrorMessage());
+        }
     }).bind("amazon-widget-wallet");
 }
 

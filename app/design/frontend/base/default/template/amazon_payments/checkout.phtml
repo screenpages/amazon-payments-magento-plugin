@@ -294,17 +294,8 @@ var Review = Class.create();
 
 var amazonBillingAgreementId;
 
-new OffAmazonPayments.Widgets.AddressBook({
+var addressBookOpts = {
     sellerId: '<?php echo $this->getSellerId(); ?>',
-    <?php if ($this->isTokenEnabled()) : ?>
-    agreementType: 'BillingAgreement',
-    onReady: function(billingAgreement) {
-        amazonBillingAgreementId = billingAgreement.getAmazonBillingAgreementId();
-        amazonPaymentsMageCheckout.amazonBillingAgreementId = amazonBillingAgreementId;
-        loadAmazonWallet();
-
-    },
-    <?php endif; ?>
     onOrderReferenceCreate: function(orderReference) {
         amazonPaymentsMageCheckout.amazonOrderReferenceId = orderReference.getAmazonOrderReferenceId();
     },
@@ -320,7 +311,28 @@ new OffAmazonPayments.Widgets.AddressBook({
         }
         console.log(error.getErrorMessage());
     }
-}).bind("amazon-widget-address");
+};
+
+<?php if ($this->isTokenEnabled()) : ?>
+amazonBillingAgreementId = Mage.Cookies.get("amazonBillingAgreementId");
+
+if (amazonBillingAgreementId) {
+    addressBookOpts.agreementType = "BillingAgreement";
+    addressBookOpts.amazonBillingAgreementId = amazonBillingAgreementId;
+}
+
+addressBookOpts.onReady = function(billingAgreement) {
+    if (!amazonBillingAgreementId) {
+        amazonBillingAgreementId = billingAgreement.getAmazonBillingAgreementId();
+    }
+
+    amazonPaymentsMageCheckout.amazonBillingAgreementId = amazonBillingAgreementId;
+    loadAmazonWallet();
+};
+<?php endif; ?>
+
+
+new OffAmazonPayments.Widgets.AddressBook(addressBookOpts).bind("amazon-widget-address");
 </script>
 
 
@@ -328,23 +340,21 @@ new OffAmazonPayments.Widgets.AddressBook({
 <script>
 function loadAmazonWallet() {
     new OffAmazonPayments.Widgets.Wallet({
-      <?php if ($this->isTokenEnabled()) : ?>
-      amazonBillingAgreementId: amazonBillingAgreementId,
-      <?php endif; ?>
-
-      sellerId: '<?php echo $this->getSellerId(); ?>',
-      design: {
-          designMode: 'responsive',
-      },
-
-      onPaymentSelect: function(orderReference) {
-          <?php if ($this->isTokenEnabled()) : ?>
-          loadAmazonConsent();
-          <?php endif; ?>
-      },
-      onError: function(error) {
-          console.log(error.getErrorMessage());
-      }
+        <?php if ($this->isTokenEnabled()) : ?>
+        amazonBillingAgreementId: amazonBillingAgreementId,
+        <?php endif; ?>
+        sellerId: '<?php echo $this->getSellerId(); ?>',
+        design: {
+            designMode: 'responsive',
+        },
+        onPaymentSelect: function(orderReference) {
+            <?php if ($this->isTokenEnabled()) : ?>
+            loadAmazonConsent();
+            <?php endif; ?>
+        },
+        onError: function(error) {
+            console.log(error.getErrorMessage());
+        }
     }).bind("amazon-widget-wallet");
 }
 

@@ -50,7 +50,7 @@ class Amazon_Payments_Block_Checkout extends Mage_Core_Block_Template
      */
     public function isTokenRequired()
     {
-        return Mage::getSingleton('amazon_payments/config')->isTokenRequired();
+        return $this->isTokenEnabled() && Mage::getSingleton('amazon_payments/config')->isTokenRequired();
     }
 
 }

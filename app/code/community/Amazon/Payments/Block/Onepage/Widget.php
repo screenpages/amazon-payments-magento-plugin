@@ -56,7 +56,7 @@ class Amazon_Payments_Block_Onepage_Widget extends Mage_Checkout_Block_Onepage_A
      */
     public function isTokenRequired()
     {
-        return Mage::getSingleton('amazon_payments/config')->isTokenRequired();
+        return $this->isTokenEnabled() && Mage::getSingleton('amazon_payments/config')->isTokenRequired();
     }
 
 }
