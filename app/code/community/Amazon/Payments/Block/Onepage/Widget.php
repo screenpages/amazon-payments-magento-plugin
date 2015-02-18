@@ -17,6 +17,12 @@ class Amazon_Payments_Block_Onepage_Widget extends Mage_Checkout_Block_Onepage_A
             'is_show'   => $this->isShow()
         ));
         parent::_construct();
+
+        $this->getCheckout()->setStepData('shipping', 'is_show', true); // Display "Shipping Information" progress widget
+
+        // Reset checkout steps if switching from OnePage core
+        $this->getCheckout()->setStepData('billing', 'is_show', false);
+        $this->getCheckout()->setStepData('payment', 'is_show', false);
     }
 
     /**

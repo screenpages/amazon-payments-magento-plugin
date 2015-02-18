@@ -104,10 +104,10 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
     /**
      * Pre-order (no authorize or capture)
      */
-    protected function _preorder(Varien_Object $payment, $amount)
+    protected function _preorder(Varien_Object $payment, $amount, $message)
     {
         $order = $payment->getOrder();
-        $message = Mage::helper('payment')->__('Tokenized pre-order of %s.', $order->getStore()->convertPrice($amount, true, false));
+        $message = str_ireplace('order', 'Pre-order', $message);
 
         $payment->setTransactionId($payment->getAdditionalInformation('order_reference'));
         $payment->setIsTransactionClosed(false);
@@ -328,20 +328,20 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
         $payment->setIsTransactionClosed(false);
         $payment->setSkipOrderProcessing(true);
 
+        $comment  = '';
+        $comment .= $this->getConfigData('is_async') ? 'Asynchronous ' : '';
+        $comment .= $billingAgreementId ? 'Tokenized ' : '';
+        $comment .= $this->_getApi()->getConfig()->isSandbox() ? 'Sandbox ' : '';
+        $comment .= 'Order of %s sent to Amazon Payments.';
+        $message = Mage::helper('payment')->__($comment, $order->getStore()->convertPrice($amount, true, false));
+
         // Pre-order (delayed tokenized payment)
         if ($this->getConfigData('token_delayed') && $billingAgreementId) {
-            $this->_preorder($payment, $amount);
+            $this->_preorder($payment, $amount, $message);
             return $this;
         }
 
-        $orderTypeLabel = $this->getConfigData('is_async') ? 'Asynchronous ' : '';
-        if ($billingAgreementId) {
-            $orderTypeLabel = 'Tokenized ';
-        }
-
-        $message = Mage::helper('payment')->__($orderTypeLabel . 'Order of %s sent to Amazon Payments.', $order->getStore()->convertPrice($amount, true, false));
         $payment->addTransaction(Mage_Sales_Model_Order_Payment_Transaction::TYPE_ORDER, null, false, $message);
-
 
         switch ($this->getConfigData('payment_action')) {
             case self::ACTION_AUTHORIZE:
@@ -566,7 +566,7 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
      */
     public function canUseCheckout()
     {
-        return (Mage::getSingleton('amazon_payments/config')->isEnabled() && ((Mage::helper('amazon_payments')->isCheckoutAmazonSession() && $this->getConfigData('checkout_page') == 'onepage') || $this->getConfigData('use_in_checkout')));
+        return (Mage::getSingleton('amazon_payments/config')->isEnabled() && Mage::helper('amazon_payments')->isEnableProductPayments() && ((Mage::helper('amazon_payments')->isCheckoutAmazonSession() && $this->getConfigData('checkout_page') == 'onepage') || $this->getConfigData('use_in_checkout')));
     }
 
     /**

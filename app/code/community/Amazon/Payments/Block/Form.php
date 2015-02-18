@@ -12,6 +12,14 @@ class Amazon_Payments_Block_Form extends Mage_Payment_Block_Form
     protected function _construct()
     {
         parent::_construct();
-        $this->setTemplate('amazon_payments/form.phtml');
+
+        // Acceptance Mark/Badge
+        $mark = Mage::getConfig()->getBlockClassName('core/template');
+        $mark = new $mark;
+        $mark->setTemplate('amazon_payments/mark.phtml');
+
+        $this->setTemplate('amazon_payments/form.phtml')
+            ->setMethodLabelAfterHtml($mark->toHtml())
+            ->setMethodTitle('');
     }
 }

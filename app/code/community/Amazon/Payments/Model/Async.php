@@ -85,7 +85,6 @@ class Amazon_Payments_Model_Async extends Mage_Core_Model_Abstract
                 // Re-authorize if holded, an Open order reference, and manual sync
                 if ($order->getState() == Mage_Sales_Model_Order::STATE_HOLDED && $orderReferenceDetails->getOrderReferenceStatus()->getState() == 'Open' && $isManualSync) {
 
-
                     // Re-authorize
                     $payment->setTransactionId($amazonOrderReference);
 

@@ -177,6 +177,7 @@
                 <button_type>PwA</button_type>
                 <button_color>Gold</button_color>
                 <button_size>medium</button_size>
+                <button_badge>1</button_badge>
             </amazon_payments>
         </payment>
     </default>
