@@ -325,11 +325,6 @@ function loadAmazonWallet() {
             designMode: 'responsive',
         },
 
-        onReady: function() {
-            <?php if (!$this->isTokenEnabled()) : ?>
-            amazonWidgetStep.toggleOrderSubmit(false);
-            <?php endif; ?>
-        },
         onPaymentSelect: function(orderReference) {
             amazonWidgetStep.hasPayment = true;
             <?php if ($this->isTokenEnabled()) : ?>
