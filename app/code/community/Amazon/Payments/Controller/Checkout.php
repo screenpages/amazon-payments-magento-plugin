@@ -198,19 +198,13 @@ abstract class Amazon_Payments_Controller_Checkout extends Mage_Checkout_Control
             $regionModel = Mage::getModel('directory/region')->loadByCode($address->getStateOrRegion(), $address->getCountryCode());
             $regionId    = $regionModel->getId();
 
-            /* Get postal code and strip +4 (if exists) since Magento only deals with 5 digits. */
-            $postalCode = $address->getPostalCode();
-            if (strlen($postalCode) >= 5) {
-                $postalCode = substr($postalCode, 0, 5);
-            }
-
             $data = array(
                 'firstname'   => $firstName,
                 'lastname'    => $lastName,
                 'street'      => array($address->getAddressLine1(), $address->getAddressLine2()),
                 'city'        => $address->getCity(),
                 'region_id'   => $regionId,
-                'postcode'    => $postalCode,
+                'postcode'    => $address->getPostalCode(),
                 'country_id'  => $address->getCountryCode(),
                 'telephone'   => ($address->getPhone()) ? $address->getPhone() : '-', // Mage requires phone number
                 'use_for_shipping' => true,
