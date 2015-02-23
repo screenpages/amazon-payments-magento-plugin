@@ -6,7 +6,8 @@
     "description": "Amazon Payments for Magento Plugin",
     "authors": [
         {
-            "name": "Amazon"
+            "name": "Amazon",
+            "email":"payments-cp-devel@amazon.com"
         }
     ],
     "require": {
