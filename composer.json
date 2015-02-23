@@ -1,0 +1,15 @@
+{
+    "name": "amzn/amazon-payments-magento-plugin",
+    "type": "magento-module",
+    "license": "Apache OSL-2",
+    "homepage": "https://payments.amazon.com/sp/magento/resources",
+    "description": "Amazon Payments for Magento Plugin",
+    "authors": [
+        {
+            "name": "Amazon"
+        }
+    ],
+    "require": {
+        "magento-hackathon/magento-composer-installer": "*"
+    }
+}
