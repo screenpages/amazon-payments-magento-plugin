@@ -59,16 +59,16 @@ class Amazon_Payments_Model_System_Config_Backend_Enabled extends Mage_Core_Mode
                 }
             catch (MarketplaceWebServiceSellers_Exception $ex) {
                 if ($ex->getErrorCode() == 'InvalidAccessKeyId'){
-                    Mage::getSingleton('core/session')->addError("The MWS Access Key is incorrect");
+                    Mage::getSingleton('core/session')->addError("The Amazon MWS Access Key is incorrect");
                 }
                 else if ($ex->getErrorCode() == 'SignatureDoesNotMatch'){
-                    Mage::getSingleton('core/session')->addError("The MWS Secret Key is incorrect");
+                    Mage::getSingleton('core/session')->addError("The Amazon MWS Secret Key is incorrect");
                 }
                 else if ($ex->getErrorCode() == 'InvalidParameterValue'){
-                    Mage::getSingleton('core/session')->addError("The Seller/Merchant ID is incorrect");
+                    Mage::getSingleton('core/session')->addError("The Amazon Seller/Merchant ID is incorrect");
                 }
                 else if ($ex->getErrorCode() == 'AccessDenied') {
-                    Mage::getSingleton('core/session')->addError("The Seller/Merchant ID does not match the MWS keys provided");
+                    Mage::getSingleton('core/session')->addError("The Amazon Seller/Merchant ID does not match the MWS keys provided");
                 }
                 else{
                     $string =  " Error Message: " . $ex->getMessage();
