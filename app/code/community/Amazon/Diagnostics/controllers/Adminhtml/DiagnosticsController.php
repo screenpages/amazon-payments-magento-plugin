@@ -195,11 +195,11 @@ class Amazon_Diagnostics_Adminhtml_DiagnosticsController extends Mage_Adminhtml_
 
                         $filearray = array();
 
-                        /* get last 15 lines of any logs */
+                        /* get last 50 lines of all logs since Magento stack traces are typically 15 lines */
                         $lh = @fopen($this->_logpath . "/" . $entry, "r");
                         if ($lh) {
                             while (($buffer = fgets($lh, 8192)) !== false) {
-                                if (count($filearray) < 15) {
+                                if (count($filearray) < 50) {
                                     array_push($filearray, trim($buffer));
                                 } else {
                                     $junk = array_pop($filearray);
