@@ -8,6 +8,7 @@ or [Learn More about Amazon Payments] (https://payments.amazon.com/sp/magento)
 * Magento CE 1.6+ or EE 1.11+.
     * Magento 1.5 is supported with a patch see [here](https://github.com/amzn/amazon-payments-magento-plugin/wiki/Magento-1.5-Compatibility) for more information
 * SSL is installed on your site and active on Checkout and Login pages
+* Compilation is turned off in your Magento system
 
 
 ### Installation
