@@ -1,6 +1,6 @@
 ## Quick Start - Login and Pay with Amazon for Magento
 
-[View the Complete User Guide](https://github.com/paywithamazon/amazon-payments-magento-plugin/raw/gh-pages/resources/Pay%20with%20Amazon%20for%20Magento%20User%20Guide.pdf)
+[View the Complete User Guide](https://github.com/amzn/amazon-payments-magento-plugin/wiki)
 or [Learn More about Amazon Payments] (https://payments.amazon.com/sp/magento)
 
 
