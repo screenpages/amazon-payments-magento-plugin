@@ -25,8 +25,6 @@
 
         <reference name="checkout.cart">
             <block type="core/template" name="amazon_payments.script" template="amazon_payments/script.phtml" />
-            <block type="amazon_payments/button" name="AmazonPayButtonTop" template="amazon_payments/button.phtml"/>
-            <block type="amazon_payments/button" name="AmazonPayButtonMethod" template="amazon_payments/button.phtml"/>
 
             <!-- ifconfig only works with action -->
             <reference name="after_body_start">
@@ -35,19 +33,20 @@
                 </action>
             </reference>
 
-            <reference name="checkout.cart.top_methods">
-                <action method="append" ifconfig="payment/amazon_payments/enabled">
-                    <block>AmazonPayButtonTop</block>
-                </action>
-            </reference>
-
-            <reference name="checkout.cart.methods">
-                <action method="append" ifconfig="payment/amazon_payments/enabled">
-                    <block>AmazonPayButtonMethod</block>
-                </action>
-            </reference>
-
         </reference>
+
+	<!-- To Move Amazon Payments button around on the cart page, change the after="" attribute to before="" in the below block tags -->
+
+	<reference name="checkout.cart.top_methods">
+		<!-- replace 'after="-"' with 'before="checkout.cart.methods.onepage.top"' to move the Amazon Payments button in front of the Checkout button -->
+		<block type="amazon_payments/button" after="-" name="AmazonPayButtonTop" template="amazon_payments/button.phtml"/>
+	</reference>
+
+	<reference name="checkout.cart.methods">
+		<!-- replace 'after="-"' with 'before="checkout.cart.methods.onepage.bottom"' to move the Amazon Payments button in front of the Checkout button -->
+		<block type="amazon_payments/button" after="-" name="AmazonPayButtonMethod" template="amazon_payments/button.phtml"/>
+	</reference>
+
     </checkout_cart_index>
 
 
