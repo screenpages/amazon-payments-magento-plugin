@@ -1,6 +1,6 @@
 ## Quick Start - Login and Pay with Amazon for Magento
 
-[View the Complete User Guide](https://github.com/paywithamazon/amazon-payments-magento-plugin/raw/gh-pages/resources/Pay%20with%20Amazon%20for%20Magento%20User%20Guide.pdf)
+[View the Complete User Guide](https://github.com/amzn/amazon-payments-magento-plugin/wiki)
 or [Learn More about Amazon Payments] (https://payments.amazon.com/sp/magento)
 
 
@@ -8,6 +8,7 @@ or [Learn More about Amazon Payments] (https://payments.amazon.com/sp/magento)
 * Magento CE 1.6+ or EE 1.11+.
     * Magento 1.5 is supported with a patch see [here](https://github.com/amzn/amazon-payments-magento-plugin/wiki/Magento-1.5-Compatibility) for more information
 * SSL is installed on your site and active on Checkout and Login pages
+* Compilation is turned off in your Magento system
 
 
 ### Installation

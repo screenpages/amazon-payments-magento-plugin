@@ -58,25 +58,9 @@ class Amazon_Payments_Model_Type_Checkout extends Mage_Checkout_Model_Type_Onepa
 
         $address = $this->getQuote()->getShippingAddress();
 
-        /* @var $addressForm Mage_Customer_Model_Form */
-        /*
-        $addressForm    = Mage::getModel('customer/form');
-        $addressForm->setFormCode('customer_address_edit')
-            ->setEntityType('customer_address')
-            ->setIsAjaxRequest(Mage::app()->getRequest()->isAjax());
-
-        $addressForm->setEntity($address);
-        // emulate request object
-        $addressData    = $addressForm->extractData($addressForm->prepareRequest($data));
-
-        $addressForm->compactData($addressData);
-        // unset shipping address attributes which were not shown in form
-        foreach ($addressForm->getAttributes() as $attribute) {
-            if (!isset($data[$attribute->getAttributeCode()])) {
-                $address->setData($attribute->getAttributeCode(), NULL);
-            }
+        foreach ($data as $attribute => $value) {
+          $address->setData($attribute, $value);
         }
-        */
 
         $address->setCustomerAddressId(null);
         // Additional form data, not fetched by extractData (as it fetches only attributes)

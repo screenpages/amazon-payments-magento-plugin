@@ -163,6 +163,16 @@
                 <show_in_store>0</show_in_store>
             </payment_action>
 
+            <payment_action_none_note translate="label">
+                <frontend_type>note</frontend_type>
+                <comment><![CDATA[You have set orders to not have funds authorized, so you should set the New Order Status below to a custom status other than "Pending" or "Processing." Funds will need to be captured from a third-party system.]]></comment>
+                <sort_order>135</sort_order>
+                <show_in_default>1</show_in_default>
+                <show_in_website>1</show_in_website>
+                <show_in_store>0</show_in_store>
+                <depends><payment_action>new</payment_action></depends>
+            </payment_action_none_note>
+
             <order_status translate="label">
                 <label>New Order Status</label>
                 <frontend_type>select</frontend_type>

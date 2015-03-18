@@ -186,7 +186,7 @@ class Amazon_Payments_Model_Async extends Mage_Core_Model_Abstract
                 ;
 
             foreach ($orderCollection as $orderRow) {
-                $order = Mage::getModel('sales/order')->load($orderRow->getId());
+                $order = Mage::getModel('sales/order')->load($orderRow->getParentId());
                 $this->syncOrderStatus($order);
             }
         }
