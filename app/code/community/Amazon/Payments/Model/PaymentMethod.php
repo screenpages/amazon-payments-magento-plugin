@@ -304,7 +304,7 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
 
         $result = $this->_getApi()->capture(
             $authReferenceId,
-            $this->_getMagentoReferenceId($payment) . '-capture',
+            $authReferenceId,
             $amount,
             $order->getBaseCurrencyCode(),
             $this->_getSoftDescriptor()
@@ -316,6 +316,8 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
             // Error handling
             switch ($status->getState()) {
                 case Amazon_Payments_Model_Api::AUTH_STATUS_PENDING:
+                    Mage::getSingleton('adminhtml/session')->addError('The invoice you are trying to create is for an authorization that is more than 7 days old. A capture request has been made. Please try and create this invoice again in 1 hour, allowing time for the capture to process.');
+                    // cont'd...
                 case Amazon_Payments_Model_Api::AUTH_STATUS_DECLINED:
                 case Amazon_Payments_Model_Api::AUTH_STATUS_CLOSED:
                     $this->_setErrorCheck();
