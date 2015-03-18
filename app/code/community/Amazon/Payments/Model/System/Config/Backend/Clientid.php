@@ -17,13 +17,18 @@ class Amazon_Payments_Model_System_Config_Backend_Clientid extends Mage_Core_Mod
      */
     public function save()
     {
-        Mage::getConfig()->saveConfig($this->_path, $this->value);
+        Mage::getConfig()->saveConfig($this->_path, $this->getValue(), $this->getScope(), $this->getScopeId());
         return parent::save();
     }
 
     public function afterLoad()
     {
-        $this->value = Mage::getStoreConfig($this->_path);
+        if ($this->website) {
+          $this->value = Mage::app()->getWebsite($this->getWebsite())->getConfig($this->_path);
+        }
+        else {
+          $this->value = Mage::getStoreConfig($this->_path);
+        }
         $this->_afterLoad();
     }
 
