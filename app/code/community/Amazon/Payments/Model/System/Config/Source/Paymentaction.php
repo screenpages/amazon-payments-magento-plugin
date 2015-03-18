@@ -15,6 +15,7 @@ class Amazon_Payments_Model_System_Config_Source_Paymentaction
         return array(
             array('value'=>'authorize_capture', 'label'=>Mage::helper('adminhtml')->__('Authorize and Capture')),
             array('value'=>'authorize', 'label'=>Mage::helper('adminhtml')->__('Authorize Only')),
+            array('value'=>'new', 'label'=>Mage::helper('adminhtml')->__('None')),
         );
     }
 }
