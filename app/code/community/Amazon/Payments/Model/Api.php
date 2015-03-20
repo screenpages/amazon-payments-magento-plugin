@@ -38,7 +38,7 @@ class Amazon_Payments_Model_Api
                 'region'             => $this->getConfig()->getRegion(),
                 'environment'        => ($this->getConfig()->isSandbox()) ? 'sandbox' : 'live',
                 'applicationName'    => 'Amazon Payments Magento Extension',
-                'applicationVersion' => current(Mage::getConfig()->getNode('modules/Amazon_Payments/version')),
+                'applicationVersion' => (string) Mage::getConfig()->getNode('modules/Amazon_Payments/version'),
                 'serviceURL'         => '',
                 'widgetURL'          => '',
                 'caBundleFile'       => '',
