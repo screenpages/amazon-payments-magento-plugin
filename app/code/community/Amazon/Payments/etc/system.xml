@@ -110,7 +110,6 @@
                 <show_in_store>0</show_in_store>
             </client_secret>
 
-            <!--
             <region translate="label">
                 <label>API Region</label>
                 <frontend_type>select</frontend_type>
@@ -120,7 +119,6 @@
                 <show_in_website>1</show_in_website>
                 <show_in_store>1</show_in_store>
             </region>
-            -->
 
             <heading_config translate="label">
                 <label>Checkout Configuration</label>
