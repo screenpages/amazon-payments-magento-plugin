@@ -111,7 +111,7 @@
             </client_secret>
 
             <region translate="label">
-                <label>API Region</label>
+                <label>Region</label>
                 <frontend_type>select</frontend_type>
                 <source_model>amazon_payments/system_config_source_region</source_model>
                 <sort_order>35</sort_order>

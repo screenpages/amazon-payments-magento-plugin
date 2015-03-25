@@ -153,6 +153,7 @@
                 <show_pay_cart>1</show_pay_cart>
                 <order_status>processing</order_status>
                 <active>1</active>
+                <region>us</region>
                 <secure_cart>1</secure_cart>
                 <button_type>PwA</button_type>
                 <button_color>Gold</button_color>
