@@ -215,7 +215,6 @@ abstract class Amazon_Payments_Controller_Checkout extends Mage_Checkout_Control
                 $data['email'] = $email;
             }
 
-
             // Set billing address (if allowed by scope)
             if ($orderReferenceDetails->getBillingAddress()) {
                 $billing = $orderReferenceDetails->getBillingAddress()->getPhysicalAddress();
