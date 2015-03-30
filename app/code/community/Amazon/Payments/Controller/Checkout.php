@@ -198,6 +198,12 @@ abstract class Amazon_Payments_Controller_Checkout extends Mage_Checkout_Control
             $regionModel = Mage::getModel('directory/region')->loadByCode($address->getStateOrRegion(), $address->getCountryCode());
             $regionId    = $regionModel->getId();
 
+            // Load region ID by name
+            if (!$regionId) {
+                $regionModel = Mage::getModel('directory/region')->loadByName($address->getStateOrRegion(), $address->getCountryCode());
+                $regionId    = $regionModel->getId();
+            }
+
             $data = array(
                 'firstname'   => $firstName,
                 'lastname'    => $lastName,
