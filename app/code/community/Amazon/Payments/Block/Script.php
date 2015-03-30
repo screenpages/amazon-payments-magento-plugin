@@ -27,7 +27,7 @@ class Amazon_Payments_Block_Script extends Mage_Core_Block_Template
 
           case 'de':
               $staticRegion = 'eu';
-              $widgetRegion = 'uk';
+              $widgetRegion = 'de';
               $lpa = 'lpa/';
               break;
 
