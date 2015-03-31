@@ -14,9 +14,11 @@ class Amazon_Payments_Model_Async extends Mage_Core_Model_Abstract
     /**
      * Return Amazon API
      */
-    protected function _getApi()
+    protected function _getApi($storeId = null)
     {
-        return Mage::getSingleton('amazon_payments/api');
+        $_api = Mage::getSingleton('amazon_payments/api');
+        $_api->setStoreId($storeId);
+        return $_api;
     }
 
     /**
@@ -48,7 +50,7 @@ class Amazon_Payments_Model_Async extends Mage_Core_Model_Abstract
      */
     public function syncOrderStatus(Mage_Sales_Model_Order $order, $isManualSync = false)
     {
-        $_api = $this->_getApi();
+        $_api = $this->_getApi($order->getStoreId());
         $message = '';
 
         try {
@@ -113,7 +115,7 @@ class Amazon_Payments_Model_Async extends Mage_Core_Model_Abstract
                   // Open (Authorize Only)
                   case Amazon_Payments_Model_Api::AUTH_STATUS_OPEN:
                       $order->setState(Mage_Sales_Model_Order::STATE_NEW);
-                      $order->setStatus($_api->getConfig()->getNewOrderStatus());
+                      $order->setStatus($_api->getConfig()->getNewOrderStatus($order->getStoreId()));
                       break;
 
                   // Closed (Authorize and Capture)
@@ -122,7 +124,7 @@ class Amazon_Payments_Model_Async extends Mage_Core_Model_Abstract
                       // Payment captured; create invoice
                       if ($reasonCode == 'MaxCapturesProcessed') {
                           $order->setState(Mage_Sales_Model_Order::STATE_PROCESSING);
-                          $order->setStatus($_api->getConfig()->getNewOrderStatus());
+                          $order->setStatus($_api->getConfig()->getNewOrderStatus($order->getStoreId()));
 
                           if ($this->_createInvoice($order, $orderReferenceDetails->getIdList()->getmember())) {
                               $message .= ' ' . Mage::helper('payment')->__('Invoice created.');

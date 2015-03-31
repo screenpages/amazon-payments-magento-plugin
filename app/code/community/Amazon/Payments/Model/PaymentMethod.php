@@ -33,9 +33,11 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
     /**
      * Return Amazon API
      */
-    protected function _getApi()
+    protected function _getApi($storeId = null)
     {
-        return Mage::getSingleton('amazon_payments/api');
+        $_api = Mage::getSingleton('amazon_payments/api');
+        $_api->setStoreId($storeId);
+        return $_api;
     }
 
     /**
@@ -112,14 +114,14 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
         $sellerAuthorizationNote = null;
 
         // Sandbox simulation testing for Stand Alone Checkout
-        if ($payment->getAdditionalInformation('sandbox') && $this->_getApi()->getConfig()->isSandbox()) {
+        if ($payment->getAdditionalInformation('sandbox') && $this->_getApi($order->getStoreId())->getConfig()->isSandbox()) {
             $sellerAuthorizationNote = $payment->getAdditionalInformation('sandbox');
         }
 
         // For core and third-party checkouts, may test credit card decline by uncommenting:
         //$sellerAuthorizationNote = '{"SandboxSimulation": {"State":"Declined", "ReasonCode":"InvalidPaymentMethod", "PaymentMethodUpdateTimeInMins":5}}';
 
-        $result = $this->_getApi()->authorize(
+        $result = $this->_getApi($order->getStoreId())->authorize(
             $payment->getTransactionId(),
             $this->_getMagentoReferenceId($payment) . '-auth',
             $amount,
@@ -179,7 +181,7 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
             case Amazon_Payments_Model_Api::AUTH_STATUS_DECLINED:
                 // Cancel order reference
                 if ($status->getReasonCode() == 'TransactionTimedOut') {
-                    $this->_getApi()->cancelOrderReference($payment->getTransactionId());
+                    $this->_getApi($order->getStoreId())->cancelOrderReference($payment->getTransactionId());
                 }
 
                 $this->_setErrorCheck();
@@ -302,7 +304,7 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
 
         $order = $payment->getOrder();
 
-        $result = $this->_getApi()->capture(
+        $result = $this->_getApi($order->getStoreId())->capture(
             $authReferenceId,
             $authReferenceId,
             $amount,
@@ -356,7 +358,7 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
 
         $order = $payment->getOrder();
 
-        $result = $this->_getApi()->refund(
+        $result = $this->_getApi($order->getStoreId())->refund(
             $payment->getRefundTransactionId(),
             $this->_getMagentoReferenceId($payment) . substr(md5($this->_getMagentoReferenceId($payment) . microtime() ),-4) . '-refund',
             $amount,
@@ -395,6 +397,7 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
      */
     protected function _void(Varien_Object $payment)
     {
+        $order = $payment->getOrder();
         $orderTransaction = $payment->lookupTransaction(false, Mage_Sales_Model_Order_Payment_Transaction::TYPE_ORDER);
 
         if (!$orderTransaction) {
@@ -405,7 +408,7 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
         }
 
         if ($orderTransaction) {
-            $this->_getApi()->cancelOrderReference($orderTransactionId);
+            $this->_getApi($order->getStoreId())->cancelOrderReference($orderTransactionId);
         }
         return $this;
     }
