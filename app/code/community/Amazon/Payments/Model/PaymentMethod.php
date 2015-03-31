@@ -35,7 +35,7 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
      */
     protected function _getApi($storeId = null)
     {
-        $_api = Mage::getSingleton('amazon_payments/api');
+        $_api = Mage::getModel('amazon_payments/api');
         $_api->setStoreId($storeId);
         return $_api;
     }
