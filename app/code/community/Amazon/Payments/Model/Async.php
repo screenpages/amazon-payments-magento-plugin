@@ -65,7 +65,7 @@ class Amazon_Payments_Model_Async extends Mage_Core_Model_Abstract
 
                 // Last transaction ID is Amazon Authorize Reference ID
                 $lastAmazonReference = $order->getPayment()->getLastTransId();
-                $resultAuthorize = $this->_getApi()->getAuthorizationDetails($lastAmazonReference);
+                $resultAuthorize = $this->_getApi($order->getStoreId())->getAuthorizationDetails($lastAmazonReference);
                 $amazonAuthorizationState = $resultAuthorize->getAuthorizationStatus()->getState();
                 $reasonCode = $resultAuthorize->getAuthorizationStatus()->getReasonCode();
 
@@ -80,11 +80,11 @@ class Amazon_Payments_Model_Async extends Mage_Core_Model_Abstract
 
                     switch ($method->getConfigData('payment_action')) {
                         case $method::ACTION_AUTHORIZE:
-                            $method->authorize($payment, $amount, false);
+                            $resultAuthorize = $method->authorize($payment, $amount, false);
                             break;
 
                         case $method::ACTION_AUTHORIZE_CAPTURE:
-                            $method->authorize($payment, $amount, true);
+                            $resultAuthorize = $method->authorize($payment, $amount, true);
                             break;
                         default:
                             break;
@@ -126,7 +126,7 @@ class Amazon_Payments_Model_Async extends Mage_Core_Model_Abstract
                           $order->setState(Mage_Sales_Model_Order::STATE_PROCESSING);
                           $order->setStatus($_api->getConfig()->getNewOrderStatus($order->getStoreId()));
 
-                          if ($this->_createInvoice($order, $orderReferenceDetails->getIdList()->getmember())) {
+                          if ($this->_createInvoice($order, $resultAuthorize->getIdList()->getmember())) {
                               $message .= ' ' . Mage::helper('payment')->__('Invoice created.');
                           }
                       }
