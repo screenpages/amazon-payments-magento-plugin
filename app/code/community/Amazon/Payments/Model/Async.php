@@ -16,7 +16,7 @@ class Amazon_Payments_Model_Async extends Mage_Core_Model_Abstract
      */
     protected function _getApi($storeId = null)
     {
-        $_api = Mage::getSingleton('amazon_payments/api');
+        $_api = Mage::getModel('amazon_payments/api');
         $_api->setStoreId($storeId);
         return $_api;
     }
