@@ -53,4 +53,18 @@ class Amazon_Login_Block_Script extends Mage_Core_Block_Template
          return $this->helper('amazon_login')->getLoginAuthUrl();
     }
 
+    /**
+     * Get region
+     */
+    public function getRegion()
+    {
+        switch ($this->helper('amazon_login')->getRegion()) {
+            case 'uk':
+            case 'de':
+                return 'EU';
+            default:
+                return 'NA'; // North America
+        }
+    }
+
 }

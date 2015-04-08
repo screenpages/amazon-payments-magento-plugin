@@ -29,7 +29,7 @@ class Amazon_Login_Helper_Data extends Mage_Core_Helper_Abstract
     }
 
     /**
-     * Retreive additional login access scope
+     * Retrieve additional login access scope
      */
     public function getAdditionalScope()
     {
@@ -37,6 +37,14 @@ class Amazon_Login_Helper_Data extends Mage_Core_Helper_Abstract
         return ($scope) ? ' ' . $scope : '';
     }
 
+    /**
+     * Return API region
+     */
+    public function getRegion()
+    {
+        $region = Mage::getStoreConfig('amazon_login/settings/region');
+        return ($region) ? $region : 'us';
+    }
     /**
      * Return login authorize URL
      *
