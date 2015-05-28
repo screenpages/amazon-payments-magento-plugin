@@ -313,5 +313,39 @@
         </reference>
     </opc_index_index>
 
+    <!--
+    OneStepCheckout.com checkout
+    -->
+    <onestepcheckout_index_index>
+
+        <reference name="head">
+            <block type="core/template" name="amazon_payments.script" template="amazon_payments/script.phtml" />
+        </reference>
+
+        <reference name="checkout.onepage">
+            <block type="amazon_payments/button" name="amazonpaymentsbutton" template="amazon_payments/onepage/button.phtml"/>
+        </reference>
+
+        <reference name="checkout.onepage.login">
+            <action method="setTemplate" ifconfig="payment/amazon_payments/enabled">
+                <template helper="amazon_payments/data/switchOnepageLoginTemplateIf">
+                    <template_amazon>amazon_payments/onepage/login.phtml</template_amazon>
+                    <template_default>checkout/onepage/login.phtml</template_default>
+                 </template>
+             </action>
+
+            <block type="core/text_list" name="col1_before" />
+            <block type="core/text_list" name="col2_before" />
+
+            <reference name="col1_before">
+                <block type="amazon_payments/button" name="AmazonPayButtonBefore" template="amazon_payments/onepage/button.phtml"/>
+            </reference>
+
+            <reference name="col2_before">
+                <block type="amazon_payments/button" name="AmazonPayButtonAdditional" template="amazon_payments/onepage/button.phtml"/>
+            </reference>
+        </reference>
+
+    </onestepcheckout_index_index>
 
 </layout>
