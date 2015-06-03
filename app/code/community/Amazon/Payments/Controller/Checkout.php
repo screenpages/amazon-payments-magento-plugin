@@ -219,13 +219,13 @@ abstract class Amazon_Payments_Controller_Checkout extends Mage_Checkout_Control
             // Set billing address (if allowed by scope)
             if ($orderReferenceDetails->getBillingAddress()) {
                 $billing = $orderReferenceDetails->getBillingAddress()->getPhysicalAddress();
-                $data['use_for_shipping'] = false;
+                //$data['use_for_shipping'] = false;
 
                 $name      = $billing->getName();
                 $firstName = substr($name, 0, strrpos($name, ' '));
                 $lastName  = substr($name, strlen($firstName) + 1);
 
-                $regionModel = Mage::getModel('directory/region')->loadByCode($address->getStateOrRegion(), $address->getCountryCode());
+                $regionModel = Mage::getModel('directory/region')->loadByCode($billing->getStateOrRegion(), $billing->getCountryCode());
                 $regionId    = $regionModel->getId();
 
                 $dataBilling = array(
