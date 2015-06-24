@@ -89,6 +89,8 @@ var AmazonPaymentsMageCheckout = Class.create();
 AmazonPaymentsMageCheckout.prototype = {
     initialize: function(opts){
         this.opts = opts;
+        this.hasPayment = false;
+        this.hasReviewLoader = false;
         //this.setShippingMethod();
     },
 
@@ -218,7 +220,7 @@ AmazonPaymentsMageCheckout.prototype = {
         this.restrictWidgets(false);
     },
 
-    restrictPlaceOrder: function(isDisabled) {
+    restrictPlaceOrder: function(isDisabled, hideLoader) {
         var btn = $$(".button.btn-checkout");
         var review = $("checkout-review-table-wrapper");
         var loader = $("amz-review-loader");
@@ -226,13 +228,17 @@ AmazonPaymentsMageCheckout.prototype = {
         if (isDisabled) {
             if (review) {
                 review.setOpacity(0.5);
-                loader.show();
+                if (!hideLoader) {
+                    loader.show();
+                    this.hasReviewLoader = true;
+                }
             }
             btn.each(function(el, i) { el.disable(); });
         } else {
             if (review) {
                 review.setOpacity(1);
                 loader.hide();
+                this.hasReviewLoader = false;
             }
             btn.each(function(el, i) { el.enable(); });
         }
@@ -290,7 +296,16 @@ var lastPrice;
 var ShippingMethod = Class.create();
 var Review = Class.create();
 
-
+// Poll if payment method is set ("Place Order" is loaded via ajax and can't depend on widget events)
+setInterval(function() {
+    if (!amazonPaymentsMageCheckout.hasReviewLoader) {
+        if (amazonPaymentsMageCheckout.hasPayment) {
+            amazonPaymentsMageCheckout.restrictPlaceOrder(false);
+        } else {
+            amazonPaymentsMageCheckout.restrictPlaceOrder(true, true);
+        }
+    }
+}, 100);
 </script>
 
 
@@ -304,6 +319,7 @@ new OffAmazonPayments.Widgets.AddressBook({
   },
   onAddressSelect: function(orderReference) {
       amazonPaymentsMageCheckout.setShippingMethod();
+      amazonPaymentsMageCheckout.hasPayment = false;
   },
   design: {
      designMode: 'responsive'
@@ -328,10 +344,10 @@ function loadAmazonWallet() {
       },
 
       onPaymentSelect: function(orderReference) {
-
+          amazonPaymentsMageCheckout.hasPayment = true;
       },
       onError: function(error) {
-        console.log(error.getErrorMessage());
+          console.log(error.getErrorMessage());
       }
     }).bind("amazon-widget-wallet");
 }

@@ -77,6 +77,12 @@
 
 }
 
+#checkout-amazon-payments .button.btn-checkout[disabled] {
+  color:#999;
+  cursor: default;
+  opacity:0.5;
+}
+
 #checkout-amazon-payments button.btn-checkout span {
   color:#4f3310;
   background:none;
