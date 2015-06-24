@@ -26,6 +26,7 @@
 
                 <div id="amazon-widget-address-wrapper" class="amazon-widget-wrapper">
                     <h2><?php echo $this->__('Shipping Address'); ?></h2>
+                    <div class="amz-widget-loader" style="display:none;"></div>
                     <div id="amazon-widget-address"></div>
                 </div>
 
@@ -41,6 +42,7 @@
 
                 <div id="amazon-widget-wrapper" class="amazon-widget-wrapper">
                     <h2><?php echo $this->__('Payment'); ?></h2>
+                    <div class="amz-widget-loader" style="display:none;"></div>
                     <div id="amazon-widget-wallet"></div>
                 </div>
 
@@ -93,7 +95,7 @@ AmazonPaymentsMageCheckout.prototype = {
     // Dynamically load shipping method HTML
     setShippingMethod: function() {
         if (this.opts.shippingMethod) {
-            this.toggleOrderSubmit(true);
+            this.restrictPlaceOrder(true);
 
             var request = new Ajax.Request(this.opts.shippingMethod.url, {
                 method: 'post',
@@ -123,7 +125,7 @@ AmazonPaymentsMageCheckout.prototype = {
             }
         }
 
-        this.toggleOrderSubmit(true);
+        this.restrictPlaceOrder(true);
 
         var request = new Ajax.Request(this.opts.review.url, {
             method: 'post',
@@ -148,7 +150,7 @@ AmazonPaymentsMageCheckout.prototype = {
         $$(".button.btn-checkout").invoke('writeAttribute','onclick', 'amazonPaymentsMageCheckout.saveOrder()');
         this.agreementsForm = $('checkout-agreements')
         $("amz-review-loader").hide();
-        this.toggleOrderSubmit(false);
+        this.restrictPlaceOrder(false);
     },
 
     saveOrder: function() {
@@ -166,7 +168,8 @@ AmazonPaymentsMageCheckout.prototype = {
           params.sandbox = sandbox.getValue();
       }
 
-      this.toggleOrderSubmit(true);
+      this.restrictPlaceOrder(true);
+      this.restrictWidgets(true);
 
       var request = new Ajax.Request(this.opts.save.url, {
           method: 'post',
@@ -211,10 +214,11 @@ AmazonPaymentsMageCheckout.prototype = {
 
         }
 
-        this.toggleOrderSubmit(false);
+        this.restrictPlaceOrder(false);
+        this.restrictWidgets(false);
     },
 
-    toggleOrderSubmit: function(isDisabled) {
+    restrictPlaceOrder: function(isDisabled) {
         var btn = $$(".button.btn-checkout");
         var review = $("checkout-review-table-wrapper");
         var loader = $("amz-review-loader");
@@ -231,6 +235,29 @@ AmazonPaymentsMageCheckout.prototype = {
                 loader.hide();
             }
             btn.each(function(el, i) { el.enable(); });
+        }
+    },
+
+    restrictWidgets: function(isDisabled) {
+        var widget = $$(".amazon-widget-wrapper .widget-container");
+        var loader = $$(".amz-widget-loader");
+
+        if (isDisabled) {
+            widget.each(function(el, i) {
+                el.setOpacity(0.5);
+                el.setStyle({"pointer-events" : "none"});
+            });
+            loader.each(function(el, i) {
+                el.show();
+            });
+        } else {
+            widget.each(function(el, i) {
+                el.setOpacity(1);
+                el.setStyle({"pointer-events" : "auto"});
+            });
+            loader.each(function(el, i) {
+                el.hide();
+            });
         }
     }
 };
