@@ -114,6 +114,13 @@
   z-index:13;
 }
 
+#shipping-method-disable {
+  position:absolute;
+  height:100%;
+  width:100%;
+  z-index:12;
+}
+
 /* Forgot an Item */
 #review-buttons-container .f-left {
   display:none;
