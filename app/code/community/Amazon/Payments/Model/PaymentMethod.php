@@ -46,7 +46,7 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
     protected function _getMagentoReferenceId(Varien_Object $payment)
     {
         $order = $payment->getOrder();
-        return $order->getIncrementId() . '-' . strtotime($payment->getCreatedAt());
+        return $order->getIncrementId() . '-' . substr(md5($order->getIncrementId() . microtime() ), -6);
     }
 
     /**
@@ -175,6 +175,7 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
                 }
 
                 $payment->addTransaction($transactionType, null, false, $message);
+
 
                 break;
 
@@ -360,7 +361,7 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
 
         $result = $this->_getApi($order->getStoreId())->refund(
             $payment->getRefundTransactionId(),
-            $this->_getMagentoReferenceId($payment) . substr(md5($this->_getMagentoReferenceId($payment) . microtime() ),-4) . '-refund',
+            $this->_getMagentoReferenceId($payment) . '-refund',
             $amount,
             $order->getBaseCurrencyCode(),
             null,

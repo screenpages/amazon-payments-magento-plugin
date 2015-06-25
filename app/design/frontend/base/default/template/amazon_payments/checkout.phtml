@@ -214,6 +214,10 @@ AmazonPaymentsMageCheckout.prototype = {
                 setTimeout(loadAmazonWallet, 2000); // Refresh Wallet
             }
 
+            if (msg.indexOf("Declined") != -1) {
+                this.restrictShipping();
+            }
+
         }
 
         this.restrictPlaceOrder(false);
@@ -265,6 +269,13 @@ AmazonPaymentsMageCheckout.prototype = {
                 el.hide();
             });
         }
+    },
+
+    restrictShipping: function() {
+        $$("#shipping-method-wrapper, #amazon-widget-address-wrapper").each(function(el, i) {
+            el.setOpacity(0.5);
+            el.setStyle({"pointer-events" : "none"});
+        });
     }
 };
 
