@@ -72,11 +72,12 @@ class Amazon_Payments_Model_Async extends Mage_Core_Model_Abstract
                 // Re-authorize if holded, an Open order reference, and manual sync
                 if ($order->getState() == Mage_Sales_Model_Order::STATE_HOLDED && $orderReferenceDetails->getOrderReferenceStatus()->getState() == 'Open' && $isManualSync) {
                     $payment = $order->getPayment();
-                    $amount = $payment->getAmountOrdered();
-                    $method = $payment->getMethodInstance();
+                    $amount  = $payment->getAmountOrdered();
+                    $method  = $payment->getMethodInstance();
 
                     // Re-authorize
                     $payment->setTransactionId($amazonOrderReference);
+                    $payment->setAdditionalInformation('sandbox', null); // Remove decline and other test simulations
 
                     switch ($method->getConfigData('payment_action')) {
                         case $method::ACTION_AUTHORIZE:
@@ -91,6 +92,8 @@ class Amazon_Payments_Model_Async extends Mage_Core_Model_Abstract
                     }
 
                     // Resync
+                    $order->setState(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT, true);
+                    $order->save();
                     $this->syncOrderStatus($order);
                     return;
                 }
