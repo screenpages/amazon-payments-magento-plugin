@@ -74,6 +74,48 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
     }
 
     /**
+     * Update billing address from authorization request
+     */
+    protected function _updateBilling(Varien_Object $payment, $amazonAuthorizationId)
+    {
+        try {
+            $mageBilling = $payment->getOrder()->getBillingAddress();
+
+            $authorizationDetails = $this->_getApi()->getAuthorizationDetails($amazonAuthorizationId);
+            $billing = $authorizationDetails->getAuthorizationBillingAddress();
+
+            $name      = $billing->getName();
+            $firstName = substr($name, 0, strrpos($name, ' '));
+            $lastName  = substr($name, strlen($firstName) + 1);
+
+            $regionModel = Mage::getModel('directory/region')->loadByCode($billing->getStateOrRegion(), $billing->getCountryCode());
+            $regionId    = $regionModel->getId();
+
+            $dataBilling = array(
+                'firstname'   => $firstName,
+                'lastname'    => $lastName,
+                'street'      => array($billing->getAddressLine1(), $billing->getAddressLine2()),
+                'city'        => $billing->getCity(),
+                'region'      => $billing->getStateOrRegion(),
+                'region_id'   => $regionId,
+                'postcode'    => $billing->getPostalCode(),
+                'country_id'  => $billing->getCountryCode(),
+                'telephone'   => ($billing->getPhone()) ? $billing->getPhone() : '-',
+            );
+
+            foreach ($dataBilling as $key => $value) {
+                $mageBilling->setData($key, $value);
+            }
+
+            $mageBilling->implodeStreetAddress()->save();
+
+        } catch (Exception $e) {
+            Mage::logException($e);
+        }
+    }
+
+
+    /**
      * Instantiate state and set it to state object
      *
      * @param string $paymentAction
@@ -176,6 +218,10 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
 
                 $payment->addTransaction($transactionType, null, false, $message);
 
+                // Set billing address for VAT countries
+                if (in_array($this->getConfigData('region'), array('uk', 'de'))) {
+                    $this->_updateBilling($payment, $result->getAmazonAuthorizationId());
+                }
 
                 break;
 
