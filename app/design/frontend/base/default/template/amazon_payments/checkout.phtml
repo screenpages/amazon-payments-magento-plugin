@@ -32,6 +32,7 @@
 
                 <?php if ($this->getChild('shipping_method')->isShow()) : ?>
                     <div id="shipping-method-wrapper">
+                        <div id="shipping-method-disable" style="display:none;"></div>
                         <?php echo $this->getChildHtml('shipping_method') ?>
                     </div>
                 <?php endif; ?>
@@ -249,8 +250,9 @@ AmazonPaymentsMageCheckout.prototype = {
     },
 
     restrictWidgets: function(isDisabled) {
-        var widget = $$(".amazon-widget-wrapper .widget-container");
-        var loader = $$(".amz-widget-loader");
+        var widget    = $$(".amazon-widget-wrapper .widget-container, #shipping-method-wrapper");
+        var loader    = $$(".amz-widget-loader");
+        var smdisable = $("shipping-method-disable");
 
         if (isDisabled) {
             widget.each(function(el, i) {
@@ -260,6 +262,7 @@ AmazonPaymentsMageCheckout.prototype = {
             loader.each(function(el, i) {
                 el.show();
             });
+            smdisable.show();
         } else {
             widget.each(function(el, i) {
                 el.setOpacity(1);
@@ -268,6 +271,7 @@ AmazonPaymentsMageCheckout.prototype = {
             loader.each(function(el, i) {
                 el.hide();
             });
+            smdisable.hide();
         }
     },
 
@@ -276,6 +280,11 @@ AmazonPaymentsMageCheckout.prototype = {
             el.setOpacity(0.5);
             el.setStyle({"pointer-events" : "none"});
         });
+        $$("#amazon-widget-address-wrapper .amz-widget-loader").each(function(el, i) {
+            el.show();
+            el.setStyle({"background" : "none"});
+        });
+        $("shipping-method-disable").show();
     }
 };
 

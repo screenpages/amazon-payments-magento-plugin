@@ -107,13 +107,18 @@
 
 .amz-widget-loader {
   position:absolute;
-  left:40%;
-  top:30%;
-  width:60px;
-  height:60px;
+  height:100%;
+  width:100%;
   padding:5px;
-  background:#fff url(https://images-na.ssl-images-amazon.com/images/G/01/ep/loading-large.gif) center center no-repeat;
+  background:url(https://images-na.ssl-images-amazon.com/images/G/01/ep/loading-large.gif) center center no-repeat;
   z-index:13;
+}
+
+#shipping-method-disable {
+  position:absolute;
+  height:100%;
+  width:100%;
+  z-index:12;
 }
 
 /* Forgot an Item */
