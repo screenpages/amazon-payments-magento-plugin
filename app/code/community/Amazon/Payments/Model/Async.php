@@ -74,8 +74,6 @@ class Amazon_Payments_Model_Async extends Mage_Core_Model_Abstract
             ->setSenderName(Mage::getStoreConfig('trans_email/ident_general/name', $order->getStoreId()))
             ->send($order->getCustomerEmail(), $order->getCustomerName(), $templateParams);
 
-        $order->addStatusHistoryComment("Email sent informing user to update their payment method.");
-        $order->save();
     }
 
     /**
@@ -112,6 +110,8 @@ class Amazon_Payments_Model_Async extends Mage_Core_Model_Abstract
                     $payment->setTransactionId($amazonOrderReference);
                     $payment->setAdditionalInformation('sandbox', null); // Remove decline and other test simulations
 
+                    $method->setForceSync(true);
+
                     switch ($method->getConfigData('payment_action')) {
                         case $method::ACTION_AUTHORIZE:
                             $resultAuthorize = $method->authorize($payment, $amount, false);
@@ -142,11 +142,11 @@ class Amazon_Payments_Model_Async extends Mage_Core_Model_Abstract
                   // Declined
                   case Amazon_Payments_Model_Api::AUTH_STATUS_DECLINED:
                       if ($order->getState() != Mage_Sales_Model_Order::STATE_HOLDED) {
-                          $this->_sendPaymentDeclineEmail($order);
                           $order->setState(Mage_Sales_Model_Order::STATE_HOLDED, true);
                       }
 
-                      $message .= " Order placed on hold due to $reasonCode. Please direct customer to Amazon Payments site to update their payment method.";
+                      $this->_sendPaymentDeclineEmail($order);
+                      $message .= " Order placed on hold due to $reasonCode. Email sent to customer with link to order details page and instructions to update their payment method.";
                       break;
 
                   // Open (Authorize Only)
