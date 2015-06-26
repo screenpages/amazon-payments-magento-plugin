@@ -12,6 +12,10 @@
 <?php
     $_helper = Mage::helper('amazon_payments/data');
 
+    if (!$_helper->isEnabled()) {
+        return;
+    }
+
     $sandbox = ($_helper->isAmazonSandbox()) ? 'sandbox/' : '';
     $jsAmazon = 'https://static-na.payments-amazon.com/OffAmazonPayments/us/' . $sandbox . 'js/Widgets.js?sellerId=' . $_helper->getSellerId();
 
