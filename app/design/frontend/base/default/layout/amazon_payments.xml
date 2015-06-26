@@ -353,7 +353,7 @@
     -->
     <sales_order_view translate="label">
         <reference name="head">
-            <block type="core/template" name="amazon_payments.script" template="amazon_payments/script.phtml" />
+            <block type="amazon_payments/script" name="amazon_payments.script" template="amazon_payments/script.phtml" />
         </reference>
         <reference name="my.account.wrapper">
             <block type="amazon_payments/sales_view" template="amazon_payments/sales/order/amazon_wallet.phtml" before="info">
