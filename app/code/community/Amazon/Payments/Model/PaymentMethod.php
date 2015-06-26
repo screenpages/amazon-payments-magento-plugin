@@ -84,30 +84,32 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
             $authorizationDetails = $this->_getApi()->getAuthorizationDetails($amazonAuthorizationId);
             $billing = $authorizationDetails->getAuthorizationBillingAddress();
 
-            $name      = $billing->getName();
-            $firstName = substr($name, 0, strrpos($name, ' '));
-            $lastName  = substr($name, strlen($firstName) + 1);
+            if ($billing) {
+                $name      = $billing->getName();
+                $firstName = substr($name, 0, strrpos($name, ' '));
+                $lastName  = substr($name, strlen($firstName) + 1);
 
-            $regionModel = Mage::getModel('directory/region')->loadByCode($billing->getStateOrRegion(), $billing->getCountryCode());
-            $regionId    = $regionModel->getId();
+                $regionModel = Mage::getModel('directory/region')->loadByCode($billing->getStateOrRegion(), $billing->getCountryCode());
+                $regionId    = $regionModel->getId();
 
-            $dataBilling = array(
-                'firstname'   => $firstName,
-                'lastname'    => $lastName,
-                'street'      => array($billing->getAddressLine1(), $billing->getAddressLine2()),
-                'city'        => $billing->getCity(),
-                'region'      => $billing->getStateOrRegion(),
-                'region_id'   => $regionId,
-                'postcode'    => $billing->getPostalCode(),
-                'country_id'  => $billing->getCountryCode(),
-                'telephone'   => ($billing->getPhone()) ? $billing->getPhone() : '-',
-            );
+                $dataBilling = array(
+                    'firstname'   => $firstName,
+                    'lastname'    => $lastName,
+                    'street'      => array($billing->getAddressLine1(), $billing->getAddressLine2(), $billing->getAddressLine3()),
+                    'city'        => $billing->getCity(),
+                    'region'      => $billing->getStateOrRegion(),
+                    'region_id'   => $regionId,
+                    'postcode'    => $billing->getPostalCode(),
+                    'country_id'  => $billing->getCountryCode(),
+                    'telephone'   => ($billing->getPhone()) ? $billing->getPhone() : '-',
+                );
 
-            foreach ($dataBilling as $key => $value) {
-                $mageBilling->setData($key, $value);
+                foreach ($dataBilling as $key => $value) {
+                    $mageBilling->setData($key, $value);
+                }
+
+                $mageBilling->implodeStreetAddress()->save();
             }
-
-            $mageBilling->implodeStreetAddress()->save();
 
         } catch (Exception $e) {
             Mage::logException($e);
@@ -218,8 +220,8 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
 
                 $payment->addTransaction($transactionType, null, false, $message);
 
-                // Set billing address for VAT countries
-                if (in_array($this->getConfigData('region'), array('uk', 'de'))) {
+                // Set billing address for non-US countries
+                if ($this->getConfigData('region') && $this->getConfigData('region') != 'us') {
                     $this->_updateBilling($payment, $result->getAmazonAuthorizationId());
                 }
 
