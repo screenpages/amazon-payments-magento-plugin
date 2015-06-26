@@ -34,14 +34,21 @@
                 <class>Amazon_Payments_Helper</class>
             </amazon_payments>
         </helpers>
-
+        <template>
+            <email>
+               <amazon_payments_async_decline>
+                   <label>Amazon Payments Async Decline</label>
+                   <file>amazon_payments_async_decline.html</file>
+                   <type>html</type>
+               </amazon_payments_async_decline>
+            </email>
+        </template>
         <rewrite>
             <amazon_payments_checkout>
                 <from><![CDATA[#^/checkout/amazon_payments#]]></from>
                 <to>/amazon_payments/checkout</to>
             </amazon_payments_checkout>
         </rewrite>
-
         <resources>
             <payments_setup>
                 <setup>
@@ -53,7 +60,6 @@
                 </connection>
             </payments_setup>
         </resources>
-
     </global>
     <admin>
         <routers>
@@ -85,7 +91,6 @@
             </adminhtml_widget_container_html_before>
         </events>
     </adminhtml>
-
     <frontend>
         <secure_url>
             <cart_updatepost>/checkout/cart/updatePost</cart_updatepost>
@@ -143,7 +148,6 @@
             </custom_quote_process>
         </events>
     </frontend>
-
     <default>
         <payment>
             <amazon_payments>
@@ -161,7 +165,6 @@
             </amazon_payments>
         </payment>
     </default>
-
     <crontab>
         <jobs>
             <amazon_payments_async>
@@ -170,5 +173,4 @@
             </amazon_payments_async>
         </jobs>
     </crontab>
-
 </config>

@@ -46,6 +46,39 @@ class Amazon_Payments_Model_Async extends Mage_Core_Model_Abstract
     }
 
     /**
+     * Send Payment Decline email
+     */
+    protected function _sendPaymentDeclineEmail(Mage_Sales_Model_Order $order)
+    {
+        $emailTemplate = Mage::getModel('core/email_template')->loadDefault('amazon_payments_async_decline');
+
+        $orderUrl = Mage::getUrl('sales/order/view', array(
+            'order_id'       => $order->getId(),
+            '_store'         => $order->getStoreId(),
+            '_forced_secure' => true,
+        ));
+
+        $templateParams = array(
+            'order_url' => $orderUrl,
+            'store'     => Mage::app()->getStore($order->getStoreId()),
+            'customer'  => Mage::getModel('customer/customer')->load($order->getCustomerId()),
+        );
+
+        $processedTemplate = $emailTemplate->getProcessedTemplate($templateParams);
+
+        // Test template:
+        //var_dump($emailTemplate->debug()); echo $processedTemplate;
+
+        $emailTemplate
+            ->setSenderEmail(Mage::getStoreConfig('trans_email/ident_general/email', $order->getStoreId()))
+            ->setSenderName(Mage::getStoreConfig('trans_email/ident_general/name', $order->getStoreId()))
+            ->send($order->getCustomerEmail(), $order->getCustomerName(), $templateParams);
+
+        $order->addStatusHistoryComment("Email sent informing user to update their payment method.");
+        $order->save();
+    }
+
+    /**
      * Poll Amazon API to receive order status and update Magento order.
      */
     public function syncOrderStatus(Mage_Sales_Model_Order $order, $isManualSync = false)
@@ -109,6 +142,7 @@ class Amazon_Payments_Model_Async extends Mage_Core_Model_Abstract
                   // Declined
                   case Amazon_Payments_Model_Api::AUTH_STATUS_DECLINED:
                       if ($order->getState() != Mage_Sales_Model_Order::STATE_HOLDED) {
+                          $this->_sendPaymentDeclineEmail($order);
                           $order->setState(Mage_Sales_Model_Order::STATE_HOLDED, true);
                       }
 
