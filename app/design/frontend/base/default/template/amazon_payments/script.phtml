@@ -9,6 +9,12 @@
  */
 ?>
 
+<?php
+    if (!Mage::helper('amazon_payments/data')->isEnabled()) {
+        return;
+    }
+?>
+
 <script type='text/javascript'>
     window.onAmazonLoginReady = function() {
         amazon.Login.setClientId('<?php echo $this->getClientId(); ?>');

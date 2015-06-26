@@ -167,6 +167,14 @@ class Amazon_Payments_Helper_Data extends Mage_Core_Helper_Abstract
     }
 
     /**
+     * Is Payment Method enabled?
+     */
+    public function isEnabled()
+    {
+        return $this->getConfig()->isEnabled();
+    }
+
+    /**
      * Show modal?
      */
     public function showModal()

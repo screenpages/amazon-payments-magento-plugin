@@ -348,4 +348,18 @@
 
     </onestepcheckout_index_index>
 
+    <!--
+    Add Wallet Widget for Async Declines
+    -->
+    <sales_order_view translate="label">
+        <reference name="head">
+            <block type="core/template" name="amazon_payments.script" template="amazon_payments/script.phtml" />
+        </reference>
+        <reference name="my.account.wrapper">
+            <block type="amazon_payments/sales_view" template="amazon_payments/sales/order/amazon_wallet.phtml" before="info">
+                <block type="amazon_payments/button" name="amazonbutton" template="amazon_payments/button.phtml"/>
+            </block>
+        </reference>
+    </sales_order_view>
+
 </layout>

@@ -46,6 +46,37 @@ class Amazon_Payments_Model_Async extends Mage_Core_Model_Abstract
     }
 
     /**
+     * Send Payment Decline email
+     */
+    protected function _sendPaymentDeclineEmail(Mage_Sales_Model_Order $order)
+    {
+        $emailTemplate = Mage::getModel('core/email_template')->loadDefault('amazon_payments_async_decline');
+
+        $orderUrl = Mage::getUrl('sales/order/view', array(
+            'order_id'       => $order->getId(),
+            '_store'         => $order->getStoreId(),
+            '_forced_secure' => true,
+        ));
+
+        $templateParams = array(
+            'order_url' => $orderUrl,
+            'store'     => Mage::app()->getStore($order->getStoreId()),
+            'customer'  => Mage::getModel('customer/customer')->load($order->getCustomerId()),
+        );
+
+        $processedTemplate = $emailTemplate->getProcessedTemplate($templateParams);
+
+        // Test template:
+        //var_dump($emailTemplate->debug()); echo $processedTemplate;
+
+        $emailTemplate
+            ->setSenderEmail(Mage::getStoreConfig('trans_email/ident_general/email', $order->getStoreId()))
+            ->setSenderName(Mage::getStoreConfig('trans_email/ident_general/name', $order->getStoreId()))
+            ->send($order->getCustomerEmail(), $order->getCustomerName(), $templateParams);
+
+    }
+
+    /**
      * Poll Amazon API to receive order status and update Magento order.
      */
     public function syncOrderStatus(Mage_Sales_Model_Order $order, $isManualSync = false)
@@ -78,6 +109,8 @@ class Amazon_Payments_Model_Async extends Mage_Core_Model_Abstract
                     // Re-authorize
                     $payment->setTransactionId($amazonOrderReference);
                     $payment->setAdditionalInformation('sandbox', null); // Remove decline and other test simulations
+
+                    $method->setForceSync(true);
 
                     switch ($method->getConfigData('payment_action')) {
                         case $method::ACTION_AUTHORIZE:
@@ -112,7 +145,8 @@ class Amazon_Payments_Model_Async extends Mage_Core_Model_Abstract
                           $order->setState(Mage_Sales_Model_Order::STATE_HOLDED, true);
                       }
 
-                      $message .= " Order placed on hold due to $reasonCode. Please direct customer to Amazon Payments site to update their payment method.";
+                      $this->_sendPaymentDeclineEmail($order);
+                      $message .= " Order placed on hold due to $reasonCode. Email sent to customer with link to order details page and instructions to update their payment method.";
                       break;
 
                   // Open (Authorize Only)

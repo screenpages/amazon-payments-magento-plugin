@@ -30,6 +30,8 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
     protected $_canFetchTransactionInfo = true;
     protected $_canReviewPayment        = false;
 
+    protected $isForceSync = false; // Force synchronous transaction
+
     /**
      * Return Amazon API
      */
@@ -172,7 +174,8 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
             $order->getBaseCurrencyCode(),
             $captureNow,
             ($captureNow) ? $this->_getSoftDescriptor() : null,
-            $sellerAuthorizationNote
+            $sellerAuthorizationNote,
+            $this->isForceSync
         );
 
         $status = $result->getAuthorizationStatus();
@@ -509,5 +512,12 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
         return (Mage::getSingleton('amazon_payments/config')->isEnabled() && Mage::helper('amazon_payments')->isEnableProductPayments() && ((Mage::helper('amazon_payments')->isCheckoutAmazonSession() && $this->getConfigData('checkout_page') == 'onepage') || $this->getConfigData('use_in_checkout')));
     }
 
+    /**
+     * Force sync instead of async
+     */
+    public function setForceSync($isForceSync)
+    {
+        $this->isForceSync = $isForceSync;
+    }
 
 }

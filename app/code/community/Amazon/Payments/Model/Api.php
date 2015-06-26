@@ -141,7 +141,7 @@ class Amazon_Payments_Model_Api extends Varien_Object
      * @return OffAmazonPaymentsService_Model_AuthorizeResponse
      * @link http://docs.developer.amazonservices.com/en_US/off_amazon_payments/OffAmazonPayments_Authorize.html
      */
-    public function authorize($orderReferenceId, $authorizationReferenceId, $authorizationAmount, $authorizationCurrency, $captureNow = false, $softDescriptor = null, $sellerAuthorizationNote = null)
+    public function authorize($orderReferenceId, $authorizationReferenceId, $authorizationAmount, $authorizationCurrency, $captureNow = false, $softDescriptor = null, $sellerAuthorizationNote = null, $forceSync = false)
     {
         $request = array(
             'AmazonOrderReferenceId' => $orderReferenceId,
@@ -153,7 +153,7 @@ class Amazon_Payments_Model_Api extends Varien_Object
             'CaptureNow' => $captureNow,
         );
 
-        if (!$this->getConfig()->isAsync($this->getStoreId())) {
+        if (!$this->getConfig()->isAsync($this->getStoreId()) || $forceSync) {
             $request['TransactionTimeout'] = 0; // Synchronous Mode
         }
 
