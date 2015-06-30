@@ -38,6 +38,8 @@ class Amazon_Payments_Model_Config
 
     const CONFIG_XML_PATH_LOGIN_ENABLED  = 'amazon_login/settings/enabled';
     const CONFIG_XML_PATH_LOGIN_REGION   = 'amazon_login/settings/region';
+    const CONFIG_XML_PATH_LOGIN_LANGUAGE = 'amazon_login/settings/language';
+
 
 
     /**
@@ -171,6 +173,17 @@ class Amazon_Payments_Model_Config
             $region = 'us';
         }
         return $region;
+    }
+
+    /**
+     * Get language UI
+     *
+     * @param   store $store
+     * @return  string
+     */
+    public function getLanguage($store = null)
+    {
+        return trim($this->_getStoreConfig(self::CONFIG_XML_PATH_LOGIN_LANGUAGE, $store));
     }
 
     /**

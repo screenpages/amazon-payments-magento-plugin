@@ -67,4 +67,13 @@ class Amazon_Login_Block_Script extends Mage_Core_Block_Template
         }
     }
 
+
+    /**
+     * Get language
+     */
+    public function getLanguage()
+    {
+        return Mage::getStoreConfig('payment/amazon_payments/language');
+    }
+
 }

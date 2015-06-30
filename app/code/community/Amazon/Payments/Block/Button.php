@@ -82,6 +82,14 @@ class Amazon_Payments_Block_Button extends Mage_Core_Block_Template
     }
 
     /**
+     * Get language
+     */
+    public function getLanguage()
+    {
+         return Mage::getSingleton('amazon_payments/config')->getLanguage();
+    }
+
+    /**
      * Is Disabled?
      *
      * @return bool

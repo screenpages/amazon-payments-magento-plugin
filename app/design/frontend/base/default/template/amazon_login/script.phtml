@@ -44,6 +44,9 @@ function amazonLoginAuthorize() {
     options = {
           scope : 'profile postal_code payments:shipping_address<?php print $this->getAdditionalScope(); ?>',
           response_type: 'token',
+          <?php if ($this->getLanguage()) : ?>
+          language: "<?php echo $this->getLanguage(); ?>",
+          <?php endif; ?>
           popup: <?php print $this->isPopup(); ?>
     };
 
