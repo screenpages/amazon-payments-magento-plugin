@@ -24,7 +24,7 @@
         </reference>
 
         <reference name="checkout.cart">
-            <block type="core/template" name="amazon_payments.script" template="amazon_payments/script.phtml" />
+            <block type="amazon_payments/script" name="amazon_payments.script" template="amazon_payments/script.phtml" />
 
             <!-- ifconfig only works with action -->
             <reference name="after_body_start">
@@ -56,7 +56,7 @@
     <checkout_onepage_index>
 
         <reference name="head">
-            <block type="core/template" name="amazon_payments.script" template="amazon_payments/script.phtml" />
+            <block type="amazon_payments/script" name="amazon_payments.script" template="amazon_payments/script.phtml" />
         </reference>
 
         <reference name="checkout.onepage">
@@ -187,7 +187,7 @@
         </reference>
 
         <reference name="head">
-            <block type="core/template" name="amazon_payments.script" template="amazon_payments/script.phtml" />
+            <block type="amazon_payments/script" name="amazon_payments.script" template="amazon_payments/script.phtml" />
         </reference>
     </checkout_amazon_payments_index>
 
@@ -259,7 +259,7 @@
         <block type="amazon_payments/button" name="addtocart-amazon-button" template="amazon_payments/button_shortcut.phtml" />
 
         <reference name="head">
-            <block type="core/template" name="amazon_payments.script" template="amazon_payments/script.phtml" />
+            <block type="amazon_payments/script" name="amazon_payments.script" template="amazon_payments/script.phtml" />
         </reference>
 
         <reference name="product.info.addtocart">
@@ -300,7 +300,7 @@
     -->
     <firecheckout_index_index translate="label">
         <reference name="head">
-            <block type="core/template" name="amazon_payments.script" template="amazon_payments/script.phtml" />
+            <block type="amazon_payments/script" name="amazon_payments.script" template="amazon_payments/script.phtml" />
         </reference>
     </firecheckout_index_index>
 
@@ -309,7 +309,7 @@
     -->
     <opc_index_index translate="label">
         <reference name="head">
-            <block type="core/template" name="amazon_payments.script" template="amazon_payments/script.phtml" />
+            <block type="amazon_payments/script" name="amazon_payments.script" template="amazon_payments/script.phtml" />
         </reference>
     </opc_index_index>
 
@@ -319,7 +319,7 @@
     <onestepcheckout_index_index>
 
         <reference name="head">
-            <block type="core/template" name="amazon_payments.script" template="amazon_payments/script.phtml" />
+            <block type="amazon_payments/script" name="amazon_payments.script" template="amazon_payments/script.phtml" />
         </reference>
 
         <reference name="checkout.onepage">
@@ -353,7 +353,7 @@
     -->
     <sales_order_view translate="label">
         <reference name="head">
-            <block type="core/template" name="amazon_payments.script" template="amazon_payments/script.phtml" />
+            <block type="amazon_payments/script" name="amazon_payments.script" template="amazon_payments/script.phtml" />
         </reference>
         <reference name="my.account.wrapper">
             <block type="amazon_payments/sales_view" template="amazon_payments/sales/order/amazon_wallet.phtml" before="info">
