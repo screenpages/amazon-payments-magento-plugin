@@ -64,6 +64,7 @@
         </reference>
 
         <reference name="checkout.onepage.login">
+            <!-- Remove this to prevent "Login with Amazon" button from appearing on checkout -->
             <action method="setTemplate" ifconfig="payment/amazon_payments/enabled">
                 <template helper="amazon_payments/data/switchOnepageLoginTemplateIf">
                     <template_amazon>amazon_payments/onepage/login.phtml</template_amazon>
