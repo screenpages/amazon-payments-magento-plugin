@@ -31,8 +31,8 @@
 
                     <strong>Configuring Amazon Payments</strong>
                     <ol style="list-style:inside decimal;">
-                      <li>Register or login to retrieve your account keys: &nbsp<button onclick="javascript:window.open(&#39;https://sellercentral.amazon.com/hz/me/sp/signup?solutionProviderOptions=lwa%3Bmws-acc%3B&marketplaceId=AGWSWK15IEJJ7&solutionProviderToken=AAAAAQAAAAEAAAAQCz2wulRfR9nOADyzVQrq5wAAAHAIIULh6RBNvlw68WY5S9ATlmInlyg2PLVF44yUVowkyjvDZPhtLf3UYn6fshHlKqwR4qptfBeltbxLtLrrIfK6JoxzuWe9FRTnCfSey8a0sFKuL3mwNenjLyMC9BAN1xU0S6pebxA2mz8t8Y1v5Axi&solutionProviderId=A2K7HE1S3M5XJ&#39;, &#39;get_keys&#39,&#39;left=50, top=50, width=950, height=750&#39;); return false;" class="scalable" type="button"><span>Login to Get Your Keys</span></button>
-                      <li>Add your url to "Allowed JavaScript Origins" in <a href="https://sellercentral.amazon.com/" target="_blank">Amazon Seller Central</a>.
+                      <li>Register or login to retrieve your account keys: &nbsp<button class="amzn-link" onclick="javascript:window.open(&#39;https://sellercentral.amazon.com/hz/me/sp/signup?solutionProviderOptions=lwa%3Bmws-acc%3B&marketplaceId=AGWSWK15IEJJ7&solutionProviderToken=AAAAAQAAAAEAAAAQCz2wulRfR9nOADyzVQrq5wAAAHAIIULh6RBNvlw68WY5S9ATlmInlyg2PLVF44yUVowkyjvDZPhtLf3UYn6fshHlKqwR4qptfBeltbxLtLrrIfK6JoxzuWe9FRTnCfSey8a0sFKuL3mwNenjLyMC9BAN1xU0S6pebxA2mz8t8Y1v5Axi&solutionProviderId=A2K7HE1S3M5XJ&#39;, &#39;get_keys&#39,&#39;left=50, top=50, width=950, height=750&#39;); return false;" class="scalable" type="button"><span>Login to Get Your Keys</span></button>
+                      <li>Add your url to "Allowed JavaScript Origins" in <a class="amzn-link" href="https://sellercentral.amazon.com/" target="_blank">Amazon Seller Central</a>.
                       <li>Under General->Web, enable "Use Secure URLs in Frontend." (HTTPS is required.)
                     </ol>
 
@@ -67,6 +67,7 @@
              <seller_id translate="label">
                 <label>Seller/Merchant ID</label>
                 <frontend_type>text</frontend_type>
+                <comment><model>amazon_login/system_config_backend_localizecomment</model></comment>
                 <sort_order>15</sort_order>
                 <show_in_default>1</show_in_default>
                 <show_in_website>1</show_in_website>

@@ -28,23 +28,21 @@
           <show_in_default>1</show_in_default>
           <show_in_website>1</show_in_website>
           <show_in_store>1</show_in_store>
-            <comment>
-            <![CDATA[
+          <comment>
+          <![CDATA[
+                  <a href="http://login.amazon.com/" target="_blank"><img src="http://g-ecx.images-amazon.com/images/G/01/lwa/common/images/lwa_dev_logo._V371482133_.png" /></a>
+                  <br/>
+                  <strong>Setup</strong>
+                  <ol style="list-style:inside decimal;">
+                    <li>Access your client credentials by registering a new application through <a class="amzn-link" href="https://sellercentral.amazon.com/" target="_blank">Amazon Seller Central</a>.
+                    <li>Whitelist your domain under "Allowed JavaScript Origins."
+                    <li>Under General->Web, enable "Use Secure URLs in Frontend." (HTTPS is required.)
+                    <li>Amazon Payments (Login and Pay) is configured under Sales->Payment Methods.
+                  </ol>
 
-                    <a href="http://login.amazon.com/" target="_blank"><img src="http://g-ecx.images-amazon.com/images/G/01/lwa/common/images/lwa_dev_logo._V371482133_.png" /></a>
-                    <br/>
-                    <strong>Setup</strong>
-                    <ol style="list-style:inside decimal;">
-                      <li>Access your client credentials by registering a new application through <a href="https://sellercentral.amazon.com/" target="_blank">Amazon Seller Central</a>.
-                      <li>Whitelist your domain under "Allowed JavaScript Origins."
-                      <li>Under General->Web, enable "Use Secure URLs in Frontend." (HTTPS is required.)
-                      <li>Amazon Payments (Login and Pay) is configured under Sales->Payment Methods.
-                    </ol>
-
-
-                    <div style="clear:both;"></div>
-            ]]>
-            </comment>
+                  <div style="clear:both;"></div>
+          ]]>
+          </comment>
           <fields>
 
             <enabled translate="label">
@@ -52,6 +50,7 @@
               <frontend_type>select</frontend_type>
               <source_model>adminhtml/system_config_source_yesno</source_model>
               <backend_model>amazon_login/system_config_backend_enabled</backend_model>
+              <comment><model>amazon_login/system_config_backend_localizecomment</model></comment>
               <sort_order>10</sort_order>
               <show_in_default>1</show_in_default>
               <show_in_website>1</show_in_website>

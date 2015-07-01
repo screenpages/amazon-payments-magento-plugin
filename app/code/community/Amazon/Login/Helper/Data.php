@@ -71,5 +71,40 @@ class Amazon_Login_Helper_Data extends Mage_Core_Helper_Abstract
         return (Mage::getStoreConfig('amazon_login/settings/enabled'));
     }
 
+    /**
+     * Get admin region for localizing URLs to Amazon
+     */
+    public function getAdminRegion()
+    {
+
+        if (in_array($this->getAdminConfig('amazon_login/settings/region'), array('uk', 'de'))) {
+            return 'eu';
+        }
+
+        $countryCode = $this->getAdminConfig('general/country/default');
+
+        // Is EU country?
+        $euCountries = explode(',', Mage::getStoreConfig('general/country/eu_countries'));
+        if (in_array($countryCode, $euCountries)) {
+            return 'eu';
+        }
+    }
+
+    /**
+     * Get config by website or store admin scope
+     */
+    public function getAdminConfig($path)
+    {
+        if ($storeCode = Mage::app()->getRequest()->getParam('store')) {
+            return Mage::getStoreConfig($path, $storeCode);
+        }
+        else if ($websiteCode = Mage::app()->getRequest()->getParam('website')) {
+            return Mage::app()->getWebsite($websiteCode)->getConfig($path);
+        }
+        else {
+            return Mage::getStoreConfig($path);
+        }
+    }
+
 
 }
