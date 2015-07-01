@@ -45,6 +45,32 @@ class Amazon_Login_Helper_Data extends Mage_Core_Helper_Abstract
         $region = Mage::getStoreConfig('amazon_login/settings/region');
         return ($region) ? $region : 'us';
     }
+
+    /**
+     * Return language for Amazon frontend
+     */
+    public function getLanguage()
+    {
+
+        if ($language = Mage::getStoreConfig('amazon_login/settings/language')) {
+            return $language;
+        }
+
+        $code = Mage::getStoreConfig('general/locale/code');
+
+        if ($code == 'en_GB') {
+            return 'en-GB';
+        }
+
+        switch (substr($code, 0, 2)) {
+            case 'de': return 'de-DE'; break;
+            case 'fr': return 'fr-FR'; break;
+            case 'it': return 'it-IT'; break;
+            case 'es': return 'es-ES'; break;
+            default: return false;
+        }
+    }
+
     /**
      * Return login authorize URL
      *
