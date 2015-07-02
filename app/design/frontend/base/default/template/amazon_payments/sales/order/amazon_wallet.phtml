@@ -23,7 +23,7 @@
 <div class="actions">
     <button id="amazon-update-button" onclick="setLocation('<?php echo Mage::getUrl('amazon_payments/order/confirm/order_id/' . $this->getOrder()->getId()); ?>'); this.disabled = true;" class="button" title="<?php echo $this->__('Update Order'); ?>" type="button"><span><span><?php echo $this->__('Update Order'); ?></span></span></button>
     <div id="amazon-button-wrapper" style="display:none;">
-        <?php echo $this->getBlockHtml('amazonbutton'); ?>
+        <?php echo $this->getBlockHtml('amazon_login.no-or'); ?>
     </div>
 </div>
 
