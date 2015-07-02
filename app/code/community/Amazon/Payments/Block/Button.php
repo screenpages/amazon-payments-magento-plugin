@@ -153,6 +153,13 @@ class Amazon_Payments_Block_Button extends Mage_Core_Block_Template
      */
     public function isPopup()
     {
+        // Use redirect for sidecart/minicart pay button
+        if ($this->getNameInLayout() == 'AmazonPayButtonSideCart'
+            && !Mage::app()->getStore()->isCurrentlySecure()
+            ) {
+            return 0;
+        }
+
         return ($this->helper('amazon_login')->isPopup());
     }
 
