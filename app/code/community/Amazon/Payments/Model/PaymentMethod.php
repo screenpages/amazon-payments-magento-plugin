@@ -30,7 +30,7 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
     protected $_canFetchTransactionInfo = true;
     protected $_canReviewPayment        = false;
 
-    protected $isForceSync = false; // Force synchronous transaction
+    protected $isForceSync = true; // Force synchronous transaction
 
     /**
      * Return Amazon API
@@ -93,7 +93,7 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
         }
 
         // Asynchronous Mode always returns Pending
-        if ($this->getConfigData('is_async')) {
+        if (!$this->isForceSync && $this->getConfigData('is_async')) {
             // "Pending Payment" indicates async for internal use
             $stateObject->setState(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT);
             $stateObject->setStatus('pending');
@@ -118,6 +118,11 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
         // Sandbox simulation testing for Stand Alone Checkout
         if ($payment->getAdditionalInformation('sandbox') && $this->_getApi($order->getStoreId())->getConfig()->isSandbox()) {
             $sellerAuthorizationNote = $payment->getAdditionalInformation('sandbox');
+
+            // Allow async decline testing
+            if ($this->getConfigData('is_async') && strpos($sellerAuthorizationNote, 'InvalidPaymentMethod') !== false) {
+                $this->isForceSync = false;
+            }
         }
 
         // For core and third-party checkouts, may test credit card decline by uncommenting:
@@ -148,7 +153,7 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
                 // Add transaction
                 if ($captureNow) {
 
-                    if (!$this->getConfigData('is_async')) {
+                    if ($this->isForceSync) { // Not async
                         $transactionSave = Mage::getModel('core/resource_transaction');
 
                         $captureReferenceIds = $result->getIdList()->getmember();
@@ -183,9 +188,26 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
                 break;
 
             case Amazon_Payments_Model_Api::AUTH_STATUS_DECLINED:
-                // Cancel order reference
+
                 if ($status->getReasonCode() == 'TransactionTimedOut') {
-                    $this->_getApi($order->getStoreId())->cancelOrderReference($payment->getTransactionId());
+                    // Preform async if TTO
+                    if ($this->isForceSync && $this->getConfigData('is_async')) {
+                        // Remove sandbox simulation test
+                        if (strpos($sellerAuthorizationNote, 'TransactionTimedOut') !== false) {
+                            $payment->setAdditionalInformation('sandbox', null);
+                        }
+                        $this->isForceSync = false;
+
+                        $order->addStatusHistoryComment('Error: TransactionTimedOut, performing asynchronous authorization.');
+                        $order->save();
+
+                        $this->_authorize($payment, $amount, $captureNow);
+                        return;
+                    }
+                    // Cancel order reference
+                    else {
+                        $this->_getApi($order->getStoreId())->cancelOrderReference($payment->getTransactionId());
+                    }
                 }
 
                 $this->_setErrorCheck();
@@ -255,7 +277,7 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
         $payment->setIsTransactionClosed(false);
         $payment->setSkipOrderProcessing(true);
 
-        $comment  = $this->getConfigData('is_async') ? 'Asynchronous ' : '';
+        $comment  = '';
         $comment .=  $this->_getApi()->getConfig()->isSandbox() ? 'Sandbox ' : '';
         $comment .= 'Order of %s sent to Amazon Payments.';
         $message = Mage::helper('payment')->__($comment, $order->getStore()->convertPrice($amount, true, false));
