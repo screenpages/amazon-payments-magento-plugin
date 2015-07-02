@@ -65,7 +65,7 @@ abstract class Amazon_Payments_Controller_Checkout extends Mage_Checkout_Control
                 $this->_redirectUrl(Mage::helper('amazon_payments')->getCheckoutUrl(false) . '#access_token=' . $token);
             }
             // Redirect to account page
-            else if (Mage::app()->getRequest()->getParams('account') != null) {
+            else if (Mage::app()->getRequest()->getParams('account') == 'redirect') {
                 $this->_redirect('customer/account');
             }
             // Redirect to clean URL

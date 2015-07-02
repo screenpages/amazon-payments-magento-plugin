@@ -116,7 +116,7 @@ class Amazon_Login_Block_Button extends Mage_Core_Block_Template
      */
     public function getCheckoutUrl()
     {
-        return $this->helper('amazon_payments')->getCheckoutUrl() . 'account/';
+        return $this->helper('amazon_payments')->getCheckoutUrl() . 'account/redirect';
     }
 
 }
