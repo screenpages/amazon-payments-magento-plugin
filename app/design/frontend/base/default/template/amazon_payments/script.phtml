@@ -19,13 +19,13 @@
     window.onAmazonLoginReady = function() {
         amazon.Login.setClientId('<?php echo $this->getClientId(); ?>');
 
-        <?php if (!$this->isPopup) : ?>
+        <?php if (!$this->isPopup()) : ?>
         amazon.Login.setUseCookie(true);
         <?php endif; ?>
 
     };
 
-    <?php if (!$this->isPopup) : ?>
+    <?php if (!$this->isPopup()) : ?>
     src = '<?php echo $this->getWidgetsUrl(); ?>';
     <?php endif; ?>
 

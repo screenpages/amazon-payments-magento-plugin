@@ -12,6 +12,37 @@ class Amazon_Login_Block_Script extends Mage_Core_Block_Template
 {
 
     /**
+     * Return Widgets.js URL
+     */
+    public function getWidgetsUrl()
+    {
+        switch (Mage::getStoreConfig('amazon_login/settings/region')) {
+          case 'uk':
+              $staticRegion = 'eu';
+              $widgetRegion = 'uk';
+              $lpa = 'lpa/';
+              break;
+
+          case 'de':
+              $staticRegion = 'eu';
+              $widgetRegion = 'de';
+              $lpa = 'lpa/';
+              break;
+
+          // US
+          default:
+              $staticRegion = 'na';
+              $widgetRegion = 'us';
+              $lpa = '';
+              break;
+        }
+
+        $sandbox = $this->isSandboxEnabled() ? 'sandbox/' : '';
+
+        return "https://static-$staticRegion.payments-amazon.com/OffAmazonPayments/$widgetRegion/{$sandbox}{$lpa}js/Widgets.js?sellerId=" . $this->getSellerId();
+    }
+
+    /**
      * Is popup window?
      *
      * @return bool
@@ -38,6 +69,14 @@ class Amazon_Login_Block_Script extends Mage_Core_Block_Template
     }
 
     /**
+     * Return seller ID
+     */
+    public function getSellerId()
+    {
+        return $this->helper('amazon_payments')->getSellerId();
+    }
+
+    /**
      * Get additional scope
      */
     public function getAdditionalScope()
@@ -51,6 +90,16 @@ class Amazon_Login_Block_Script extends Mage_Core_Block_Template
     public function getLoginAuthUrl()
     {
          return $this->helper('amazon_login')->getLoginAuthUrl();
+    }
+
+    /**
+     * Is Amazon Payments enabled?
+     *
+     * @return bool
+     */
+    public function isAmazonPaymentsEnabled()
+    {
+        return $this->helper('amazon_login')->isAmazonPaymentsEnabled();
     }
 
 }

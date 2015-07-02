@@ -15,6 +15,8 @@
  */
 ?>
 
+<?php if (!$this->isAmazonPaymentsEnabled() || $this->getNameInLayout() == 'amazon_login.script.logout') : ?>
+
 <div id="amazon-root"></div>
 <script type="text/javascript">
 
@@ -71,15 +73,41 @@ $$('.amazon-login-button').each(function(el) {
 
 </script>
 
+
+<?php else : // Amazon Payments is enabled ?>
+
+    <script type='text/javascript'>
+        window.onAmazonLoginReady = function() {
+            amazon.Login.setClientId('<?php echo $this->getClientId(); ?>');
+
+            <?php if (!$this->isPopup()) : ?>
+            amazon.Login.setUseCookie(true);
+            <?php endif; ?>
+
+        };
+
+        <?php if (!$this->isPopup()) : ?>
+        src = '<?php echo $this->getWidgetsUrl(); ?>';
+        <?php endif; ?>
+
+    </script>
+
+    <script type='text/javascript' src='<?php echo $this->getWidgetsUrl(); ?>'></script>
+
+
+<?php endif; ?>
+
+
+
 <?php if ($this->getNameInLayout() == 'amazon_login.script.logout') : ?>
 
-<script type="text/javascript">
+    <script type="text/javascript">
 
-window.onAmazonLoginReady = function() {
-    amazon.Login.logout();
-    document.cookie = "amazon_Login_accessToken=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
-};
+    window.onAmazonLoginReady = function() {
+        amazon.Login.logout();
+        document.cookie = "amazon_Login_accessToken=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+    };
 
-</script>
+    </script>
 
 <?php endif; ?>
