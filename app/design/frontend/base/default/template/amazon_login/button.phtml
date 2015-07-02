@@ -9,20 +9,13 @@
  */
 ?>
 
-
-<?php
-
-/**
- * More button styles: http://login.amazon.com/button-guide
- */
-
-?>
-
 <div id="amazon-buttons-wrapper" class="col2-set">
     <div class="col-1">
         <div class="amazon-login-button-wrapper">
-            <strong>- <?php echo $this->__('OR'); ?> -</strong>
+            <?php if ($this->getNameInLayout() != 'amazon_login.no-or') : ?>
+            <strong class="amazon-or">- <?php echo $this->__('OR'); ?> -</strong>
             <br />
+            <?php endif; ?>
 
             <?php if (!$this->isAmazonPaymentsEnabled()) : // Old embed method (does not require seller id) ?>
 

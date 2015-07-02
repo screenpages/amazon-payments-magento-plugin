@@ -18,13 +18,6 @@ class Amazon_Payments_CheckoutController extends Amazon_Payments_Controller_Chec
      */
     public function indexAction()
     {
-        // User logged in at order details page and wants to update payment method from async decline
-        if ($orderIdRedirect = Mage::getModel('core/cookie')->get('amazonOrderIdRedirect')) {
-            Mage::getModel('core/cookie')->delete('amazonOrderIdRedirect');
-            $this->_redirect('sales/order/view/order_id/' . $orderIdRedirect);
-            return;
-        }
-
         $quote = $this->_getCheckout()->getQuote();
         if (!$quote->hasItems() || $quote->getHasError()) {
             $this->_redirect('checkout/cart');
@@ -103,7 +96,13 @@ class Amazon_Payments_CheckoutController extends Amazon_Payments_Controller_Chec
      */
     public function accountAction()
     {
-        $this->_redirect('customer/account');
+        // User logged in at order details page and wants to update payment method from async decline
+        if ($orderIdRedirect = Mage::getModel('core/cookie')->get('amazonOrderIdRedirect')) {
+            Mage::getModel('core/cookie')->delete('amazonOrderIdRedirect');
+            $this->_redirect('sales/order/view/order_id/' . $orderIdRedirect);
+        } else {
+            $this->_redirect('customer/account');
+        }
     }
 
     /**

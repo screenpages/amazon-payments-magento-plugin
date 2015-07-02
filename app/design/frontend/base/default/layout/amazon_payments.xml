@@ -358,7 +358,7 @@
         </reference>
         <reference name="my.account.wrapper">
             <block type="amazon_payments/sales_view" template="amazon_payments/sales/order/amazon_wallet.phtml" before="info">
-                <block type="amazon_payments/button" name="amazonbutton" template="amazon_payments/button.phtml"/>
+                <block type="amazon_login/button" name="amazon_login.no-or" template="amazon_login/button.phtml"/>
             </block>
         </reference>
     </sales_order_view>
