@@ -275,6 +275,19 @@
 
     </catalog_product_view>
 
+
+    <!--
+    Sidecart/Minicart Shortcut
+    -->
+    <default>
+        <reference name="head">
+            <block type="amazon_payments/script" name="amazon_payments.script" template="amazon_payments/script.phtml" />
+        </reference>
+        <reference name="cart_sidebar.extra_actions">
+            <block type="amazon_payments/button" name="AmazonPayButtonSideCart" template="amazon_payments/button.phtml"/>
+        </reference>
+    </default>
+
     <!--
     Acceptance Mark/Badge
     -->
