@@ -132,5 +132,14 @@ class Amazon_Login_Helper_Data extends Mage_Core_Helper_Abstract
         }
     }
 
+    /**
+     * Is Amazon Payments enabled?
+     *
+     * @return bool
+     */
+    public function isAmazonPaymentsEnabled()
+    {
+        return Mage::helper('core')->isModuleEnabled('Amazon_Payments') && $this->isEnabled() ? true : false;
+    }
 
 }

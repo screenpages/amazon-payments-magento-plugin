@@ -16,7 +16,7 @@
         <block type="amazon_login/button" name="amazon_login.button" template="amazon_login/button.phtml" after="customer_form_login" />
 
         <!-- ifconfig only works with action -->
-        <reference name="before_body_end">
+        <reference name="after_body_start">
             <action method="append" ifconfig="amazon_login/settings/enabled">
                 <block>amazon_login.script</block>
             </action>

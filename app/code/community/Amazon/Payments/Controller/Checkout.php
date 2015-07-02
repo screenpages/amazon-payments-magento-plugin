@@ -27,6 +27,7 @@ abstract class Amazon_Payments_Controller_Checkout extends Mage_Checkout_Control
     public function preDispatch()
     {
         parent::preDispatch();
+
         $this->_amazonOrderReferenceId = htmlentities($this->getRequest()->getParam('amazon_order_reference_id'));
 
         if (!$this->_amazonOrderReferenceId) {
@@ -62,7 +63,10 @@ abstract class Amazon_Payments_Controller_Checkout extends Mage_Checkout_Control
             // Full-page redirect (user did not sign in using popup)
             if ($this->getRequest()->getParam('nopopup')) {
                 $this->_redirectUrl(Mage::helper('amazon_payments')->getCheckoutUrl(false) . '#access_token=' . $token);
-
+            }
+            // Redirect to account page
+            else if (Mage::app()->getRequest()->getParams('account') != null) {
+                $this->_redirect('customer/account');
             }
             // Redirect to clean URL
             else if (!$this->getRequest()->getParam('ajax')) {

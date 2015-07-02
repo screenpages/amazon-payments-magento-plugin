@@ -159,7 +159,7 @@ class Amazon_Payments_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function switchOnepageLoginTemplateIf($amazonTemplate, $defaultTemplate)
     {
-        if ($this->getConfig()->isCheckoutOnepage()) {
+        if ($this->isEnabled()) {
             return $amazonTemplate;
         } else {
             return $defaultTemplate;

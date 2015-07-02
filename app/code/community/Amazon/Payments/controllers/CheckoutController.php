@@ -99,6 +99,14 @@ class Amazon_Payments_CheckoutController extends Amazon_Payments_Controller_Chec
     }
 
     /**
+     * Redirect to account
+     */
+    public function accountAction()
+    {
+        $this->_redirect('customer/account');
+    }
+
+    /**
      * Failure action
      */
     public function failureAction()

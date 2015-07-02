@@ -12,6 +12,37 @@ class Amazon_Login_Block_Script extends Mage_Core_Block_Template
 {
 
     /**
+     * Return Widgets.js URL
+     */
+    public function getWidgetsUrl()
+    {
+        switch (Mage::getStoreConfig('amazon_login/settings/region')) {
+          case 'uk':
+              $staticRegion = 'eu';
+              $widgetRegion = 'uk';
+              $lpa = 'lpa/';
+              break;
+
+          case 'de':
+              $staticRegion = 'eu';
+              $widgetRegion = 'de';
+              $lpa = 'lpa/';
+              break;
+
+          // US
+          default:
+              $staticRegion = 'na';
+              $widgetRegion = 'us';
+              $lpa = '';
+              break;
+        }
+
+        $sandbox = $this->isSandboxEnabled() ? 'sandbox/' : '';
+
+        return "https://static-$staticRegion.payments-amazon.com/OffAmazonPayments/$widgetRegion/{$sandbox}{$lpa}js/Widgets.js?sellerId=" . $this->getSellerId();
+    }
+
+    /**
      * Is popup window?
      *
      * @return bool
@@ -35,6 +66,14 @@ class Amazon_Login_Block_Script extends Mage_Core_Block_Template
     public function getClientId()
     {
         return Mage::getModel('amazon_login/api')->getClientId();
+    }
+
+    /**
+     * Return seller ID
+     */
+    public function getSellerId()
+    {
+        return $this->helper('amazon_payments')->getSellerId();
     }
 
     /**
@@ -67,13 +106,22 @@ class Amazon_Login_Block_Script extends Mage_Core_Block_Template
         }
     }
 
-
     /**
      * Get language
      */
     public function getLanguage()
     {
         return Mage::getStoreConfig('payment/amazon_payments/language');
+    }
+
+    /**
+     * Is Amazon Payments enabled?
+     *
+     * @return bool
+     */
+    public function isAmazonPaymentsEnabled()
+    {
+        return $this->helper('amazon_login')->isAmazonPaymentsEnabled();
     }
 
 }
