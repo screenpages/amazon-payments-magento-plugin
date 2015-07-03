@@ -117,6 +117,14 @@ class Amazon_Login_Helper_Data extends Mage_Core_Helper_Abstract
     }
 
     /**
+     * Is admin set to DE?
+     */
+    public function isAdminGermany()
+    {
+        return $this->getAdminConfig('amazon_login/settings/region') == 'de' || substr($this->getAdminConfig('general/country/default'), 0, 2) == 'DE';
+    }
+
+    /**
      * Get config by website or store admin scope
      */
     public function getAdminConfig($path)

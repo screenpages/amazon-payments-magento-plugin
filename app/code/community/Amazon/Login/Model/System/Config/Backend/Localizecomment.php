@@ -11,8 +11,7 @@
 class Amazon_Login_Model_System_Config_Backend_Localizecomment extends Mage_Core_Model_Config_Data
 {
     /**
-     * Return dynamic help/comment text
-     *
+     * Localize links found in Amazon admin
      */
     public function getCommentText(Mage_Core_Model_Config_Element $element, $currentValue)
     {
@@ -25,10 +24,9 @@ class Amazon_Login_Model_System_Config_Backend_Localizecomment extends Mage_Core
                 break;
         }
 
-
         // Use JS as the settings/header comment doesn't support getCommentText
         if ($domain) {
-            return '<script>
+            $script = '
                 $$(".amzn-link").each(function(el, i) {
                     if (el.href) {
                         el.href = el.href.replace("sellercentral.amazon.com", "' . $domain . '");
@@ -42,7 +40,18 @@ class Amazon_Login_Model_System_Config_Backend_Localizecomment extends Mage_Core
                     }
 
                 });
-            </script>';
+                ';
+
+            // Update doc domain
+            if (Mage::helper('amazon_login')->isAdminGermany()) {
+                $script .= '
+                $$(".amzn-doc-link").each(function(el, i) {
+                    el.href = el.href.replace(".co.uk", ".de");
+                });
+                ';
+            }
+
+            return '<script>document.observe("dom:loaded", function() { '. $script . '});</script>';
         }
     }
 }

@@ -67,7 +67,6 @@
              <seller_id translate="label">
                 <label>Seller/Merchant ID</label>
                 <frontend_type>text</frontend_type>
-                <comment><model>amazon_login/system_config_backend_localizecomment</model></comment>
                 <sort_order>15</sort_order>
                 <show_in_default>1</show_in_default>
                 <show_in_website>1</show_in_website>
@@ -116,6 +115,7 @@
                 <frontend_type>select</frontend_type>
                 <backend_model>amazon_payments/system_config_backend_region</backend_model>
                 <source_model>amazon_login/system_config_source_region</source_model>
+                <comment><model>amazon_login/system_config_backend_localizecomment</model></comment>
                 <sort_order>35</sort_order>
                 <show_in_default>1</show_in_default>
                 <show_in_website>1</show_in_website>
@@ -124,7 +124,7 @@
 
             <language translate="label">
                 <label>Language</label>
-                <comment><![CDATA[Default is Country Locale. Override with a value from "<a href="https://payments.amazon.co.uk/developer/documentation/lpwa/201749840#201749950" target="_blank">ENTER_LANGUAGE_PARAMETER</a>."]]></comment>
+                <comment><![CDATA[Default is Country Locale. Override with a value from "<a href="https://payments.amazon.co.uk/developer/documentation/lpwa/201749840#201749950" class="amzn-doc-link" target="_blank">ENTER_LANGUAGE_PARAMETER</a>."]]></comment>
                 <frontend_type>text</frontend_type>
                 <backend_model>amazon_payments/system_config_backend_language</backend_model>
                 <sort_order>40</sort_order>
