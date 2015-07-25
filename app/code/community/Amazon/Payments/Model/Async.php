@@ -131,12 +131,12 @@ class Amazon_Payments_Model_Async extends Mage_Core_Model_Abstract
                     return;
                 }
 
-                $message = Mage::helper('payment')->__('Sync with Amazon: Authorization state is %s.', $amazonAuthorizationState);
+                $message = Mage::helper('payment')->__('Sync with Amazon: Authorization state is "%s".', $amazonAuthorizationState);
 
                 switch ($amazonAuthorizationState) {
                   // Pending (All Authorization objects are in the Pending state for 30 seconds after Authorize request)
                   case Amazon_Payments_Model_Api::AUTH_STATUS_PENDING:
-                      $message .= ' (Payment is currently authorizing. Please try again momentarily.)';
+                      $message .= Mage::helper('payment')->__(' (Payment is currently authorizing. Please try again momentarily.)');
                       break;
 
                   // Declined
@@ -146,7 +146,7 @@ class Amazon_Payments_Model_Async extends Mage_Core_Model_Abstract
                       }
 
                       $this->_sendPaymentDeclineEmail($order);
-                      $message .= " Order placed on hold due to $reasonCode. Email sent to customer with link to order details page and instructions to update their payment method.";
+                      $message .= Mage::helper('payment')->__(' Order placed on hold due to "%s". Email sent to customer with link to order details page and instructions to update their payment method.', $reasonCode);
                       break;
 
                   // Open (Authorize Only)
@@ -170,7 +170,7 @@ class Amazon_Payments_Model_Async extends Mage_Core_Model_Abstract
                       else {
                           $order->setState(Mage_Sales_Model_Order::STATE_HOLDED, true);
 
-                          $message .= ' Unable to create invoice due to Authorization Reason Code: ' . $reasonCode;
+                          $message .= Mage::helper('payment')->__(' Unable to create invoice due to Authorization Reason Code: %s', $reasonCode);
                       }
 
                       break;

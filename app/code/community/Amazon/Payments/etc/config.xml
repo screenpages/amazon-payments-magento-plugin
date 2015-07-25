@@ -80,6 +80,15 @@
                 </tax>
             </updates>
         </layout>
+        <translate>
+            <modules>
+                <Amazon_Payments>
+                    <files>
+                        <default>Amazon_Payments.csv</default>
+                    </files>
+                </Amazon_Payments>
+            </modules>
+        </translate>
         <events>
             <adminhtml_widget_container_html_before>
                 <observers>
@@ -106,6 +115,15 @@
                 </args>
             </amazon_payments>
         </routers>
+        <translate>
+            <modules>
+                <Amazon_Payments>
+                    <files>
+                        <default>Amazon_Payments.csv</default>
+                    </files>
+                </Amazon_Payments>
+            </modules>
+        </translate>        
         <layout>
             <updates>
                 <amazon_payments>
