@@ -44,7 +44,12 @@ class Amazon_Diagnostics_Adminhtml_DiagnosticsController extends Mage_Adminhtml_
         
         $this->log("===== MAGENTO =====");
         $this->log("version: ". Mage::getVersion());
-        $this->log("edition: ". Mage::getEdition());
+        try {
+            $this->log("edition: ". Mage::getEdition());
+        } catch (Exception $e) {
+            /* getEdition() does not appear until 1.7 */
+            $this->log("edition: <1.7");
+        }
         $this->log("base_path: ". $this->_basepath);
         $this->log("secure_frontend: ". (Mage::getStoreConfig('web/secure/use_in_frontend') == 1 ? 'yes' : 'no'));
         $this->log("store_name: ". Mage::getStoreConfig('general/store_information/name'));
