@@ -87,24 +87,13 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
             $billing = $authorizationDetails->getAuthorizationBillingAddress();
 
             if ($billing) {
-                $name      = $billing->getName();
-                $firstName = substr($name, 0, strrpos($name, ' '));
-                $lastName  = substr($name, strlen($firstName) + 1);
 
                 $regionModel = Mage::getModel('directory/region')->loadByCode($billing->getStateOrRegion(), $billing->getCountryCode());
                 $regionId    = $regionModel->getId();
-
-                $dataBilling = array(
-                    'firstname'   => $firstName,
-                    'lastname'    => $lastName,
-                    'street'      => array($billing->getAddressLine1(), $billing->getAddressLine2(), $billing->getAddressLine3()),
-                    'city'        => $billing->getCity(),
-                    'region'      => $billing->getStateOrRegion(),
-                    'region_id'   => $regionId,
-                    'postcode'    => $billing->getPostalCode(),
-                    'country_id'  => $billing->getCountryCode(),
-                    'telephone'   => ($billing->getPhone()) ? $billing->getPhone() : '-',
-                );
+                $dataBilling = Mage::helper('amazon_payments')->transformAmazonAddressToMagentoAddress($billing);
+                $dataBilling['use_for_shipping'] = false;
+                $dataBilling['region'] = $billing->getStateOrRegion();
+                $dataBilling['region_id'] = $regionId;
 
                 foreach ($dataBilling as $key => $value) {
                     $mageBilling->setData($key, $value);
