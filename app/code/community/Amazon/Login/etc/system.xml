@@ -155,9 +155,7 @@
 
             <additional_scope translate="label">
               <label>Additional Access Scope</label>
-              <comment>
-                <![CDATA[Optional access scope strings during login.]]>
-              </comment>
+              <comment><![CDATA[Optional access scope strings during login.]]></comment>
               <frontend_type>text</frontend_type>
               <sort_order>120</sort_order>
               <show_in_default>1</show_in_default>

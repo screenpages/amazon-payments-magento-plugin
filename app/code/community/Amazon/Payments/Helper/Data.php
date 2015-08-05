@@ -191,4 +191,51 @@ class Amazon_Payments_Helper_Data extends Mage_Core_Helper_Abstract
     {
         return ($this->getConfig()->isButtonBadgeEnabled() && $this->getConfig()->isEnabled());
     }
+
+    /**
+     * Transform an Amazon address into a standard Magento address
+     *
+     * @param OffAmazonPaymentsService_Model_Address amazonAddress
+     */
+    public function transformAmazonAddressToMagentoAddress($amazonAddress) {
+        $name = $amazonAddress->getName();
+        $firstName = substr($name, 0, strrpos($name, ' '));
+        $lastName  = substr($name, strlen($firstName) + 1);
+
+        $data['firstname'] = $firstName;
+        $data['lastname'] = $lastName;
+        $data['country_id'] = $amazonAddress->getCountryCode();
+        $data['city'] = $amazonAddress->getCity();
+        $data['postcode'] = $amazonAddress->getPostalCode();
+        $data['telephone'] = $amazonAddress->getPhone() ? $amazonAddress->getPhone() : $this->__('-');
+
+        $data['street'] = array();
+
+        $countryCode = $amazonAddress->getCountryCode();
+        $addressLine1 = $amazonAddress->getAddressLine1();
+        $addressLine2 = $amazonAddress->getAddressLine2();
+        $addressLine3 = $amazonAddress->getAddressLine3();
+        if($countryCode && in_array($countryCode, array('AT', 'DE'))){
+            if ($addressLine3) {
+                $data['company'] = trim($addressLine1.' '.$addressLine2);
+                $data['street'][] = $addressLine3;
+            } else if ($addressLine2) {
+                $data['company'] = $addressLine1;
+                $data['street'][] = $addressLine2;
+            } else {
+                $data['street'][] = $addressLine1;
+            }
+        } else {
+            if ($addressLine1) {
+                $data['street'][] = $addressLine1;
+            }
+            if ($addressLine2) {
+                $data['street'][] = $addressLine2;
+            }
+            if ($addressLine3) {
+                $data['street'][] = $addressLine3;
+            }
+        }
+        return $data;
+    }
 }
