@@ -64,16 +64,12 @@ class Amazon_Payments_Model_Async extends Mage_Core_Model_Abstract
             'customer'  => Mage::getModel('customer/customer')->load($order->getCustomerId()),
         );
 
-        $processedTemplate = $emailTemplate->getProcessedTemplate($templateParams);
+        $sender = array(
+            'name' => Mage::getStoreConfig('trans_email/ident_general/email', $order->getStoreId()),
+            'email' => Mage::getStoreConfig('trans_email/ident_general/name', $order->getStoreId())
+        );
 
-        // Test template:
-        //var_dump($emailTemplate->debug()); echo $processedTemplate;
-
-        $emailTemplate
-            ->setSenderEmail(Mage::getStoreConfig('trans_email/ident_general/email', $order->getStoreId()))
-            ->setSenderName(Mage::getStoreConfig('trans_email/ident_general/name', $order->getStoreId()))
-            ->send($order->getCustomerEmail(), $order->getCustomerName(), $templateParams);
-
+        $emailTemplate->sendTransactional($emailTemplate->getId(), $sender, $order->getCustomerEmail(), $order->getCustomerName(), $templateParams, $order->getStoreId());
     }
 
     /**
