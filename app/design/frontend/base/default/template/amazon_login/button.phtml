@@ -12,7 +12,8 @@
 <div id="amazon-buttons-wrapper" class="col2-set">
     <div class="col-1">
         <div class="amazon-login-button-wrapper">
-            <?php if ($this->getNameInLayout() != 'amazon_login.no-or') : ?>
+
+            <?php if ($this->getNameInLayout() == 'amazon_login.button_login') : ?>
             <strong class="amazon-or">- <?php echo $this->__('OR'); ?> -</strong>
             <br />
             <?php endif; ?>
@@ -53,6 +54,12 @@
                 </script>
 
             <?php endif; ?>
+
+            <?php if ($this->getNameInLayout() == 'amazon_login.button_create') : ?>
+            <strong class="amazon-or">- <?php echo $this->__('OR'); ?> -</strong>
+            <br />
+            <?php endif; ?>
+
         </div>
     </div>
 </div>
