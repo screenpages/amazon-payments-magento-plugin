@@ -50,4 +50,21 @@ class Amazon_Payments_Model_Observer_Order
 
         }
     }
+
+
+    /**
+     * Event: sales_order_save_commit_after
+     *
+     * Close Amazon ORO
+     */
+    public function closeAmazonOrder(Varien_Event_Observer $observer)
+    {
+        $order   = $observer->getEvent()->getOrder();
+        $payment = $order->getPayment();
+
+        if ($order->getState() == Mage_Sales_Model_Order::STATE_COMPLETE && $order->getOrigData('state') != Mage_Sales_Model_Order::STATE_COMPLETE
+            && $payment->getMethodInstance()->getCode() == 'amazon_payments') {
+            Mage::getModel('amazon_payments/api')->closeOrderReference($payment->getAdditionalInformation('order_reference'));
+        }
+    }
 }

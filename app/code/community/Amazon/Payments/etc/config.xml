@@ -89,6 +89,14 @@
                     </amazon_payments>
                 </observers>
             </adminhtml_widget_container_html_before>
+            <sales_order_save_commit_after>
+                <observers>
+                    <amazon_payments_observer>
+                        <class>Amazon_Payments_Model_Observer_Order</class>
+                        <method>closeAmazonOrder</method>
+                    </amazon_payments_observer>
+                </observers>
+            </sales_order_save_commit_after>
         </events>
     </adminhtml>
     <frontend>
