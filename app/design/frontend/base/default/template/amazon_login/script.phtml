@@ -103,11 +103,13 @@ $$('.amazon-login-button').each(function(el) {
 <?php if ($this->getNameInLayout() == 'amazon_login.script.logout') : ?>
 
     <script type="text/javascript">
-
-    window.onAmazonLoginReady = function() {
+    function amazonLogout() {
         amazon.Login.logout();
         document.cookie = "amazon_Login_accessToken=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
-    };
+    }
+
+    window.onAmazonLoginReady = amazonLogout; // If not loading Widget JS
+    amazonLogout();
 
     </script>
 
