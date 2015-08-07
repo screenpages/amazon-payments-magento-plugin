@@ -92,20 +92,6 @@ class Amazon_Payments_CheckoutController extends Amazon_Payments_Controller_Chec
     }
 
     /**
-     * Redirect to account
-     */
-    public function accountAction()
-    {
-        // User logged in at order details page and wants to update payment method from async decline
-        if ($orderIdRedirect = Mage::getModel('core/cookie')->get('amazonOrderIdRedirect')) {
-            Mage::getModel('core/cookie')->delete('amazonOrderIdRedirect');
-            $this->_redirect('sales/order/view/order_id/' . $orderIdRedirect);
-        } else {
-            $this->_redirect('customer/account');
-        }
-    }
-
-    /**
      * Failure action
      */
     public function failureAction()
