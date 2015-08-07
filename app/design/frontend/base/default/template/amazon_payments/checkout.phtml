@@ -264,7 +264,9 @@ AmazonPaymentsMageCheckout.prototype = {
             loader.each(function(el, i) {
                 el.show();
             });
-            smdisable.show();
+            if (smdisable) {
+                smdisable.show();
+            }
         } else {
             widget.each(function(el, i) {
                 el.setOpacity(1);
@@ -273,7 +275,9 @@ AmazonPaymentsMageCheckout.prototype = {
             loader.each(function(el, i) {
                 el.hide();
             });
-            smdisable.hide();
+            if (smdisable) {
+                smdisable.hide();
+            }
         }
     },
 
