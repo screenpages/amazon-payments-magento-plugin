@@ -303,7 +303,7 @@
             <action method="setTemplate"><template>page/popup.phtml</template></action>
         </reference>
         <reference name="head">
-            <block type="core/template" name="amazon_payments.script" template="amazon_payments/script.phtml" />
+            <block type="amazon_payments/script" name="amazon_payments.script" template="amazon_payments/script.phtml" />
             <action method="addItem"><type>skin_css</type><name>amazon_payments/css/popup_alphacube.css</name><params/></action>
         </reference>
 

@@ -165,7 +165,7 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
         }
         // Normal payment
         else {
-            $authorizationDetails = $$this->_getApi($order->getStoreId())->authorize(
+            $authorizationDetails = $this->_getApi($order->getStoreId())->authorize(
                 $payment->getTransactionId(),
                 $this->_getMagentoReferenceId($payment) . '-auth',
                 $amount,
