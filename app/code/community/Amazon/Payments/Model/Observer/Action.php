@@ -17,9 +17,16 @@ class Amazon_Payments_Model_Observer_Action
      */
     public function secureCart(Varien_Event_Observer $observer)
     {
-        if (!Mage::app()->getStore()->isCurrentlySecure() && strpos(Mage::getStoreConfig('web/secure/base_url'), 'https') !== false && Mage::getSingleton('amazon_payments/config')->isSecureCart()) {
+        if (Mage::getSingleton('amazon_payments/config')->isEnabled()
+            && Mage::getSingleton('amazon_payments/config')->isSecureCart()
+            && !Mage::app()->getStore()->isCurrentlySecure()
+            && strpos(Mage::getStoreConfig('web/secure/base_url'), 'https') !== false
+        ) {
             $redirectUrl = Mage::getUrl('checkout/cart/', array('_forced_secure' => true));
-            Mage::app()->getResponse()->setRedirect($redirectUrl)->sendResponse();
+            Mage::app()->getResponse()
+                ->setRedirect($redirectUrl)
+                ->sendResponse();
+            exit;
         }
     }
 }

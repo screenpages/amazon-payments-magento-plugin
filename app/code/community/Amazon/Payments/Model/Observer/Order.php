@@ -21,8 +21,7 @@ class Amazon_Payments_Model_Observer_Order
         $customer = $order->getCustomer();
         $payment  = $order->getPayment();
 
-        if ($customer->getId() && $payment->getMethodInstance()->getCode() == 'amazon_payments') {
-
+        if ($customer && $customer->getId() && $payment->getMethodInstance()->getCode() == 'amazon_payments') {
             $customerAddress = $order->getShippingAddress() ? $order->getShippingAddress() : $order->getBillingAddress();
 
             $newAddress = Mage::getModel('customer/address')
@@ -49,6 +48,23 @@ class Amazon_Payments_Model_Observer_Order
                 Mage::logException($e);
             }
 
+        }
+    }
+
+
+    /**
+     * Event: sales_order_save_commit_after
+     *
+     * Close Amazon ORO
+     */
+    public function closeAmazonOrder(Varien_Event_Observer $observer)
+    {
+        $order   = $observer->getEvent()->getOrder();
+        $payment = $order->getPayment();
+
+        if ($order->getState() == Mage_Sales_Model_Order::STATE_COMPLETE && $order->getOrigData('state') != Mage_Sales_Model_Order::STATE_COMPLETE
+            && $payment->getMethodInstance()->getCode() == 'amazon_payments') {
+            Mage::getModel('amazon_payments/api')->closeOrderReference($payment->getAdditionalInformation('order_reference'));
         }
     }
 }

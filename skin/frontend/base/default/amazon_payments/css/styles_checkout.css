@@ -46,6 +46,8 @@
   max-width:100%;
   height: 140px;
 
+.amazon-widget-wrapper {
+  position:relative;
 }
 
 #shipping-method-wrapper {
@@ -80,6 +82,12 @@
 
 }
 
+#checkout-amazon-payments .button.btn-checkout[disabled] {
+  color:#999;
+  cursor: default;
+  opacity:0.5;
+}
+
 #checkout-amazon-payments button.btn-checkout span {
   color:#4f3310;
   background:none;
@@ -102,6 +110,21 @@
   z-index:10;
 }
 
+.amz-widget-loader {
+  position:absolute;
+  height:100%;
+  width:100%;
+  padding:5px;
+  background:url(https://images-na.ssl-images-amazon.com/images/G/01/ep/loading-large.gif) center center no-repeat;
+  z-index:13;
+}
+
+#shipping-method-disable {
+  position:absolute;
+  height:100%;
+  width:100%;
+  z-index:12;
+}
 
 /* Forgot an Item */
 #review-buttons-container .f-left {
@@ -178,22 +201,3 @@ textarea#sandbox { width:100%;}
     border-right:0;
   }
 }
-
-/*
-@media all and (max-width: 900px) {
-  #col-1-amz {
-    width:49%;
-  }
-  #col-2-amz {
-    width:50%;
-    margin-right:0;
-  }
-  #col-3-amz {
-    float:none;
-    width:auto;
-    margin-right:0;
-  }
-}
-*/
-
-

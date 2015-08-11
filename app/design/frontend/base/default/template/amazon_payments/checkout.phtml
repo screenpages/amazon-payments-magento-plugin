@@ -26,11 +26,13 @@
 
                 <div id="amazon-widget-address-wrapper" class="amazon-widget-wrapper">
                     <h2><?php echo $this->__('Shipping Address'); ?></h2>
+                    <div class="amz-widget-loader" style="display:none;"></div>
                     <div id="amazon-widget-address"></div>
                 </div>
 
                 <?php if ($this->getChild('shipping_method')->isShow()) : ?>
                     <div id="shipping-method-wrapper">
+                        <div id="shipping-method-disable" style="display:none;"></div>
                         <?php echo $this->getChildHtml('shipping_method') ?>
                     </div>
                 <?php endif; ?>
@@ -41,6 +43,7 @@
 
                 <div id="amazon-widget-wrapper" class="amazon-widget-wrapper">
                     <h2><?php echo $this->__('Payment'); ?></h2>
+                    <div class="amz-widget-loader" style="display:none;"></div>
                     <div id="amazon-widget-wallet"></div>
                 </div>
 
@@ -66,7 +69,7 @@
                 <small>
                  	{"SandboxSimulation": {"State":"Declined", "ReasonCode":"InvalidPaymentMethod"}}
                   <br />
-                  (<a href="http://docs.developer.amazonservices.com/en_US/apa_guide/APAGuide_Testing.html" target="_blank">More Info</a>)<br />
+                  (<a href="https://payments.amazon.com/documentation/lpwa/201749840#201750790" target="_blank">More Info</a>)<br />
                 </small>
 
 
@@ -93,13 +96,15 @@ AmazonPaymentsMageCheckout.prototype = {
         this.opts = opts;
         this.amazonBillingAgreementId = null;
         this.amazonBillingAgreementConsent = false;
+        this.hasPayment = false;
+        this.hasReviewLoader = false;
         //this.setShippingMethod();
     },
 
     // Dynamically load shipping method HTML
     setShippingMethod: function() {
         if (this.opts.shippingMethod) {
-            this.toggleOrderSubmit(true);
+            this.restrictPlaceOrder(true);
 
             var request = new Ajax.Request(this.opts.shippingMethod.url, {
                 method: 'post',
@@ -129,7 +134,7 @@ AmazonPaymentsMageCheckout.prototype = {
             }
         }
 
-        this.toggleOrderSubmit(true);
+        this.restrictPlaceOrder(true);
 
         var request = new Ajax.Request(this.opts.review.url, {
             method: 'post',
@@ -154,7 +159,7 @@ AmazonPaymentsMageCheckout.prototype = {
         $$(".button.btn-checkout").invoke('writeAttribute','onclick', 'amazonPaymentsMageCheckout.saveOrder()');
         this.agreementsForm = $('checkout-agreements')
         $("amz-review-loader").hide();
-        this.toggleOrderSubmit(false);
+        this.restrictPlaceOrder(false);
     },
 
     saveOrder: function() {
@@ -182,7 +187,8 @@ AmazonPaymentsMageCheckout.prototype = {
           params.sandbox = sandbox.getValue();
       }
 
-      this.toggleOrderSubmit(true);
+      this.restrictPlaceOrder(true);
+      this.restrictWidgets(true);
 
       var request = new Ajax.Request(this.opts.save.url, {
           method: 'post',
@@ -209,6 +215,10 @@ AmazonPaymentsMageCheckout.prototype = {
             window.top.location.href = this.successUrl;
         }
         else{
+
+            this.restrictPlaceOrder(false);
+            this.restrictWidgets(false);
+
             var msg = response.error_messages;
             if (typeof(msg)=='object') {
                 msg = msg.join("\n");
@@ -231,12 +241,15 @@ AmazonPaymentsMageCheckout.prototype = {
                 setTimeout(loadAmazonWallet, 2000); // Refresh Wallet
             }
 
+            if (msg.indexOf("Declined") != -1) {
+                this.restrictShipping();
+            }
+
         }
 
-        this.toggleOrderSubmit(false);
     },
 
-    toggleOrderSubmit: function(isDisabled) {
+    restrictPlaceOrder: function(isDisabled, hideLoader) {
         var btn = $$(".button.btn-checkout");
         var review = $("checkout-review-table-wrapper");
         var loader = $("amz-review-loader");
@@ -244,16 +257,64 @@ AmazonPaymentsMageCheckout.prototype = {
         if (isDisabled) {
             if (review) {
                 review.setOpacity(0.5);
-                loader.show();
+                if (!hideLoader) {
+                    loader.show();
+                    this.hasReviewLoader = true;
+                }
             }
             btn.each(function(el, i) { el.disable(); });
         } else {
             if (review) {
                 review.setOpacity(1);
                 loader.hide();
+                this.hasReviewLoader = false;
             }
             btn.each(function(el, i) { el.enable(); });
         }
+    },
+
+    restrictWidgets: function(isDisabled) {
+        var widget    = $$(".amazon-widget-wrapper .widget-container, #shipping-method-wrapper");
+        var loader    = $$(".amz-widget-loader");
+        var smdisable = $("shipping-method-disable");
+
+        if (isDisabled) {
+            widget.each(function(el, i) {
+                el.setOpacity(0.5);
+                el.setStyle({"pointer-events" : "none"});
+            });
+            loader.each(function(el, i) {
+                el.show();
+            });
+            if (smdisable) {
+                smdisable.show();
+            }
+        } else {
+            widget.each(function(el, i) {
+                el.setOpacity(1);
+                el.setStyle({"pointer-events" : "auto"});
+            });
+            loader.each(function(el, i) {
+                el.hide();
+            });
+            if (smdisable) {
+                smdisable.hide();
+            }
+        }
+    },
+
+    restrictShipping: function() {
+        clearInterval(restrictInterval);
+
+        $$("#shipping-method-wrapper, #amazon-widget-address-wrapper").each(function(el, i) {
+            el.setOpacity(0.5);
+            //el.setStyle({"pointer-events" : "none"});
+        });
+        $$("#amazon-widget-address-wrapper .amz-widget-loader").each(function(el, i) {
+            el.show();
+            el.setStyle({"background" : "none"});
+        });
+        $("shipping-method-disable").show();
     }
 };
 
@@ -285,7 +346,16 @@ var lastPrice;
 var ShippingMethod = Class.create();
 var Review = Class.create();
 
-
+// Poll if payment method is set ("Place Order" is loaded via ajax and can't depend on widget events)
+var restrictInterval = setInterval(function() {
+    if (!amazonPaymentsMageCheckout.hasReviewLoader) {
+        if (amazonPaymentsMageCheckout.hasPayment) {
+            amazonPaymentsMageCheckout.restrictPlaceOrder(false);
+        } else {
+            amazonPaymentsMageCheckout.restrictPlaceOrder(true, true);
+        }
+    }
+}, 100);
 </script>
 
 
@@ -386,9 +456,11 @@ function loadAmazonConsent() {
           if (typeof billingAgreementConsentStatus != "undefined") {
               amazonPaymentsMageCheckout.amazonBillingAgreementConsent = billingAgreementConsentStatus.getConsentStatus() == "true" ? true : false;
           }
+      onPaymentSelect: function(orderReference) {
+          amazonPaymentsMageCheckout.hasPayment = true;
       },
       onError: function(error) {
-        console.log(error.getErrorMessage());
+          console.log(error.getErrorMessage());
       }
     }).bind("amazon-widget-consent");
 }

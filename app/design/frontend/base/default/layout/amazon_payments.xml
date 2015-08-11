@@ -24,10 +24,10 @@
         </reference>
 
         <reference name="checkout.cart">
-            <block type="core/template" name="amazon_payments.script" template="amazon_payments/script.phtml" />
+            <block type="amazon_payments/script" name="amazon_payments.script" template="amazon_payments/script.phtml" />
 
             <!-- ifconfig only works with action -->
-            <reference name="after_body_start">
+            <reference name="before_body_end">
                 <action method="append" ifconfig="payment/amazon_payments/enabled">
                     <block>amazon_payments.script</block>
                 </action>
@@ -56,7 +56,7 @@
     <checkout_onepage_index>
 
         <reference name="head">
-            <block type="core/template" name="amazon_payments.script" template="amazon_payments/script.phtml" />
+            <block type="amazon_payments/script" name="amazon_payments.script" template="amazon_payments/script.phtml" />
         </reference>
 
         <reference name="checkout.onepage">
@@ -64,6 +64,7 @@
         </reference>
 
         <reference name="checkout.onepage.login">
+            <!-- Remove this to prevent "Login with Amazon" button from appearing on checkout -->
             <action method="setTemplate" ifconfig="payment/amazon_payments/enabled">
                 <template helper="amazon_payments/data/switchOnepageLoginTemplateIf">
                     <template_amazon>amazon_payments/onepage/login.phtml</template_amazon>
@@ -187,7 +188,7 @@
         </reference>
 
         <reference name="head">
-            <block type="core/template" name="amazon_payments.script" template="amazon_payments/script.phtml" />
+            <block type="amazon_payments/script" name="amazon_payments.script" template="amazon_payments/script.phtml" />
         </reference>
     </checkout_amazon_payments_index>
 
@@ -266,7 +267,7 @@
         <block type="amazon_payments/button" name="addtocart-amazon-button" template="amazon_payments/button_shortcut.phtml" />
 
         <reference name="head">
-            <block type="core/template" name="amazon_payments.script" template="amazon_payments/script.phtml" />
+            <block type="amazon_payments/script" name="amazon_payments.script" template="amazon_payments/script.phtml" />
         </reference>
 
         <reference name="product.info.addtocart">
@@ -280,6 +281,19 @@
         </reference>
 
     </catalog_product_view>
+
+
+    <!--
+    Sidecart/Minicart Shortcut
+    -->
+    <default>
+        <reference name="head">
+            <block type="amazon_payments/script" name="amazon_payments.script" template="amazon_payments/script.phtml" />
+        </reference>
+        <reference name="cart_sidebar.extra_actions">
+            <block type="amazon_payments/button" name="AmazonPayButtonSideCart" template="amazon_payments/button.phtml"/>
+        </reference>
+    </default>
 
     <!--
     Ajax cart for Token Payments
@@ -331,7 +345,7 @@
     -->
     <firecheckout_index_index translate="label">
         <reference name="head">
-            <block type="core/template" name="amazon_payments.script" template="amazon_payments/script.phtml" />
+            <block type="amazon_payments/script" name="amazon_payments.script" template="amazon_payments/script.phtml" />
         </reference>
     </firecheckout_index_index>
 
@@ -340,9 +354,57 @@
     -->
     <opc_index_index translate="label">
         <reference name="head">
-            <block type="core/template" name="amazon_payments.script" template="amazon_payments/script.phtml" />
+            <block type="amazon_payments/script" name="amazon_payments.script" template="amazon_payments/script.phtml" />
         </reference>
     </opc_index_index>
 
+    <!--
+    OneStepCheckout.com checkout
+    -->
+    <onestepcheckout_index_index>
+
+        <reference name="head">
+            <block type="amazon_payments/script" name="amazon_payments.script" template="amazon_payments/script.phtml" />
+        </reference>
+
+        <reference name="checkout.onepage">
+            <block type="amazon_payments/button" name="amazonpaymentsbutton" template="amazon_payments/onepage/button.phtml"/>
+        </reference>
+
+        <reference name="checkout.onepage.login">
+            <action method="setTemplate" ifconfig="payment/amazon_payments/enabled">
+                <template helper="amazon_payments/data/switchOnepageLoginTemplateIf">
+                    <template_amazon>amazon_payments/onepage/login.phtml</template_amazon>
+                    <template_default>checkout/onepage/login.phtml</template_default>
+                 </template>
+             </action>
+
+            <block type="core/text_list" name="col1_before" />
+            <block type="core/text_list" name="col2_before" />
+
+            <reference name="col1_before">
+                <block type="amazon_payments/button" name="AmazonPayButtonBefore" template="amazon_payments/onepage/button.phtml"/>
+            </reference>
+
+            <reference name="col2_before">
+                <block type="amazon_payments/button" name="AmazonPayButtonAdditional" template="amazon_payments/onepage/button.phtml"/>
+            </reference>
+        </reference>
+
+    </onestepcheckout_index_index>
+
+    <!--
+    Add Wallet Widget for Async Declines
+    -->
+    <sales_order_view translate="label">
+        <reference name="head">
+            <block type="amazon_payments/script" name="amazon_payments.script" template="amazon_payments/script.phtml" />
+        </reference>
+        <reference name="my.account.wrapper">
+            <block type="amazon_payments/sales_view" template="amazon_payments/sales/order/amazon_wallet.phtml" before="info">
+                <block type="amazon_login/button" name="amazon_login.no-or" template="amazon_login/button.phtml"/>
+            </block>
+        </reference>
+    </sales_order_view>
 
 </layout>

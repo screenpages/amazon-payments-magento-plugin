@@ -43,6 +43,7 @@ abstract class Amazon_Payments_Controller_Checkout extends Mage_Checkout_Control
     public function preDispatch()
     {
         parent::preDispatch();
+
         $this->_amazonOrderReferenceId = htmlentities($this->getRequest()->getParam('amazon_order_reference_id'));
 
         if (!$this->_amazonOrderReferenceId) {
@@ -81,7 +82,10 @@ abstract class Amazon_Payments_Controller_Checkout extends Mage_Checkout_Control
             // Full-page redirect (user did not sign in using popup)
             if ($this->getRequest()->getParam('nopopup')) {
                 $this->_redirectUrl(Mage::helper('amazon_payments')->getCheckoutUrl(false) . '#access_token=' . $token);
-
+            }
+            // Redirect to account page
+            else if (Mage::app()->getRequest()->getParams('account') == 'redirect') {
+                $this->_redirect('customer/account');
             }
             // User signed-in via popup
             else if (!$this->getRequest()->getParam('ajax')) {
@@ -118,6 +122,19 @@ abstract class Amazon_Payments_Controller_Checkout extends Mage_Checkout_Control
         Mage::helper('amazon_payments/data')->clearSession();
     }
 
+    /**
+     * Redirect to account
+     */
+    public function accountAction()
+    {
+        // User logged in at order details page and wants to update payment method from async decline
+        if ($orderIdRedirect = Mage::getModel('core/cookie')->get('amazonOrderIdRedirect')) {
+            Mage::getModel('core/cookie')->delete('amazonOrderIdRedirect');
+            $this->_redirect('sales/order/view/order_id/' . $orderIdRedirect);
+        } else {
+            $this->_redirect('customer/account');
+        }
+    }
 
     /**
      * Validate ajax request and redirect on failure
@@ -257,15 +274,15 @@ abstract class Amazon_Payments_Controller_Checkout extends Mage_Checkout_Control
 
 
             // Set billing address (if allowed by scope)
-            if ($orderDetails->getBillingAddress()) {
-                $billing = $orderDetails->getBillingAddress()->getPhysicalAddress();
-                $data['use_for_shipping'] = false;
+            if ($orderReferenceDetails->getBillingAddress()) {
+                $billing = $orderReferenceDetails->getBillingAddress()->getPhysicalAddress();
+                //$data['use_for_shipping'] = false;
 
                 $name      = $billing->getName();
                 $firstName = substr($name, 0, strrpos($name, ' '));
                 $lastName  = substr($name, strlen($firstName) + 1);
 
-                $regionModel = Mage::getModel('directory/region')->loadByCode($address->getStateOrRegion(), $address->getCountryCode());
+                $regionModel = Mage::getModel('directory/region')->loadByCode($billing->getStateOrRegion(), $billing->getCountryCode());
                 $regionId    = $regionModel->getId();
 
                 $dataBilling = array(

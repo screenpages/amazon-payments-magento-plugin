@@ -41,7 +41,82 @@ class Amazon_Login_Block_Button extends Mage_Core_Block_Template
         }
 
         return 'https://images-na.ssl-images-amazon.com/images/G/01/lwa/btnLWA' . $button . '.png';
+    }
 
+    /**
+     * Is Amazon Payments enabled?
+     *
+     * @return bool
+     */
+    public function isAmazonPaymentsEnabled()
+    {
+        return $this->helper('amazon_login')->isAmazonPaymentsEnabled();
+    }
+
+    /**
+     * Is popup window?
+     *
+     * @return bool
+     */
+    public function isPopup()
+    {
+        return ($this->helper('amazon_login')->isPopup());
+    }
+
+    /**
+     * Get additional login scope
+     */
+    public function getAdditionalScope()
+    {
+         return $this->helper('amazon_login')->getAdditionalScope();
+    }
+
+    /**
+     * Get button type
+     */
+    public function getButtonType()
+    {
+         return Mage::getStoreConfig('amazon_login/settings/button_type');
+    }
+
+    /**
+     * Get button size
+     */
+    public function getButtonSize()
+    {
+         return Mage::getStoreConfig('amazon_login/settings/button_size');
+    }
+
+    /**
+     * Get button color
+     */
+    public function getButtonColor()
+    {
+         return Mage::getStoreConfig('amazon_login/settings/button_color');
+    }
+
+    /**
+     * Return seller ID
+     */
+    public function getSellerId()
+    {
+        return $this->helper('amazon_payments')->getSellerId();
+    }
+
+    /**
+     * Get login auth URL
+     */
+    public function getLoginAuthUrl()
+    {
+         return $this->getUrl('amazon_payments/checkout/authorize', array('_forced_secure'=>true));
+    }
+
+    /**
+     * Return URL to use for checkout
+     */
+    public function getCheckoutUrl()
+    {
+        return $this->helper('amazon_payments')->getCheckoutUrl() . 'account/redirect';
     }
 
 }

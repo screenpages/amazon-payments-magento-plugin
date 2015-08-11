@@ -14,9 +14,11 @@ class Amazon_Payments_Model_Async extends Mage_Core_Model_Abstract
     /**
      * Return Amazon API
      */
-    protected function _getApi()
+    protected function _getApi($storeId = null)
     {
-        return Mage::getSingleton('amazon_payments/api');
+        $_api = Mage::getModel('amazon_payments/api');
+        $_api->setStoreId($storeId);
+        return $_api;
     }
 
     /**
@@ -44,11 +46,38 @@ class Amazon_Payments_Model_Async extends Mage_Core_Model_Abstract
     }
 
     /**
+     * Send Payment Decline email
+     */
+    protected function _sendPaymentDeclineEmail(Mage_Sales_Model_Order $order)
+    {
+        $emailTemplate = Mage::getModel('core/email_template')->loadDefault('amazon_payments_async_decline');
+
+        $orderUrl = Mage::getUrl('sales/order/view', array(
+            'order_id'       => $order->getId(),
+            '_store'         => $order->getStoreId(),
+            '_forced_secure' => true,
+        ));
+
+        $templateParams = array(
+            'order_url' => $orderUrl,
+            'store'     => Mage::app()->getStore($order->getStoreId()),
+            'customer'  => Mage::getModel('customer/customer')->load($order->getCustomerId()),
+        );
+
+        $sender = array(
+            'name' => Mage::getStoreConfig('trans_email/ident_general/email', $order->getStoreId()),
+            'email' => Mage::getStoreConfig('trans_email/ident_general/name', $order->getStoreId())
+        );
+
+        $emailTemplate->sendTransactional($emailTemplate->getId(), $sender, $order->getCustomerEmail(), $order->getCustomerName(), $templateParams, $order->getStoreId());
+    }
+
+    /**
      * Poll Amazon API to receive order status and update Magento order.
      */
     public function syncOrderStatus(Mage_Sales_Model_Order $order, $isManualSync = false)
     {
-        $_api = $this->_getApi();
+        $_api = $this->_getApi($order->getStoreId());
         $message = '';
 
         try {
@@ -78,29 +107,37 @@ class Amazon_Payments_Model_Async extends Mage_Core_Model_Abstract
 
                 // Last transaction ID is Amazon Authorize Reference ID
                 $lastAmazonReference = $order->getPayment()->getLastTransId();
-                $resultAuthorize = $this->_getApi()->getAuthorizationDetails($lastAmazonReference);
+                $resultAuthorize = $this->_getApi($order->getStoreId())->getAuthorizationDetails($lastAmazonReference);
                 $amazonAuthorizationState = $resultAuthorize->getAuthorizationStatus()->getState();
                 $reasonCode = $resultAuthorize->getAuthorizationStatus()->getReasonCode();
 
                 // Re-authorize if holded, an Open order reference, and manual sync
                 if ($order->getState() == Mage_Sales_Model_Order::STATE_HOLDED && $orderReferenceDetails->getOrderReferenceStatus()->getState() == 'Open' && $isManualSync) {
+                    $payment = $order->getPayment();
+                    $amount  = $payment->getAmountOrdered();
+                    $method  = $payment->getMethodInstance();
 
                     // Re-authorize
                     $payment->setTransactionId($amazonOrderReference);
+                    $payment->setAdditionalInformation('sandbox', null); // Remove decline and other test simulations
+
+                    $method->setForceSync(true);
 
                     switch ($method->getConfigData('payment_action')) {
                         case $method::ACTION_AUTHORIZE:
-                            $method->authorize($payment, $amount, false);
+                            $resultAuthorize = $method->authorize($payment, $amount, false);
                             break;
 
                         case $method::ACTION_AUTHORIZE_CAPTURE:
-                            $method->authorize($payment, $amount, true);
+                            $resultAuthorize = $method->authorize($payment, $amount, true);
                             break;
                         default:
                             break;
                     }
 
                     // Resync
+                    $order->setState(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT, true);
+                    $order->save();
                     $this->syncOrderStatus($order);
                     return;
                 }
@@ -119,13 +156,14 @@ class Amazon_Payments_Model_Async extends Mage_Core_Model_Abstract
                           $order->setState(Mage_Sales_Model_Order::STATE_HOLDED, true);
                       }
 
-                      $message .= " Order placed on hold due to $reasonCode. Please direct customer to Amazon Payments site to update their payment method.";
+                      $this->_sendPaymentDeclineEmail($order);
+                      $message .= " Order placed on hold due to $reasonCode. Email sent to customer with link to order details page and instructions to update their payment method.";
                       break;
 
                   // Open (Authorize Only)
                   case Amazon_Payments_Model_Api::AUTH_STATUS_OPEN:
                       $order->setState(Mage_Sales_Model_Order::STATE_NEW);
-                      $order->setStatus($_api->getConfig()->getNewOrderStatus());
+                      $order->setStatus($_api->getConfig()->getNewOrderStatus($order->getStoreId()));
                       break;
 
                   // Closed (Authorize and Capture)
@@ -134,9 +172,9 @@ class Amazon_Payments_Model_Async extends Mage_Core_Model_Abstract
                       // Payment captured; create invoice
                       if ($reasonCode == 'MaxCapturesProcessed') {
                           $order->setState(Mage_Sales_Model_Order::STATE_PROCESSING);
-                          $order->setStatus($_api->getConfig()->getNewOrderStatus());
+                          $order->setStatus($_api->getConfig()->getNewOrderStatus($order->getStoreId()));
 
-                          if ($this->_createInvoice($order, $orderReferenceDetails->getIdList()->getmember())) {
+                          if ($this->_createInvoice($order, $resultAuthorize->getIdList()->getmember())) {
                               $message .= ' ' . Mage::helper('payment')->__('Invoice created.');
                           }
                       }
