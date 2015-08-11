@@ -371,6 +371,7 @@ var addressBookOpts = {
     },
     onAddressSelect: function(orderReference) {
         amazonPaymentsMageCheckout.setShippingMethod();
+        amazonPaymentsMageCheckout.hasPayment = false;
     },
     design: {
         designMode: 'responsive'
@@ -421,6 +422,7 @@ function loadAmazonWallet() {
             <?php if ($this->isTokenEnabled()) : ?>
             loadAmazonConsent();
             <?php endif; ?>
+            amazonPaymentsMageCheckout.hasPayment = true;
         },
         onError: function(error) {
             console.log(error.getErrorMessage());
@@ -456,6 +458,7 @@ function loadAmazonConsent() {
           if (typeof billingAgreementConsentStatus != "undefined") {
               amazonPaymentsMageCheckout.amazonBillingAgreementConsent = billingAgreementConsentStatus.getConsentStatus() == "true" ? true : false;
           }
+      },
       onPaymentSelect: function(orderReference) {
           amazonPaymentsMageCheckout.hasPayment = true;
       },

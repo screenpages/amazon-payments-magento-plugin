@@ -238,13 +238,13 @@ abstract class Amazon_Payments_Controller_Checkout extends Mage_Checkout_Control
         if ($this->getAmazonOrderReferenceId() || $this->getAmazonBillingAgreementId()) {
 
             if ($this->getAmazonBillingAgreementId()) {
-                $orderDetails = $this->_getApi()->getBillingAgreementDetails($this->getAmazonBillingAgreementId(), Mage::getSingleton('checkout/session')->getAmazonAccessToken());
+                $orderReferenceDetails = $this->_getApi()->getBillingAgreementDetails($this->getAmazonBillingAgreementId(), Mage::getSingleton('checkout/session')->getAmazonAccessToken());
             }
             else {
-                $orderDetails = $this->_getApi()->getOrderReferenceDetails($this->getAmazonOrderReferenceId(), Mage::getSingleton('checkout/session')->getAmazonAccessToken());
+                $orderReferenceDetails = $this->_getApi()->getOrderReferenceDetails($this->getAmazonOrderReferenceId(), Mage::getSingleton('checkout/session')->getAmazonAccessToken());
             }
 
-            $address = $orderDetails->getDestination()->getPhysicalDestination();
+            $address = $orderReferenceDetails->getDestination()->getPhysicalDestination();
 
             // Split name into first/last
             $name      = $address->getName();
