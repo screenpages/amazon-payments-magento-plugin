@@ -518,16 +518,25 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
         $order = $payment->getOrder();
         $orderTransaction = $payment->lookupTransaction(false, Mage_Sales_Model_Order_Payment_Transaction::TYPE_ORDER);
 
-        if (!$orderTransaction) {
+        if (!$orderTransaction || $payment->getAdditionalInformation('billing_agreement_id')) {
             $orderTransactionId = $payment->getAdditionalInformation('order_reference');
         }
         else {
             $orderTransactionId = $orderTransaction->getTxnId();
         }
 
+        if ($payment->getAdditionalInformation('billing_agreement_id')) {
+            $orderReferenceDetails = $this->_getApi()->getOrderReferenceDetails($orderTransactionId);
+            $state = $orderReferenceDetails->getOrderReferenceStatus()->getState();
+            if ($state == 'Closed' || $state == 'Canceled') {
+                return $this;
+            }
+        }
+
         if ($orderTransaction) {
             $this->_getApi($order->getStoreId())->cancelOrderReference($orderTransactionId);
         }
+
         return $this;
     }
 
