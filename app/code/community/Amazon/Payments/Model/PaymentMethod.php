@@ -211,7 +211,15 @@ class Amazon_Payments_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
                 }
 
                 $this->_setErrorCheck();
-                Mage::throwException("Amazon could not process your order.\n\n" . $status->getReasonCode() . " (" . $status->getState() . ")\n" . $status->getReasonDescription());
+
+                // specific error handling for InvalidPaymentMethod decline scenario
+                if($status->getReasonCode() == 'InvalidPaymentMethod') {
+                        Mage::throwException("There was a problem with your payment. Please select another payment method from the Amazon Wallet and try again.");
+                        break;
+                }
+
+                // all other declines - AmazonRejected && ProcessingFailure && TransactionTimedOut (when async is off)
+                Mage::throwException("Amazon could not process your order. Please try again. If this continues, please select a different payment option.\n\n" . $status->getReasonCode() . " (" . $status->getState() . ")\n" . $status->getReasonDescription());
                 break;
             default:
                 $this->_setErrorCheck();
