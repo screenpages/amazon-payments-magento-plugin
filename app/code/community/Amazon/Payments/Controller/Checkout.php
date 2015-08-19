@@ -87,6 +87,19 @@ abstract class Amazon_Payments_Controller_Checkout extends Mage_Checkout_Control
         Mage::helper('amazon_payments/data')->clearSession();
     }
 
+    /**
+     * Redirect to account
+     */
+    public function accountAction()
+    {
+        // User logged in at order details page and wants to update payment method from async decline
+        if ($orderIdRedirect = Mage::getModel('core/cookie')->get('amazonOrderIdRedirect')) {
+            Mage::getModel('core/cookie')->delete('amazonOrderIdRedirect');
+            $this->_redirect('sales/order/view/order_id/' . $orderIdRedirect);
+        } else {
+            $this->_redirect('customer/account');
+        }
+    }
 
     /**
      * Validate ajax request and redirect on failure

@@ -48,9 +48,9 @@ class Amazon_Payments_Model_Async extends Mage_Core_Model_Abstract
     /**
      * Send Payment Decline email
      */
-    protected function _sendPaymentDeclineEmail(Mage_Sales_Model_Order $order)
+    protected function _sendPaymentDeclineEmail(Mage_Sales_Model_Order $order, $type = 'soft')
     {
-        $emailTemplate = Mage::getModel('core/email_template')->loadDefault('amazon_payments_async_decline');
+        $emailTemplate = Mage::getModel('core/email_template')->loadDefault('amazon_payments_async_decline_' . $type);
 
         $orderUrl = Mage::getUrl('sales/order/view', array(
             'order_id'       => $order->getId(),
@@ -141,8 +141,13 @@ class Amazon_Payments_Model_Async extends Mage_Core_Model_Abstract
                           $order->setState(Mage_Sales_Model_Order::STATE_HOLDED, true);
                       }
 
-                      $this->_sendPaymentDeclineEmail($order);
-                      $message .= Mage::helper('payment')->__(' Order placed on hold due to "%s". Email sent to customer with link to order details page and instructions to update their payment method.', $reasonCode);
+                      if ($reasonCode == 'InvalidPaymentMethod') {
+                          $this->_sendPaymentDeclineEmail($order, 'soft');
+                          $message .= " Order placed on hold due to $reasonCode. Email sent to customer with link to order details page and instructions to update their payment method.";
+                      } else {
+                          $this->_sendPaymentDeclineEmail($order, 'hard');
+                          $message .= " Order placed on hold due to $reasonCode. Email sent to customer with instructions to contact seller.";
+                      }
                       break;
 
                   // Open (Authorize Only)
