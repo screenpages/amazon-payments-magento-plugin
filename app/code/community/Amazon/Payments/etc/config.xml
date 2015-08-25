@@ -162,6 +162,7 @@
                 <title>Amazon Payments</title>
                 <model>amazon_payments/paymentMethod</model>
                 <payment_action>authorize_capture</payment_action>
+                <checkout_page>amazon</checkout_page>
                 <show_pay_cart>1</show_pay_cart>
                 <order_status>processing</order_status>
                 <active>1</active>
@@ -170,6 +171,7 @@
                 <button_color>Gold</button_color>
                 <button_size>medium</button_size>
                 <button_badge>1</button_badge>
+                <popup>1</popup>
             </amazon_payments>
         </payment>
     </default>

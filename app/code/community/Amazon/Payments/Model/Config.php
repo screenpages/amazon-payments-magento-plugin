@@ -15,8 +15,8 @@ class Amazon_Payments_Model_Config
      */
 
     const CONFIG_XML_PATH_ENABLED        = 'payment/amazon_payments/enabled';
-    const CONFIG_XML_PATH_CLIENT_ID      = 'amazon_login/settings/client_id';
-    const CONFIG_XML_PATH_CLIENT_SECRET  = 'amazon_login/settings/client_secret';
+    const CONFIG_XML_PATH_CLIENT_ID      = 'payment/amazon_payments/settings/client_id';
+    const CONFIG_XML_PATH_CLIENT_SECRET  = 'payment/amazon_payments/settings/client_secret';
     const CONFIG_XML_PATH_SELLER_ID      = 'payment/amazon_payments/seller_id';
     const CONFIG_XML_PATH_ACCESS_KEY     = 'payment/amazon_payments/access_key';
     const CONFIG_XML_PATH_ACCESS_SECRET  = 'payment/amazon_payments/access_secret';
@@ -36,9 +36,6 @@ class Amazon_Payments_Model_Config
     const CONFIG_XML_PATH_BUTTON_COLOR   = 'payment/amazon_payments/button_color';
     const CONFIG_XML_PATH_BUTTON_SIZE    = 'payment/amazon_payments/button_size';
     const CONFIG_XML_PATH_BUTTON_BADGE   = 'payment/amazon_payments/button_badge';
-
-    const CONFIG_XML_PATH_LOGIN_ENABLED  = 'amazon_login/settings/enabled';
-
 
     /**
      * Retrieve config value for store by path
@@ -89,7 +86,7 @@ class Amazon_Payments_Model_Config
      */
     public function isGuestCheckout($store = null)
     {
-        return ! (bool) $this->_getStoreConfig(self::CONFIG_XML_PATH_LOGIN_ENABLED, $store);
+        return false;
     }
 
     /**
