@@ -104,6 +104,8 @@
             <cart_updatepost>/checkout/cart/updatePost</cart_updatepost>
             <checkout_amazon>/checkout/amazon_payments</checkout_amazon>
             <amazon_checkout>/amazon_payments/checkout</amazon_checkout>
+            <cart_couponpost>/checkout/cart/couponPost</cart_couponpost>
+            <cart_estimatepost>/checkout/cart/estimatePost</cart_estimatepost>
         </secure_url>
         <routers>
             <amazon_payments>
