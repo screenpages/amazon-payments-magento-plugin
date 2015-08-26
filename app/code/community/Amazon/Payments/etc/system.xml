@@ -29,15 +29,10 @@
                     Login and Pay with Amazon helps you increase conversion, reduce fraud, acquire new customers and build loyalty.
                     <br /><br />
 
+
                     <div id="amazon_simplepath">
-                      <select>
-                        <option value="new">Set up a NEW Amazon Payments Merchant Account</option>
-                        <option value="existing">I have my keys (or non-US merchant)</option>
-                      </select>
-                      <br /><br />
-
-                      <button><span>Go!</span></button>
-
+                        <button><span>Setup Pay with Amazon</span></button>
+                        <a href="#" id="simplepath-skip">Skip setup, I have keys</a>
                     </div>
 
                     <div id="amazon_instructions">

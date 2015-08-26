@@ -16,18 +16,17 @@ document.observe("dom:loaded", function() {
 
     amazonSimplepath.select("button")[0].observe("click", function(e) {
         e.stop();
-        switch (amazonSimplepath.select("select")[0].value) {
-          case "new":
-          case "retrieve":
-            window.open(amazonSimplepathUrl);
-            break;
-          case "existing":
-            amazonFields.show();
-            amazonInstructions.show();
-            amazonSimplepath.hide();
-            break;
-        }
+        window.open(amazonSimplepathUrl);
     });
+    amazonSimplepath.select("a")[0].observe("click", function(e) {
+        e.stop();
+        amazonFields.show();
+        amazonInstructions.show();
+        amazonSimplepath.hide();
+
+    });
+
+
 
     amazonImportButton.select("button")[0].observe("click", function(e) {
         amazonImportButton.hide();
