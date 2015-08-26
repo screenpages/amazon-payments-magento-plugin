@@ -73,7 +73,7 @@
               <show_in_store>0</show_in_store>
             </enabled>
 
-            <credentials type="group" translate="label">
+            <ap_credentials type="group" translate="label">
                 <label>Credentials</label>
                 <show_in_default>1</show_in_default>
                 <show_in_website>1</show_in_website>
@@ -92,6 +92,7 @@
                     <simplepath_json translate="label">
                         <label>Import From Clipboard</label>
                         <frontend_type>textarea</frontend_type>
+                        <backend_model>amazon_payments/system_config_backend_simplepath</backend_model>
                         <comment><![CDATA[<button><span>Save</span></button>]]></comment>
                         <sort_order>7</sort_order>
                         <show_in_default>1</show_in_default>
@@ -169,9 +170,9 @@
                     -->
 
                 </fields>
-            </credentials>
+            </ap_credentials>
 
-            <checkout type="group" translate="label">
+            <ap_checkout type="group" translate="label">
                 <label>Checkout Style</label>
                 <show_in_default>1</show_in_default>
                 <show_in_website>1</show_in_website>
@@ -325,9 +326,9 @@
                         </fields>
                     </login>
                 </fields>
-          </checkout>
+          </ap_checkout>
 
-          <transaction type="group" translate="label">
+          <ap_transaction type="group" translate="label">
               <label>Transaction</label>
               <show_in_default>1</show_in_default>
               <show_in_website>1</show_in_website>
@@ -395,9 +396,9 @@
                       </fields>
                   </advanced>
               </fields>
-          </transaction>
+          </ap_transaction>
 
-          <developer type="group" translate="label">
+          <ap_developer type="group" translate="label">
               <label>Developer</label>
               <show_in_default>1</show_in_default>
               <show_in_website>1</show_in_website>
@@ -443,7 +444,7 @@
                   </restricted_ips>
 
               </fields>
-          </developer>
+          </ap_developer>
 
           </fields>
         </amazon_payments>

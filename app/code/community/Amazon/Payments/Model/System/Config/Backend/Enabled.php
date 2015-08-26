@@ -16,11 +16,11 @@ class Amazon_Payments_Model_System_Config_Backend_Enabled extends Mage_Core_Mode
     public function save()
     {
 
-        $data = $this->getFieldsetData();
+        $data = $this->_getCredentials();
         $isEnabled = $this->getValue();
 
         if ($isEnabled) {
-            if ($data['seller_id'] && !ctype_alnum($data['seller_id'])) {
+            if ($data['seller_id']['value'] && !ctype_alnum($data['seller_id']['value'])) {
                 Mage::getSingleton('core/session')->addError('Error: Please verify your Seller ID (alphanumeric characters only).');
             }
         }
@@ -32,7 +32,7 @@ class Amazon_Payments_Model_System_Config_Backend_Enabled extends Mage_Core_Mode
      */
     public function _afterSaveCommit()
     {
-        $data = $this->getFieldsetData();
+        $data = $this->_getCredentials();
         $isEnabled = $this->getValue();
 
         if ($isEnabled) {
@@ -45,14 +45,14 @@ class Amazon_Payments_Model_System_Config_Backend_Enabled extends Mage_Core_Mode
                 'MaxErrorRetry' => 3,
             );
             $service = new MarketplaceWebServiceSellers_Client(
-                $data['access_key'],
-                $data['access_secret'],
+                $data['access_key']['value'],
+                $data['access_secret']['value'],
                 'Login and Pay for Magento',
                 '1.3',
                 $config);
 
             $request = new MarketplaceWebServiceSellers_Model_ListMarketplaceParticipationsRequest();
-            $request->setSellerId($data['seller_id']);
+            $request->setSellerId($data['seller_id']['value']);
             try {
                 $service->ListMarketplaceParticipations($request);
                 Mage::getSingleton('core/session')->addSuccess("All of your Amazon API keys are correct!");
@@ -83,12 +83,37 @@ class Amazon_Payments_Model_System_Config_Backend_Enabled extends Mage_Core_Mode
 
     /**
      * Return dynamic help/comment text
-     *
      */
     public function getCommentText(Mage_Core_Model_Config_Element $element, $currentValue)
     {
         $version = Mage::getConfig()->getModuleConfig("Amazon_Payments")->version;
-        return "v$version";
+
+        // SimplePath
+        $replace_cleanup = array('index.php/', ':80', ':443');
+        $callbackUrl = str_replace($replace_cleanup, '', Mage::getUrl('amazon_payments/simplepath', array('_store' => 1, '_forced_secure' => true)));
+        //$callbackUrl = Mage::helper('adminhtml')->getUrl("adminhtml/amazon_payments/simplepath", array('_forced_secure' => true));
+
+        $_simplePath = Mage::getModel('amazon_payments/simplePath');
+        $publickey = urlencode($_simplePath->getPublicKey());
+        $amazonSimplepathUrl = $_simplePath::API_ENDPOINT_DOWNLOAD_KEYS . '?post_url=' . $callbackUrl . '&pub_key=' . $publickey;
+
+        return "v$version
+
+        <!-- SimplePath URL -->
+        <script>
+        var amazonSimplepathUrl = '$amazonSimplepathUrl';
+        console.log(amazonSimplepathUrl);
+        </script>
+        ";
+    }
+
+    /**
+     * Return credentials
+     */
+    private function _getCredentials()
+    {
+        $groups = $this->getData('groups');
+        return $groups['ap_credentials']['fields'];
     }
 
 }
