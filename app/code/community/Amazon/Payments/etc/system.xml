@@ -32,7 +32,6 @@
                     <div id="amazon_simplepath">
                       <select>
                         <option value="new">Set up a NEW Amazon Payments Merchant Account</option>
-                        <option value="retrieve">Retrieve my keys from my existing Amazon Payments Account</option>
                         <option value="existing">I have my keys (or non-US merchant)</option>
                       </select>
                       <br /><br />
