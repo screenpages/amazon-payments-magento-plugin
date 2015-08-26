@@ -33,13 +33,17 @@ class Amazon_Payments_Model_SimplePath
 
     /**
      * Return RSA public key
+     *
+     * @param bool $pemformat  Return key in PEM format
      */
     public function getPublicKey($pemformat = false)
     {
         $publickey = Mage::getStoreConfig(self::CONFIG_XML_PATH_PUBLIC_KEY, 0);
+
+        // Generate key pair
         if (!$publickey) {
-          $keys = $this->generateKeys();
-          $publickey = $keys['publicKey'];
+            $keys = $this->generateKeys();
+            $publickey = $keys['publicKey'];
         }
 
         if (!$pemformat) {
@@ -51,7 +55,6 @@ class Amazon_Payments_Model_SimplePath
     /**
      * Return RSA private key
      */
-
     public function getPrivateKey()
     {
         return Mage::helper('core')->decrypt(Mage::getStoreConfig(self::CONFIG_XML_PATH_PRIVATE_KEY, 0));
@@ -69,6 +72,8 @@ class Amazon_Payments_Model_SimplePath
 
     /**
      * Verify and decrypt JSON payload
+     *
+     * @param string $payloadJson
      */
     public function decryptPayload($payloadJson)
     {
@@ -85,24 +90,29 @@ class Amazon_Payments_Model_SimplePath
             $payload->$key = urldecode($value);
         }
 
-        // Retrieve Amazon public key for signature verification
-        $client = new Zend_Http_Client(self::API_ENDPOINT_GET_PUBLICKEY, array(
-            'maxredirects' => 2,
-            'timeout'      => 30));
+        // Retrieve Amazon public key to verify signature
+        try {
+            $client = new Zend_Http_Client(self::API_ENDPOINT_GET_PUBLICKEY, array(
+                'maxredirects' => 2,
+                'timeout'      => 30));
 
-        $client->setParameterGet(array('sigkey_id' => $payload->sigKeyID));
+            $client->setParameterGet(array('sigkey_id' => $payload->sigKeyID));
 
-        $response = $client->request();
-        $amazonPublickey = urldecode($response->getBody());
+            $response = $client->request();
+            $amazonPublickey = urldecode($response->getBody());
+
+        } catch (Exception $e) {
+            Mage::throwException($e->getMessage());
+        }
 
         // Use raw JSON (without signature or URL decode) as the data to verify signature
         unset($payloadVerify->signature);
         $payloadVerifyJson = Zend_Json::encode($payloadVerify);
 
         // Verify signature using Amazon publickey and JSON paylaod
-        if (openssl_verify($payloadVerifyJson, base64_decode($payload->signature), $this->key2pem($amazonPublickey), OPENSSL_ALGO_SHA256)) {
+        if ($amazonPublickey && openssl_verify($payloadVerifyJson, base64_decode($payload->signature), $this->key2pem($amazonPublickey), OPENSSL_ALGO_SHA256)) {
 
-            // Decrypt Amazon key using private key
+            // Decrypt Amazon key using own private key
             $decryptedKey = null;
             openssl_private_decrypt(base64_decode($payload->encryptedKey), $decryptedKey, $this->getPrivateKey(), OPENSSL_PKCS1_OAEP_PADDING);
 
@@ -112,13 +122,30 @@ class Amazon_Payments_Model_SimplePath
             if (Zend_Json::decode($finalPayload)) {
                 return $finalPayload;
             }
-            else {
-                return false;
-            }
 
         } else {
             Mage::throwException("Unable to verify signature for JSON payload.");
         }
+
+        return false;
     }
 
+    /**
+     * Save values to Mage config
+     *
+     * @param string $json
+     */
+    public function saveToConfig($json)
+    {
+        if ($values = Zend_Json::decode($json, Zend_Json::TYPE_OBJECT)) {
+            $config = Mage::getModel('core/config');
+            $amazonConfig = Mage::getSingleton('amazon_payments/config');
+
+            $config->saveConfig($amazonConfig::CONFIG_XML_PATH_SELLER_ID, $values->merchant_id, 'default', 0);
+            $config->saveConfig($amazonConfig::CONFIG_XML_PATH_CLIENT_ID, $values->client_id, 'default', 0);
+            $config->saveConfig($amazonConfig::CONFIG_XML_PATH_CLIENT_SECRET, $values->client_secret, 'default', 0);
+            $config->saveConfig($amazonConfig::CONFIG_XML_PATH_ACCESS_KEY, $values->access_key, 'default', 0);
+            $config->saveConfig($amazonConfig::CONFIG_XML_PATH_ACCESS_SECRET, $values->secret_key, 'default', 0);
+        }
+    }
 }
