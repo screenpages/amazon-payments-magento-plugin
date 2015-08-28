@@ -35,6 +35,11 @@ class Amazon_Payments_Model_System_Config_Backend_Enabled extends Mage_Core_Mode
         $data = $this->_getCredentials();
         $isEnabled = $this->getValue();
 
+        $access_secret = $data['access_secret']['value'];
+        if (strpos($access_secret, '*****') !== FALSE) { // Encrypted
+            $access_secret = Mage::getSingleton('amazon_payments/config')->getAccessSecret();
+        }
+
         if ($isEnabled) {
             $config = array (
                 'ServiceURL' => "https://mws.amazonservices.com/Sellers/2011-07-01",
@@ -46,7 +51,7 @@ class Amazon_Payments_Model_System_Config_Backend_Enabled extends Mage_Core_Mode
             );
             $service = new MarketplaceWebServiceSellers_Client(
                 $data['access_key']['value'],
-                $data['access_secret']['value'],
+                $access_secret,
                 'Login and Pay for Magento',
                 '1.3',
                 $config);

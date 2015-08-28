@@ -113,12 +113,13 @@
                     </access_key>
                     <access_secret translate="label">
                         <label>MWS Secret Key</label>
-                        <frontend_type>text</frontend_type>
+                        <frontend_type>obscure</frontend_type>
                         <sort_order>30</sort_order>
                         <show_in_default>1</show_in_default>
                         <show_in_website>1</show_in_website>
                         <show_in_store>0</show_in_store>
                         <config_path>payment/amazon_payments/access_secret</config_path>
+                        <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
                     </access_secret>
                     <client_id translate="label">
                         <label>Client ID</label>
@@ -131,12 +132,13 @@
                     </client_id>
                     <client_secret translate="label">
                         <label>Client Secret</label>
-                        <frontend_type>text</frontend_type>
+                        <frontend_type>obscure</frontend_type>
                         <sort_order>32</sort_order>
                         <show_in_default>1</show_in_default>
                         <show_in_website>1</show_in_website>
                         <show_in_store>0</show_in_store>
                         <config_path>payment/amazon_payments/client_secret</config_path>
+                        <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
                     </client_secret>
 
                     <sandbox translate="label">

@@ -10,7 +10,7 @@
 <config>
     <modules>
         <Amazon_Payments>
-            <version>1.3.0</version>
+            <version>1.3.2</version>
         </Amazon_Payments>
     </modules>
     <global>
@@ -173,6 +173,8 @@
                 <button_size>medium</button_size>
                 <button_badge>1</button_badge>
                 <popup>1</popup>
+                <access_secret backend_model="adminhtml/system_config_backend_encrypted" />
+                <client_secret backend_model="adminhtml/system_config_backend_encrypted" />
             </amazon_payments>
         </payment>
     </default>
