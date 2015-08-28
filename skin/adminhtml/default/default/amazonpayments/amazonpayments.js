@@ -23,15 +23,19 @@ document.observe("dom:loaded", function() {
         amazonFields.show();
         amazonInstructions.show();
         amazonSimplepath.hide();
-
     });
-
-
 
     amazonImportButton.select("button")[0].observe("click", function(e) {
         amazonImportButton.hide();
         amazonImport.show();
     });
+
+    if (amazonIsSecure) {
+        $("amazon_https_required").show();
+    }
+    if (amazonHasOpenssl) {
+        $("amazon_openssl_required").show();
+    }
 
   }
 

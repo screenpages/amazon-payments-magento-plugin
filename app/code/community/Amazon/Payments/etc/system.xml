@@ -33,10 +33,13 @@
                     <div id="amazon_simplepath">
                         <button><span>Setup Pay with Amazon</span></button>
                         <a href="#" id="simplepath-skip">Skip setup, I have keys</a>
+
+                        <p style="color:red;display:none" id="amazon_https_required">HTTPS is required to retrieve keys from Amazon.</p>
+                        <p style="color:red;display:none" id="amazon_openssl_required">openssl is required to retrieve keys from Amazon.</p>
+
                     </div>
 
                     <div id="amazon_instructions">
-
 
                       <strong>Configuring Amazon Payments</strong>
                       <ol style="list-style:inside decimal;">
