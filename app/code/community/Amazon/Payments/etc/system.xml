@@ -276,7 +276,7 @@
                             </button_badge>
                         </fields>
                     </buttons>
-                    <login type="group" translate="label">
+                    <ap_login type="group" translate="label">
                         <label>Amazon Login</label>
                         <show_in_default>1</show_in_default>
                         <show_in_website>1</show_in_website>
@@ -318,7 +318,7 @@
                                 <config_path>amazon_login/settings/additional_scope</config_path>
                             </additional_scope>
                         </fields>
-                    </login>
+                    </ap_login>
                 </fields>
           </ap_checkout>
 
@@ -369,7 +369,7 @@
                       <config_path>payment/amazon_payments/store_name</config_path>
                   </store_name>
 
-                  <advanced type="group" translate="label">
+                  <ap_advanced type="group" translate="label">
                       <label>Advanced Transaction Options</label>
                       <show_in_default>1</show_in_default>
                       <show_in_website>1</show_in_website>
@@ -388,7 +388,7 @@
                               <config_path>payment/amazon_payments/is_async</config_path>
                           </is_async>
                       </fields>
-                  </advanced>
+                  </ap_advanced>
               </fields>
           </ap_transaction>
 
@@ -424,26 +424,25 @@
                       <config_path>payment/amazon_payments/debug</config_path>
                   </debug>
                   <restricted_ips translate="label">
-                    <label>Restrict by IP</label>
-                    <comment>
-                      <![CDATA[Display to only whitelisted IPs found in <br>Developer -> Developer Client Restrictions]]>
-                    </comment>
-                    <frontend_type>select</frontend_type>
-                    <source_model>adminhtml/system_config_source_yesno</source_model>
-                    <sort_order>530</sort_order>
-                    <show_in_default>1</show_in_default>
-                    <show_in_website>1</show_in_website>
-                    <show_in_store>0</show_in_store>
-                    <config_path>payment/amazon_payments/restricted_ips</config_path>
+                      <label>Restrict by IP</label>
+                      <comment>
+                        <![CDATA[Display to only whitelisted IPs found in <br>Developer -> Developer Client Restrictions]]>
+                      </comment>
+                      <frontend_type>select</frontend_type>
+                      <source_model>adminhtml/system_config_source_yesno</source_model>
+                      <sort_order>530</sort_order>
+                      <show_in_default>1</show_in_default>
+                      <show_in_website>1</show_in_website>
+                      <show_in_store>0</show_in_store>
+                      <config_path>payment/amazon_payments/restricted_ips</config_path>
                   </restricted_ips>
-
               </fields>
           </ap_developer>
+
 
           </fields>
         </amazon_payments>
       </groups>
-
     </payment>
   </sections>
 </config>
