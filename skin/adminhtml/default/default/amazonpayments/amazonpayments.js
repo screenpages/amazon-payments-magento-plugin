@@ -10,14 +10,22 @@ document.observe("dom:loaded", function() {
     var amazonImport = $("row_payment_ap_credentials_simplepath_json");
     var amazonImportButton = $("row_payment_ap_credentials_simplepath_import_button");
 
+
     amazonInstructions.hide();
     amazonFields.hide();
     amazonImport.hide();
 
-    amazonSimplepath.select("button")[0].observe("click", function(e) {
+
+    var form = new Element('form', { method: 'post', action: amazonSimplepathUrl, id: 'simplepath_form', target: 'simplepath'});
+    amazonSimplepath.wrap(form);
+
+    $("simplepath_form").observe("submit", function(e) {
+        // window.open('', 'simplepath', "height=500, width=500");
         e.stop();
-        window.open(amazonSimplepathUrl);
+        window.open(amazonSimplepathUrl, 'simplepath', "height=500, width=500");
     });
+
+
     amazonSimplepath.select("a")[0].observe("click", function(e) {
         e.stop();
         amazonFields.show();

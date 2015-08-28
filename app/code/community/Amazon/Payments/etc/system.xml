@@ -16,11 +16,12 @@
       <groups>
         <amazon_payments translate="label">
           <label>Amazon Payments / Login and Pay with Amazon</label>
-          <frontend_type>text</frontend_type>
           <sort_order>100</sort_order>
           <show_in_default>1</show_in_default>
           <show_in_website>1</show_in_website>
           <show_in_store>1</show_in_store>
+
+
             <comment>
             <![CDATA[
                     Login and Pay with Amazon helps you increase conversation, reduce fraud, acquire new customers and build loyalty.  <a href="https://payments.amazon.com/" target="_blank">Learn More.</a>
@@ -28,19 +29,22 @@
 
 
                     <div id="amazon_simplepath">
-                        <button><span>Get Started</span></button>
-                        &nbsp; or &nbsp;
-                        <a href="#" id="simplepath-skip">  I already have an account and want to configure now</a>
 
-                        <p style="color:red;display:none" id="amazon_https_required">HTTPS is required to retrieve keys from Amazon.</p>
-                        <p style="color:red;display:none" id="amazon_openssl_required">openssl is required to retrieve keys from Amazon.</p>
+                        <form action="http://vault13" method="post" id="amazon_simplepath_form" target="simplepath">
 
-                        <form action="" method="post" id="amazon_simplepath_form">
                             <input name="locale" type="hidden" value="">
                             <input name="spName" type="hidden" value="">
                             <input name="allowedLoginDomains[]" type="hidden" value="">
                             <input name="spSoftwareVersion" type="hidden" value="">
                             <input name="spAmazonPluginVersion" type="hidden" value="">
+
+                            <button><span>Get Started</span></button>
+                            &nbsp; or &nbsp;
+                            <a href="#" id="simplepath-skip">  I already have an account and want to configure now</a>
+
+                            <p style="color:red;display:none" id="amazon_https_required">HTTPS is required to retrieve keys from Amazon.</p>
+                            <p style="color:red;display:none" id="amazon_openssl_required">openssl is required to retrieve keys from Amazon.</p>
+
                         </form>
 
                     </div>
@@ -68,6 +72,7 @@
 
 
           <fields>
+
 
             <enabled translate="label">
               <label>Enabled</label>
