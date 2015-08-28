@@ -30,10 +30,10 @@ document.observe("dom:loaded", function() {
         amazonImport.show();
     });
 
-    if (amazonIsSecure) {
+    if (!amazonIsSecure) {
         $("amazon_https_required").show();
     }
-    if (amazonHasOpenssl) {
+    if (!amazonHasOpenssl) {
         $("amazon_openssl_required").show();
     }
 
