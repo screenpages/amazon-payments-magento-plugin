@@ -10,7 +10,7 @@
 <config>
     <modules>
         <Amazon_Login>
-            <active>true</active>
+            <active>false</active>
             <codePool>community</codePool>
         </Amazon_Login>
     </modules>

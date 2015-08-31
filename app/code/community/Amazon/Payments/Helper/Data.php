@@ -191,4 +191,50 @@ class Amazon_Payments_Helper_Data extends Mage_Core_Helper_Abstract
     {
         return ($this->getConfig()->isButtonBadgeEnabled() && $this->getConfig()->isEnabled());
     }
+
+    /**
+     * Retrieve customer verify url
+     *
+     * @return string
+     */
+    public function getVerifyUrl()
+    {
+        return $this->_getUrl('amazon_payments/customer/verify');
+    }
+
+    /**
+     * Retrieve Amazon Profile in session
+     */
+    public function getAmazonProfileSession()
+    {
+        return Mage::getSingleton('customer/session')->getAmazonProfile();
+    }
+
+    /**
+     * Retreive additional login access scope
+     */
+    public function getAdditionalScope()
+    {
+        $scope = trim(Mage::getStoreConfig('amazon_login/settings/additional_scope'));
+        return ($scope) ? ' ' . $scope : '';
+    }
+
+    /**
+     * Return login authorize URL
+     *
+     * @return string
+     */
+    public function getLoginAuthUrl()
+    {
+        return $this->_getUrl('amazon_payments/customer/authorize', array('_forced_secure' => true));
+    }
+
+    /**
+     * Is login a popup or full-page redirect?
+     */
+    public function isPopup()
+    {
+        return (Mage::getStoreConfig('amazon_login/settings/popup'));
+    }
+
 }
