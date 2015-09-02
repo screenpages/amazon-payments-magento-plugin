@@ -105,6 +105,7 @@ class Amazon_Payments_Model_System_Config_Backend_Enabled extends Mage_Core_Mode
         var amazonPollUrl ='" . $_simplepath->getListenerUrl() . "poll';
         var amazonIsSecure = " . (Mage::app()->getFrontController()->getRequest()->isSecure() ? 'true' : 'false') . ";
         var amazonHasOpenssl = " . (extension_loaded('openssl') ? 'true' : 'false') . ";
+        var amazonIsUsa = " . (Mage::getStoreConfig('general/country/default') == 'US' ? 'true' : 'false') . ";
         </script>
         ";
     }

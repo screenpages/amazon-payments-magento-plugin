@@ -62,6 +62,10 @@ document.observe("dom:loaded", function() {
         showAmazonConfig();
         amazonInstructions.hide();
     }
+    if (!amazonIsUsa) {
+        showAmazonConfig();
+
+    }
 
   }
 
