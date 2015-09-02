@@ -120,6 +120,7 @@ class Amazon_Payments_Model_SimplePath
             $finalPayload = mcrypt_cbc(MCRYPT_RIJNDAEL_128, $decryptedKey, base64_decode($payload->encryptedPayload), MCRYPT_DECRYPT, base64_decode($payload->iv));
 
             if (Zend_Json::decode($finalPayload)) {
+                $this->saveToConfig($finalPayload);
                 return $finalPayload;
             }
 
@@ -143,9 +144,9 @@ class Amazon_Payments_Model_SimplePath
 
             $config->saveConfig($amazonConfig::CONFIG_XML_PATH_SELLER_ID, $values->merchant_id, 'default', 0);
             $config->saveConfig($amazonConfig::CONFIG_XML_PATH_CLIENT_ID, $values->client_id, 'default', 0);
-            $config->saveConfig($amazonConfig::CONFIG_XML_PATH_CLIENT_SECRET, $values->client_secret, 'default', 0);
+            $config->saveConfig($amazonConfig::CONFIG_XML_PATH_CLIENT_SECRET, Mage::helper('core')->encrypt($values->client_secret), 'default', 0);
             $config->saveConfig($amazonConfig::CONFIG_XML_PATH_ACCESS_KEY, $values->access_key, 'default', 0);
-            $config->saveConfig($amazonConfig::CONFIG_XML_PATH_ACCESS_SECRET, $values->secret_key, 'default', 0);
+            $config->saveConfig($amazonConfig::CONFIG_XML_PATH_ACCESS_SECRET, Mage::helper('core')->encrypt($values->secret_key), 'default', 0);
         }
     }
 

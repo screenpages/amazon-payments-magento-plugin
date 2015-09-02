@@ -40,7 +40,7 @@ class Amazon_Payments_Model_System_Config_Backend_Enabled extends Mage_Core_Mode
             $access_secret = Mage::getSingleton('amazon_payments/config')->getAccessSecret();
         }
 
-        if ($isEnabled) {
+        if ($isEnabled && $data['access_key']['value']) {
             $config = array (
                 'ServiceURL' => "https://mws.amazonservices.com/Sellers/2011-07-01",
                 'ProxyHost' => null,
@@ -94,13 +94,15 @@ class Amazon_Payments_Model_System_Config_Backend_Enabled extends Mage_Core_Mode
         $version = Mage::getConfig()->getModuleConfig("Amazon_Payments")->version;
 
         // SimplePath
-        $amazonSimplepathUrl = Mage::getModel('amazon_payments/simplePath')->getSimplepathUrl();
+        $_simplepath = Mage::getSingleton('amazon_payments/simplePath');
+        $amazonSimplepathUrl = $_simplepath->getSimplepathUrl();
 
         return "v$version
 
         <!-- SimplePath -->
         <script>
         var amazonSimplepathUrl = '$amazonSimplepathUrl';
+        var amazonPollUrl ='" . $_simplepath->getListenerUrl() . "poll';
         var amazonIsSecure = " . (Mage::app()->getFrontController()->getRequest()->isSecure() ? 'true' : 'false') . ";
         var amazonHasOpenssl = " . (extension_loaded('openssl') ? 'true' : 'false') . ";
         </script>

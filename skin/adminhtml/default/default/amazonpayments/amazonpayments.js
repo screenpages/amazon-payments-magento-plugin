@@ -2,6 +2,8 @@
 
 // var amazonSimplepathUrl is defined in Amazon_Payments_Model_System_Config_Backend_Enabled->getCommentText()
 
+var amazonPollInterval = 1500; // poll every ms for keys
+
 document.observe("dom:loaded", function() {
   if ($("payment_amazon_payments")) {
     var amazonSimplepath = $("amazon_simplepath");
@@ -32,16 +34,15 @@ document.observe("dom:loaded", function() {
         amazonImport.show();
         amazonImportButton.hide();
 
+        setTimeout(pollForKeys, amazonPollInterval);
+
     });
 
 
-    // User has account info
+    // User is skipping simplepath
     amazonSimplepath.select("a")[0].observe("click", function(e) {
         e.stop();
-        amazonFields.each(Element.show);
-        amazonImport.hide();
-        amazonInstructions.show();
-        amazonSimplepath.hide();
+        showAmazonConfig();
     });
 
 
@@ -57,13 +58,51 @@ document.observe("dom:loaded", function() {
         $("amazon_openssl_required").show();
     }
 
+    if ($("payment_ap_credentials_seller_id").value) {
+        showAmazonConfig();
+        amazonInstructions.hide();
+    }
+
   }
+
+  function showAmazonConfig() {
+      amazonFields.each(Element.show);
+      amazonImport.hide();
+      amazonInstructions.show();
+      amazonSimplepath.hide();
+  }
+
+
+  function pollForKeys() {
+    new Ajax.Request(amazonPollUrl, {
+        method:'post',
+        onSuccess: function(transport) {
+            if (transport.responseText == '1') {
+                $("amazon_reload").show();
+                document.location.replace(document.location + "#payment_amazon_payments-head");
+                location.reload();
+            } else {
+                setTimeout(pollForKeys, amazonPollInterval);
+            }
+
+        },
+        onFailure: function() {  },
+        // Disable "Please Wait" modal
+        onCreate: function(request) {
+            Ajax.Responders.unregister(varienLoaderHandler.handler);
+        },
+    });
+  }
+
 
 
 });
 
 
 
+
+
+// Amazon Pop-up
 (function () {
     'use strict';
 

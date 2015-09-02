@@ -44,6 +44,7 @@
 
                             <p style="color:red;display:none" id="amazon_https_required">In order to set keys, an SSL certificate (HTTPS) is required.</p>
                             <p style="color:red;display:none" id="amazon_openssl_required">In order to set keys, the OpenSSL PHP library is required.</p>
+                            <p style="color:red;display:none" id="amazon_reload">Updating your config with new keys, please wait...</p>
 
                         </form>
 
