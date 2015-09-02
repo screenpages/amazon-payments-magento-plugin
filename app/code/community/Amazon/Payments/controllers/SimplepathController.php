@@ -25,17 +25,26 @@ class Amazon_Payments_SimplepathController extends Mage_Core_Controller_Front_Ac
         //$redirectUrl = Mage::helper('adminhtml')->getUrl('adminhtml/system_config/edit/section/payment', array('_store' => 0));
         $redirectUrl = Mage::getModel('amazon_payments/simplePath')->getSimplepathUrl();
 
-        if ($payloadJson) {
-            $_simplePath = Mage::getModel('amazon_payments/simplePath');
-            $json = $_simplePath->decryptPayload($payloadJson);
+        $this->getResponse()->setHeader('Content-type', 'application/json');
 
-            if ($json) {
-                if ($adminSession = $this->_getAdminSession()) {
-                    $adminSession->addSuccess($json);
+        try {
+            if ($payloadJson) {
+                $_simplePath = Mage::getModel('amazon_payments/simplePath');
+                $json = $_simplePath->decryptPayload($payloadJson);
+
+                if ($json) {
+                    if ($adminSession = $this->_getAdminSession()) {
+                        $adminSession->addSuccess($json);
+                    }
+
+                    $this->_redirectUrl($redirectUrl);
                 }
-
-                $this->_redirectUrl($redirectUrl);
+            } else {
+                $this->getResponse()->setBody(Zend_Json::encode(array('result' => 'error', 'message' => 'payload parameter not found.')));
             }
+
+        } catch (Exception $e) {
+            $this->getResponse()->setBody(Zend_Json::encode(array('result' => 'error', 'message' => $e->getMessage())));
         }
     }
 
