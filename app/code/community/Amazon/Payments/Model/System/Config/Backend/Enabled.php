@@ -94,13 +94,7 @@ class Amazon_Payments_Model_System_Config_Backend_Enabled extends Mage_Core_Mode
         $version = Mage::getConfig()->getModuleConfig("Amazon_Payments")->version;
 
         // SimplePath
-        $replace_cleanup = array('index.php/', ':80', ':443');
-        $callbackUrl = str_replace($replace_cleanup, '', Mage::getUrl('amazon_payments/simplepath', array('_store' => 1, '_forced_secure' => true)));
-
-        $_simplePath = Mage::getModel('amazon_payments/simplePath');
-        $publickey = urlencode($_simplePath->getPublicKey());
-        $amazonSimplepathUrl = $_simplePath::API_ENDPOINT_DOWNLOAD_KEYS . '?post_url=' . $callbackUrl . '&pub_key=' . $publickey;
-
+        $amazonSimplepathUrl = Mage::getModel('amazon_payments/simplePath')->getSimplepathUrl();
 
         return "v$version
 

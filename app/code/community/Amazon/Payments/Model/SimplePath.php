@@ -148,4 +148,21 @@ class Amazon_Payments_Model_SimplePath
             $config->saveConfig($amazonConfig::CONFIG_XML_PATH_ACCESS_SECRET, $values->secret_key, 'default', 0);
         }
     }
+
+    /**
+     * Generate listner URL
+     */
+    public function getListenerUrl()
+    {
+        $replace_cleanup = array('index.php/', ':80', ':443');
+        return str_replace($replace_cleanup, '', Mage::getUrl('amazon_payments/simplepath', array('_store' => 1, '_forced_secure' => true)));
+    }
+
+    /**
+     * Generate simplepath URL
+     */
+    public function getSimplepathUrl()
+    {
+        return self::API_ENDPOINT_DOWNLOAD_KEYS . '?post_url=' . $this->getListenerUrl() . '&pub_key=' . urlencode($this->getPublicKey());
+    }
 }
