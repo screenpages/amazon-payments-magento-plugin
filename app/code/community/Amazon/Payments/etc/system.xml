@@ -30,8 +30,6 @@
 
                     <div id="amazon_simplepath">
 
-                        <form action="http://vault13" method="post" id="amazon_simplepath_form" target="simplepath">
-
                             <input name="locale" type="hidden" value="">
                             <input name="spName" type="hidden" value="">
                             <input name="allowedLoginDomains[]" type="hidden" value="">
@@ -45,8 +43,6 @@
                             <p style="color:red;display:none" id="amazon_https_required">In order to set keys, an SSL certificate (HTTPS) is required.</p>
                             <p style="color:red;display:none" id="amazon_openssl_required">In order to set keys, the OpenSSL PHP library is required.</p>
                             <p style="color:red;display:none" id="amazon_reload">Updating your config with new keys, please wait...</p>
-
-                        </form>
 
                     </div>
 
