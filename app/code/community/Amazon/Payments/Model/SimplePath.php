@@ -202,6 +202,7 @@ class Amazon_Payments_Model_SimplePath
     public function getJsonAmazonSpConfig()
     {
         return array(
+            'amazonUrl'     => self::API_ENDPOINT_DOWNLOAD_KEYS,
             'pollUrl'       => Mage::helper("adminhtml")->getUrl('adminhtml/amazon_simplepath/poll'),
             'spUrl'         => Mage::helper("adminhtml")->getUrl('adminhtml/amazon_simplepath/spurl'),
             'isSecure'      => (int) (Mage::app()->getFrontController()->getRequest()->isSecure()),

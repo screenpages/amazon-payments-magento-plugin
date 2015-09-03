@@ -51,7 +51,7 @@ document.observe("dom:loaded", function() {
                     if (url) {
                         form.action = url;
 
-                        window.launchPopup('', 768, 820);
+                        window.launchPopup(AmazonSp.amazonUrl, 768, 820);
 
                         form.submit();
                         form.action = '';
