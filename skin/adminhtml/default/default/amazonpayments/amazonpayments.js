@@ -1,6 +1,8 @@
-// Amazon Payments Adminhtml
-
-// var amazonSimplepathUrl is defined in Amazon_Payments_Model_System_Config_Backend_Enabled->getCommentText()
+/**
+ * Amazon Payments Adminhtml
+ *
+ * var AmazonSp is set by Amazon_Payments_Model_SimplePath->getJsonAmazonSpConfig()
+ */
 
 var amazonPollInterval = 1500; // poll every ms for keys
 
@@ -8,7 +10,6 @@ document.observe("dom:loaded", function() {
   if ($("payment_amazon_payments")) {
     var amazonSimplepath = $("amazon_simplepath");
     var amazonInstructions = $("amazon_instructions");
-    //var amazonFields = $("payment_amazon_payments").select("table")[0];
     var amazonFields = $$("#payment_amazon_payments tr");
     var amazonImport = $("row_payment_ap_credentials_simplepath_json");
     var amazonImportButton = $("row_payment_ap_credentials_simplepath_import_button");
@@ -19,22 +20,52 @@ document.observe("dom:loaded", function() {
     amazonImport.hide();
 
 
-    var form = new Element('form', { method: 'post', action: amazonSimplepathUrl, id: 'simplepath_form', target: 'simplepath'});
+    // Generate form to post to Amazon
+    var form = new Element('form', { method: 'post', action: '', id: 'simplepath_form', target: 'simplepath'});
     amazonSimplepath.wrap(form);
 
-    // Get Started
+    // Convert formParams JSON to hidden inputs
+    var formInput;
+    for (var key in AmazonSp.formParams) {
+        if (typeof AmazonSp.formParams[key] == 'object' || typeof AmazonSp.formParams[key] == 'array') {
+            for (var i in AmazonSp.formParams[key]) {
+                if (typeof AmazonSp.formParams[key][i] != "function") {
+                    form.insert(new Element('input', { type: 'hidden', name: key, value: AmazonSp.formParams[key][i]}));
+                }
+            }
+        } else {
+            form.insert(new Element('input', { type: 'hidden', name: key, value: AmazonSp.formParams[key]}));
+        }
+    }
+
+    // Get Started clicked
     $("simplepath_form").observe("submit", function(e) {
-        // window.open('', 'simplepath', "height=500, width=500");
-        e.stop();
-        //window.open(amazonSimplepathUrl, 'simplepath', "height=500, width=500");
-        window.launchPopup(amazonSimplepathUrl, 768, 820);
+        // Get SimplePath URL with public key from regenerated key-pair
+        if (!form.action) {
+            e.stop();
 
-        // Show Credentials group and Import option
-        amazonFields[1].show();
-        amazonImport.show();
-        amazonImportButton.hide();
+            new Ajax.Request(AmazonSp.spUrl, {
+                method:'get',
+                onSuccess: function(transport) {
+                    var url = transport.responseText;
+                    if (url) {
+                        form.action = url;
 
-        setTimeout(pollForKeys, amazonPollInterval);
+                        window.launchPopup('', 768, 820);
+
+                        form.submit();
+                        form.action = '';
+
+                        amazonFields[1].show();
+                        amazonImport.show();
+                        amazonImportButton.hide();
+
+                        setTimeout(pollForKeys, amazonPollInterval);
+                    }
+                },
+                onFailure: function(transport) { console.log(transport); },
+            });
+        }
 
     });
 
@@ -51,10 +82,10 @@ document.observe("dom:loaded", function() {
         amazonImport.show();
     });
 
-    if (!amazonIsSecure) {
+    if (!AmazonSp.isSecure) {
         $("amazon_https_required").show();
     }
-    if (!amazonHasOpenssl) {
+    if (!AmazonSp.hasOpenssl) {
         $("amazon_openssl_required").show();
     }
 
@@ -62,7 +93,7 @@ document.observe("dom:loaded", function() {
         showAmazonConfig();
         amazonInstructions.hide();
     }
-    if (!amazonIsUsa) {
+    if (!AmazonSp.isUsa) {
         showAmazonConfig();
 
     }
@@ -78,24 +109,24 @@ document.observe("dom:loaded", function() {
 
 
   function pollForKeys() {
-    new Ajax.Request(amazonPollUrl, {
-        method:'post',
-        onSuccess: function(transport) {
-            if (transport.responseText == '1') {
-                $("amazon_reload").show();
-                document.location.replace(document.location + "#payment_amazon_payments-head");
-                location.reload();
-            } else {
-                setTimeout(pollForKeys, amazonPollInterval);
-            }
+      new Ajax.Request(AmazonSp.pollUrl, {
+          method:'get',
+          onSuccess: function(transport) {
+              if (transport.responseText == '1') {
+                  $("amazon_reload").show();
+                  document.location.replace(document.location + "#payment_amazon_payments-head");
+                  location.reload();
+              } else {
+                  setTimeout(pollForKeys, amazonPollInterval);
+              }
 
-        },
-        onFailure: function() {  },
-        // Disable "Please Wait" modal
-        onCreate: function(request) {
-            Ajax.Responders.unregister(varienLoaderHandler.handler);
-        },
-    });
+          },
+          onFailure: function() {  },
+          // Disable "Please Wait" modal
+          onCreate: function(request) {
+              Ajax.Responders.unregister(varienLoaderHandler.handler);
+          },
+      });
   }
 
 

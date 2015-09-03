@@ -30,11 +30,7 @@
 
                     <div id="amazon_simplepath">
 
-                            <input name="locale" type="hidden" value="">
-                            <input name="spName" type="hidden" value="">
-                            <input name="allowedLoginDomains[]" type="hidden" value="">
-                            <input name="spSoftwareVersion" type="hidden" value="">
-                            <input name="spAmazonPluginVersion" type="hidden" value="">
+
 
                             <button><span>Get Started</span></button>
                             &nbsp; or &nbsp;

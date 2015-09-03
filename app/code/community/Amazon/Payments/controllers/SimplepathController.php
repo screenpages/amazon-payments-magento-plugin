@@ -45,14 +45,5 @@ class Amazon_Payments_SimplepathController extends Mage_Core_Controller_Front_Ac
         }
     }
 
-    /**
-     * Check if keys exist
-     */
-    public function pollAction()
-    {
-        $hasKeys = Mage::getSingleton('amazon_payments/config')->getSellerId() ? 1 : 0;
-        $this->getResponse()->setHeader('Content-type', 'application/json');
-        $this->getResponse()->setBody($hasKeys);
-    }
 
 }

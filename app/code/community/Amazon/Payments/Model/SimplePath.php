@@ -13,6 +13,8 @@ class Amazon_Payments_Model_SimplePath
     const API_ENDPOINT_DOWNLOAD_KEYS = 'https://payments.amazon.com/817ee4262/downloadkeyspage';
     const API_ENDPOINT_GET_PUBLICKEY = 'https://payments.amazon.com/817ee4262/getpublickey';
 
+    const PARAM_SP_NAME = '';
+
     const CONFIG_XML_PATH_PRIVATE_KEY = 'payment/amazon_payments/simplepath/privatekey';
     const CONFIG_XML_PATH_PUBLIC_KEY  = 'payment/amazon_payments/simplepath/publickey';
 
@@ -36,12 +38,12 @@ class Amazon_Payments_Model_SimplePath
      *
      * @param bool $pemformat  Return key in PEM format
      */
-    public function getPublicKey($pemformat = false)
+    public function getPublicKey($pemformat = false, $reset = false)
     {
         $publickey = Mage::getStoreConfig(self::CONFIG_XML_PATH_PUBLIC_KEY, 0);
 
         // Generate key pair
-        if (!$publickey) {
+        if (!$publickey || $reset) {
             $keys = $this->generateKeys();
             $publickey = $keys['publicKey'];
         }
@@ -151,7 +153,7 @@ class Amazon_Payments_Model_SimplePath
     }
 
     /**
-     * Generate listner URL
+     * Return listner URL
      */
     public function getListenerUrl()
     {
@@ -160,10 +162,52 @@ class Amazon_Payments_Model_SimplePath
     }
 
     /**
-     * Generate simplepath URL
+     * Return simplepath URL
      */
     public function getSimplepathUrl()
     {
-        return self::API_ENDPOINT_DOWNLOAD_KEYS . '?post_url=' . $this->getListenerUrl() . '&pub_key=' . urlencode($this->getPublicKey());
+        return self::API_ENDPOINT_DOWNLOAD_KEYS . '?post_url=' . $this->getListenerUrl() . '&pub_key=' . urlencode($this->getPublicKey(false, true));
+    }
+
+    /**
+     * Return array of form POST params for SimplePath sign up
+     */
+    public function getFormParams()
+    {
+        $urls = array();
+        $db = Mage::getSingleton('core/resource')->getConnection('core_read');
+
+        $select = $db->select()
+            ->from('core_config_data')
+            ->where('path IN (?)', array('web/unsecure/base_url', 'web/secure/base_url'));
+
+        foreach ($db->fetchAll($select) as $row) {
+            $urls[] = str_replace('http:', 'https:', $row['value']);
+        }
+
+        return array(
+            'locale' => Mage::getStoreConfig('general/country/default'),
+            'spName' => self::PARAM_SP_NAME,
+            'allowedLoginDomains[]' => array(array_unique($urls)),
+            'spSoftwareVersion' => Mage::getVersion(),
+            'spAmazonPluginVersion' => Mage::getConfig()->getModuleConfig("Amazon_Payments")->version,
+        );
+    }
+
+    /**
+     * Return array of config for JSON AmazonSp variable.
+     *
+     * @see Amazon_Payments_Model_System_Config_Backend_Enabled->getCommentText()
+     */
+    public function getJsonAmazonSpConfig()
+    {
+        return array(
+            'pollUrl'       => Mage::helper("adminhtml")->getUrl('adminhtml/amazon_simplepath/poll'),
+            'spUrl'         => Mage::helper("adminhtml")->getUrl('adminhtml/amazon_simplepath/spurl'),
+            'isSecure'      => (int) (Mage::app()->getFrontController()->getRequest()->isSecure()),
+            'isUsa'         => (int) (Mage::getStoreConfig('general/country/default') == 'US'),
+            'hasOpenssl'    => (int) (extension_loaded('openssl')),
+            'formParams'    => $this->getFormParams(),
+        );
     }
 }

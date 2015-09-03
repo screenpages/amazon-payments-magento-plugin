@@ -76,6 +76,7 @@
                 <args>
                     <modules>
                         <Amazon_Payments after="Mage_Adminhtml">Amazon_Payments_Adminhtml</Amazon_Payments>
+                        <Amazon_Simplepath after="Mage_Adminhtml">Amazon_Simplepath_Adminhtml</Amazon_Simplepath>
                     </modules>
                 </args>
             </adminhtml>
