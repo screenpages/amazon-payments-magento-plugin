@@ -5,6 +5,7 @@
  */
 
 var amazonPollInterval = 1500; // poll every ms for keys
+var amazonPollTimer = null;
 
 document.observe("dom:loaded", function() {
   if ($("payment_amazon_payments")) {
@@ -21,7 +22,7 @@ document.observe("dom:loaded", function() {
 
 
     // Generate form to post to Amazon
-    var form = new Element('form', { method: 'post', action: '', id: 'simplepath_form', target: 'simplepath'});
+    var form = new Element('form', { method: 'post', action: AmazonSp.amazonUrl, id: 'simplepath_form', target: 'simplepath'});
     amazonSimplepath.wrap(form);
 
     // Convert formParams JSON to hidden inputs
@@ -40,31 +41,15 @@ document.observe("dom:loaded", function() {
 
     // Get Started clicked
     $("simplepath_form").observe("submit", function(e) {
-        // Get SimplePath URL with public key from regenerated key-pair
-        if (!form.action) {
-            e.stop();
 
-            new Ajax.Request(AmazonSp.spUrl, {
-                method:'get',
-                onSuccess: function(transport) {
-                    var url = transport.responseText;
-                    if (url) {
-                        form.action = url;
+        window.launchPopup('', 768, 820);
 
-                        window.launchPopup(AmazonSp.amazonUrl, 768, 820);
+        amazonFields[1].show();
+        amazonImport.show();
+        amazonImportButton.hide();
 
-                        form.submit();
-                        form.action = '';
-
-                        amazonFields[1].show();
-                        amazonImport.show();
-                        amazonImportButton.hide();
-
-                        setTimeout(pollForKeys, amazonPollInterval);
-                    }
-                },
-                onFailure: function(transport) { console.log(transport); },
-            });
+        if (!amazonPollTimer) {
+            amazonPollTimer = setTimeout(pollForKeys, amazonPollInterval);
         }
 
     });
@@ -117,7 +102,7 @@ document.observe("dom:loaded", function() {
                   document.location.replace(document.location + "#payment_amazon_payments-head");
                   location.reload();
               } else {
-                  setTimeout(pollForKeys, amazonPollInterval);
+                  amazonPollTimer = setTimeout(pollForKeys, amazonPollInterval);
               }
 
           },

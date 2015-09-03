@@ -34,6 +34,16 @@ class Amazon_Payments_Model_SimplePath
     }
 
     /**
+     * Delete key-pair from config
+     */
+    public function destroyKeys()
+    {
+        $config = Mage::getModel('core/config');
+        $config->deleteConfig(self::CONFIG_XML_PATH_PUBLIC_KEY, 'default', 0);
+        $config->deleteConfig(self::CONFIG_XML_PATH_PRIVATE_KEY, 'default', 0);
+    }
+
+    /**
      * Return RSA public key
      *
      * @param bool $pemformat  Return key in PEM format
@@ -123,6 +133,7 @@ class Amazon_Payments_Model_SimplePath
 
             if (Zend_Json::decode($finalPayload)) {
                 $this->saveToConfig($finalPayload);
+                $this->destroyKeys();
                 return $finalPayload;
             }
 
@@ -166,6 +177,11 @@ class Amazon_Payments_Model_SimplePath
      */
     public function getSimplepathUrl()
     {
+        // Don't generate key-pair or simplepath URL if credentials exist
+        if (Mage::getSingleton('amazon_payments/config')->getSellerId()) {
+            return;
+        }
+
         return self::API_ENDPOINT_DOWNLOAD_KEYS . '?post_url=' . $this->getListenerUrl() . '&pub_key=' . urlencode($this->getPublicKey(false, true));
     }
 
@@ -174,6 +190,7 @@ class Amazon_Payments_Model_SimplePath
      */
     public function getFormParams()
     {
+        // Retrieve store URLs from config
         $urls = array();
         $db = Mage::getSingleton('core/resource')->getConnection('core_read');
 
@@ -202,9 +219,9 @@ class Amazon_Payments_Model_SimplePath
     public function getJsonAmazonSpConfig()
     {
         return array(
-            'amazonUrl'     => self::API_ENDPOINT_DOWNLOAD_KEYS,
+            'amazonUrl'     => $this->getSimplepathUrl(),
             'pollUrl'       => Mage::helper("adminhtml")->getUrl('adminhtml/amazon_simplepath/poll'),
-            'spUrl'         => Mage::helper("adminhtml")->getUrl('adminhtml/amazon_simplepath/spurl'),
+            //'spUrl'         => Mage::helper("adminhtml")->getUrl('adminhtml/amazon_simplepath/spurl'),
             'isSecure'      => (int) (Mage::app()->getFrontController()->getRequest()->isSecure()),
             'isUsa'         => (int) (Mage::getStoreConfig('general/country/default') == 'US'),
             'hasOpenssl'    => (int) (extension_loaded('openssl')),
