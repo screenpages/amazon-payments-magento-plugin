@@ -38,25 +38,9 @@ document.observe("dom:loaded", function() {
         }
     }
 
-    form.action = AmazonSp.amazonUrl;
-
     // Get Started clicked
     $("simplepath_form").observe("submit", function(e) {
         // Get SimplePath URL with public key from regenerated key-pair
-
-                        window.launchPopup(AmazonSp.amazonUrl, 768, 820);
-
-                        //form.submit();
-                        //form.action = '';
-
-                        amazonFields[1].show();
-                        amazonImport.show();
-                        amazonImportButton.hide();
-
-                        setTimeout(pollForKeys, amazonPollInterval);
-
-
-        /*
         if (!form.action) {
             e.stop();
 
@@ -82,7 +66,6 @@ document.observe("dom:loaded", function() {
                 onFailure: function(transport) { console.log(transport); },
             });
         }
-        */
 
     });
 
