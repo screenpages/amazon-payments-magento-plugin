@@ -92,7 +92,41 @@ AmazonPaymentsMageCheckout.prototype = {
         this.opts = opts;
         this.hasPayment = false;
         this.hasReviewLoader = false;
-        //this.setShippingMethod();
+        this.giftwrapped = false;
+        this.asynchronous = true;
+    },
+
+    // Set events for ee giftwrapping
+    setGiftWrappingEvents: function() {
+
+        Event.observe($('allow_gift_options'), 'change', this.checkGiftOption.bindAsEventListener(this));
+
+        $$('allow_gift_options').each(function(el){
+            Event.observe(el, 'change', this.setGiftWrapping.bindAsEventListener(this));
+        }, this);
+
+        $$('select=[id^="giftwrapping_"]').each(function(el){
+            Event.observe(el, 'change', this.setGiftWrapping.bindAsEventListener(this));
+        }, this);
+
+        $$('input=[id^="add-printed-card"]').each(function(el){
+            Event.observe(el, 'change', this.setGiftWrapping.bindAsEventListener(this));
+        }, this);
+    },
+
+    // observe the gift option checkbox to set totals
+    checkGiftOption: function(transporter){
+        if (!transporter.srcElement.checked){
+            this.giftwrapped = false;
+            this.setReview(transporter);
+        }else{
+            this.giftwrapped = true;
+        }
+    },
+
+    // observe the giftwrap option dropdown to update totals
+    setGiftWrapping: function(transporter){
+        this.setReview(transporter);
     },
 
     // Dynamically load shipping method HTML
@@ -111,6 +145,7 @@ AmazonPaymentsMageCheckout.prototype = {
         }
     },
 
+
     // Dynamically load review HTML
     setReview: function() {
         var btnSubmit = $$(".button.btn-checkout");
@@ -128,11 +163,57 @@ AmazonPaymentsMageCheckout.prototype = {
             }
         }
 
+
+        var requestParams = [{
+            "shipping_method"               : shippingMethod,
+            "amazon_order_reference_id"     : this.amazonOrderReferenceId
+        }];
+
+        /**
+         * Change to implement EE gift wrapping
+         * If giftwrapping element doesn't exixt, then revert to CE gift message
+         */
+        if(this.giftwrapped) {
+            requestParams[0]['allow_gift_options'] = '1';
+
+            if($('allow_gift_options_for_order').checked){ requestParams[0]['allow_gift_options_for_order'] = '1'; }
+            if($('allow_gift_options_for_items').checked){ requestParams[0]['allow_gift_options_for_items'] = '1'; }
+            $$('select=[id^="giftwrapping_"]').each(function (el) { requestParams[0][el.name] = el.selectedOptions[0].value; });
+
+            $$('input=[name^="giftwrapping"]').each(function (el) {
+                if (el.type == 'checkbox') {
+                    if (el.checked) {
+                        requestParams[0][el.name] = '1';
+                    }
+                }
+            });
+
+            $$('input=[name^="giftoptions"]').each(function (el) { requestParams[0][el.name] = el.value; });
+            $$('input=[name^="giftmessage"]').each(function (el) { requestParams[0][el.name] = el.value; });
+            $$('textarea=[name^="giftmessage"]').each(function (el) { requestParams[0][el.name] = el.value; });
+        }else if($('allow_gift_options') != null) {
+            requestParams[0]['allow_gift_options'] = '';
+            requestParams[0]['allow_gift_options_for_order'] = '';
+            requestParams[0]['allow_gift_options_for_items'] = '';
+            $$('select=[id^="giftwrapping_"]').each(function (el) { requestParams[0][el.name] = ''; });
+            $$('input=[name^="giftoptions"]').each(function (el) { requestParams[0][el.name] = el.value; });
+            $$('input=[name^="giftmessage"]').each(function (el) { requestParams[0][el.name] = ''; });
+            $$('textarea=[name^="giftmessage"]').each(function (el) {  requestParams[0][el.name] = ''; });
+        }else {
+            requestParams[0]['allow_gift_messages'] = ($('allow_gift_messages').checked)?('1'):('');
+            requestParams[0]['allow_gift_messages_for_order'] = ($('allow_gift_messages_for_order').checked)?('1'):('');
+            requestParams[0]['allow_gift_messages_for_items'] = ($('allow_gift_messages_for_items').checked)?('1'):('');
+            $$('input=[name^="giftoptions"]').each(function (el) { requestParams[0][el.name] = el.value; });
+            $$('input=[name^="giftmessage"]').each(function (el) { requestParams[0][el.name] = el.value; });
+            $$('textarea=[name^="giftmessage"]').each(function (el) {  requestParams[0][el.name] = el.value; });
+        }
+
         this.restrictPlaceOrder(true);
 
         var request = new Ajax.Request(this.opts.review.url, {
             method: 'post',
-            parameters: { "shipping_method": shippingMethod, "amazon_order_reference_id": this.amazonOrderReferenceId },
+            asynchronous: this.asynchronous,
+            parameters: requestParams[0],
             onSuccess: this.renderReview.bindAsEventListener(this, this.opts.review.id)
         });
     },
@@ -144,6 +225,10 @@ AmazonPaymentsMageCheckout.prototype = {
         $$('input[type="radio"][name="shipping_method"]').each(function(el){
             Event.observe(el, 'change', this.setReview.bindAsEventListener(this));
        }, this);
+
+        if($('allow_gift_options') != null){
+            this.setGiftWrappingEvents();
+        }
 
        this.setReview();
     },
@@ -158,6 +243,9 @@ AmazonPaymentsMageCheckout.prototype = {
 
     saveOrder: function() {
       var params = {};
+
+      this.asynchronous = false;
+      this.setReview();
 
       if (this.agreementsForm) {
           params += '&'+Form.serialize(this.agreementsForm);

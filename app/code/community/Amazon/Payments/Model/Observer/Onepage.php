@@ -11,6 +11,90 @@
 class Amazon_Payments_Model_Observer_Onepage
 {
     protected $_quote;
+    /**
+     * Prepare quote item info about gift wrapping
+     *
+     * @param mixed $entity
+     * @param array $data
+     * @return Enterprise_GiftWrapping_Model_Observer
+     */
+    protected function _saveItemInfo($entity, $data)
+    {
+        if (is_array($data)) {
+            $wrapping = Mage::getModel('enterprise_giftwrapping/wrapping')->load($data['design']);
+            $entity->setGwId($wrapping->getId())
+                ->save();
+        }
+        return $this;
+    }
+
+    /**
+     * Prepare entire order info about gift wrapping
+     *
+     * @param mixed $entity
+     * @param array $data
+     * @return Enterprise_GiftWrapping_Model_Observer
+     */
+    protected function _saveOrderInfo($entity, $data)
+    {
+        if (is_array($data)) {
+            $wrappingInfo = array();
+            if (isset($data['design'])) {
+                $wrapping = Mage::getModel('enterprise_giftwrapping/wrapping')->load($data['design']);
+                $wrappingInfo['gw_id'] = $wrapping->getId();
+            }
+            $wrappingInfo['gw_allow_gift_receipt'] = isset($data['allow_gift_receipt']);
+            $wrappingInfo['gw_add_card'] = isset($data['add_printed_card']);
+            if ($entity->getShippingAddress()) {
+                $entity->getShippingAddress()->addData($wrappingInfo);
+            }
+            $entity->addData($wrappingInfo)->save();
+        }
+        return $this;
+    }
+
+    /**
+     * Process gift wrapping options on checkout proccess
+     *
+     * @param Varien_Object $observer
+     * @return Enterprise_GiftWrapping_Model_Observer
+     */
+    public function checkoutProcessWrappingInfo($observer)
+    {
+        $request = $observer->getEvent()->getRequest();
+        $giftWrappingInfo = $request->getParam('giftwrapping');
+        if (is_array($giftWrappingInfo)) {
+            $quote = $observer->getEvent()->getQuote();
+            $giftOptionsInfo = $request->getParam('giftoptions');
+            foreach ($giftWrappingInfo as $entityId => $data) {
+                $info = array();
+                if (!is_array($giftOptionsInfo) || empty($giftOptionsInfo[$entityId]['type'])) {
+                    continue;
+                }
+                switch ($giftOptionsInfo[$entityId]['type']) {
+                    case 'quote':
+                        $entity = $quote;
+                        $this->_saveOrderInfo($entity, $data);
+                        break;
+                    case 'quote_item':
+                        $entity = $quote->getItemById($entityId);
+                        $this->_saveItemInfo($entity, $data);
+                        break;
+                    case 'quote_address':
+                        $entity = $quote->getAddressById($entityId);
+                        $this->_saveOrderInfo($entity, $data);
+                        break;
+                    case 'quote_address_item':
+                        $entity = $quote
+                            ->getAddressById($giftOptionsInfo[$entityId]['address'])
+                            ->getItemById($entityId);
+                        $this->_saveItemInfo($entity, $data);
+                        break;
+                }
+            }
+        }
+        return $this;
+    }
 
     /**
      * Event: controller_action_layout_load_before

@@ -147,6 +147,14 @@
             </updates>
         </layout>
         <events>
+            <checkout_controller_onepage_save_shipping_method>
+                <observers>
+                    <amazon_payments_observer>
+                        <class>Amazon_Payments_Model_Observer_Onepage</class>
+                        <method>checkoutProcessWrappingInfo</method>
+                    </amazon_payments_observer>
+                </observers>
+            </checkout_controller_onepage_save_shipping_method>
             <controller_action_layout_load_before>
                 <observers>
                    <amazon_payments_observer>

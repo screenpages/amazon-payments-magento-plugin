@@ -138,6 +138,11 @@ class Amazon_Payments_CheckoutController extends Amazon_Payments_Controller_Chec
 
         if ($data = $this->getRequest()->getParam('shipping_method', '')) {
             $result = $this->_getCheckout()->saveShippingMethod($data);
+            Mage::dispatchEvent(
+                'checkout_controller_onepage_save_shipping_method',
+                array(
+                    'request' => $this->getRequest(),
+                    'quote'   => $this->_getCheckout()->getQuote()));
             $this->_getCheckout()->getQuote()->collectTotals()->save();
         }
 
