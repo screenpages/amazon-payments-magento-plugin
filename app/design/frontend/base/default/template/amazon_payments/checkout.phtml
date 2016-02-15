@@ -173,7 +173,7 @@ AmazonPaymentsMageCheckout.prototype = {
          * Change to implement EE gift wrapping
          * If giftwrapping element doesn't exixt, then revert to CE gift message
          */
-        if(this.giftwrapped) {
+        if(this.giftwrapped || $('allow_gift_options').checked) {
             requestParams[0]['allow_gift_options'] = '1';
 
             if($('allow_gift_options_for_order').checked){ requestParams[0]['allow_gift_options_for_order'] = '1'; }
